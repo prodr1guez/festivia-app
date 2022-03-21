@@ -10,7 +10,7 @@ class _FavouritePageState extends State<FavouritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Text("FAVOURITE", style: TextStyle(fontSize: 60)),
+      child: Text("FAVOURITEee", style: TextStyle(fontSize: 60)),
     ));
   }
 }
