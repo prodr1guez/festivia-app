@@ -50,6 +50,7 @@ class _SearchPageState extends State<SearchPage> {
       onMapCreated: _con.onMapCreated,
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
+      markers: Set<Marker>.of(_con.markers.values),
     );
   }
 

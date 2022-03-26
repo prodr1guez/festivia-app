@@ -1,4 +1,4 @@
-/*import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GeofireProvider {
@@ -41,4 +41,3 @@ class GeofireProvider {
     return _ref.doc(id).delete();
   }
 }
-*/

@@ -7,7 +7,7 @@ import 'package:festivia/providers/event_provider.dart';
 import 'package:festivia/providers/storage_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
@@ -15,8 +15,8 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 import 'package:flutter_google_places/flutter_google_places.dart';
-//import 'package:geocoder/geocoder.dart';
-//import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../providers/geofire_provider.dart';
 
@@ -28,8 +28,8 @@ class AddController {
   AuthProvider _authProvider;
   EventProvider _eventProvider;
   StorageProvider _storageProvider;
-  //GeofireProvider _geofireProvider;
-  //Position _position;
+  GeofireProvider _geofireProvider;
+  Position _position;
 
   places.GoogleMapsPlaces _places =
       places.GoogleMapsPlaces(apiKey: Env.GOOGLE_MAPS_API_KEY);
@@ -56,7 +56,7 @@ class AddController {
 
   List<String> selectedGenders = [];
 
-  //LatLng fromLatLng;
+  LatLng fromLatLng;
 
   File imageFile;
   PickedFile pickedFile;
@@ -90,7 +90,7 @@ class AddController {
     _authProvider = new AuthProvider();
     _eventProvider = new EventProvider();
     _storageProvider = new StorageProvider();
-    //_geofireProvider = new GeofireProvider();
+    _geofireProvider = new GeofireProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
     refresh();
@@ -171,7 +171,7 @@ class AddController {
           idHost: idHost);
 
       await _eventProvider.create(event);
-      //saveLocation();
+      saveLocation();
     }
 
     _progressDialog.hide();
@@ -215,11 +215,11 @@ class AddController {
     refresh();
   }
 
-  /*void saveLocation() async {
+  void saveLocation() async {
     await _geofireProvider.create(
         _authProvider.getUser().uid, _position.latitude, _position.longitude);
     _progressDialog.hide();
-  }*/
+  }
 
   Future<Null> showGoogleAutoComplete(bool isFrom) async {
     places.Prediction p = await PlacesAutocomplete.show(
@@ -228,7 +228,7 @@ class AddController {
       language: 'es',
       radius: 5000,
     );
-    /*
+
     if (p != null) {
       places.PlacesDetailsResponse detail =
           await _places.getDetailsByPlaceId(p.placeId, language: 'es');
@@ -245,7 +245,7 @@ class AddController {
 
             if (isFrom) {
               from = '$direction, $city, $department';
-             // _position = Position(longitude: lng, latitude: lat);
+              _position = Position(longitude: lng, latitude: lat);
 
               fromLatLng = new LatLng(lat, lng);
             }
@@ -254,6 +254,6 @@ class AddController {
           }
         }
       }
-    }*/
+    }
   }
 }
