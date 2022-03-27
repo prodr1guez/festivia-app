@@ -18,6 +18,7 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'package:min_id/min_id.dart';
 import '../../providers/geofire_provider.dart';
 
 class AddController {
@@ -147,8 +148,10 @@ class AddController {
       TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
       String idHost = _authProvider.getUser().uid;
+      String id = MinId.getId('3{w}3{d}3{w}3{d}');
 
       Event event = new Event(
+          id: id,
           image: imageUrl,
           tittle: tittle,
           dateStart: dateStart,
@@ -171,7 +174,7 @@ class AddController {
           idHost: idHost);
 
       await _eventProvider.create(event);
-      saveLocation();
+      saveLocation(id);
     }
 
     _progressDialog.hide();
@@ -215,9 +218,8 @@ class AddController {
     refresh();
   }
 
-  void saveLocation() async {
-    await _geofireProvider.create(
-        _authProvider.getUser().uid, _position.latitude, _position.longitude);
+  void saveLocation(String id) async {
+    await _geofireProvider.create(id, _position.latitude, _position.longitude);
     _progressDialog.hide();
   }
 

@@ -8,6 +8,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 import 'package:festivia/utils/snackbar.dart' as utils;
 import 'package:location/location.dart' as location;
+import 'package:custom_info_window/custom_info_window.dart';
+import 'package:festivia/utils/colors.dart' as utils;
+
+import '../../models/Event.dart';
+import '../../providers/event_provider.dart';
+import '../../widgets/button_app.dart';
 
 class SearchController {
   BuildContext context;
@@ -18,6 +24,9 @@ class SearchController {
   Position _position;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor markerDriver;
+  LatLng _latLng;
+  Event event;
+  EventProvider _eventProvider = new EventProvider();
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -25,7 +34,8 @@ class SearchController {
     checkGPS();
     _geofireProvider = new GeofireProvider();
     _position = await Geolocator.getLastKnownPosition();
-    markerDriver = await createMarkerImageFromAsset('assets/mappinred.png');
+    _latLng = LatLng(_position.latitude, _position.longitude);
+    markerDriver = await createMarkerImageFromAsset('assets/marker-fav.png');
   }
 
   void checkGPS() async {
@@ -67,7 +77,7 @@ class SearchController {
     GoogleMapController controller = await _mapController.future;
     if (controller != null) {
       controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          bearing: 0, target: LatLng(latitude, longitude), zoom: 13)));
+          bearing: 0, target: LatLng(latitude, longitude), zoom: 14)));
     }
   }
 
@@ -135,7 +145,7 @@ class SearchController {
 
       for (DocumentSnapshot d in documentList) {
         GeoPoint point = d.get("position")["geopoint"];
-        addMarker(d.id, point.latitude, point.longitude, 'Conductor disponible',
+        addMarker(d.id, point.latitude, point.longitude, 'Fiesta disponible',
             d.id, markerDriver);
       }
 
@@ -145,23 +155,144 @@ class SearchController {
 
   void addMarker(String markerId, double lat, double lng, String title,
       String content, BitmapDescriptor iconMarker) {
-    print(markerId);
-    print(lat);
-    print(lng);
-    print(title);
     MarkerId id = MarkerId(markerId);
     Marker marker = Marker(
         markerId: id,
         icon: iconMarker,
         position: LatLng(lat, lng),
-        infoWindow: InfoWindow(title: title, snippet: content),
         draggable: false,
         zIndex: 2,
         flat: true,
         anchor: Offset(0.5, 0.5),
-        rotation: _position.heading);
+        rotation: _position.heading,
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (builder) {
+                return FutureBuilder(
+                    future: getEventInfo(markerId),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<Event> snapshot) {
+                      if (snapshot.hasData) {
+                        return _buildBottonNavigationMethod(snapshot.data.id);
+                      } else {
+                        return Container(
+                          height: 150,
+                        );
+                      }
+                    });
+              });
+        });
 
     markers[id] = marker;
+  }
+
+  Future<Event> getEventInfo(String id) async {
+    event = await _eventProvider.getById(id);
+    return event;
+  }
+
+  SafeArea _buildBottonNavigationMethod(idEvent) {
+    getEventInfo(idEvent);
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: 150,
+            width: 450,
+            child: Image.network(
+              event.image,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: Text(
+                          event.tittle,
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10),
+                        child: Text(
+                          event.dateStartParsed,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                              child: Text(
+                            "San Martin 300",
+                            style: TextStyle(fontSize: 16, color: Colors.red),
+                          )),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [_buttonReserve(event.id)],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonReserve(String id) {
+    return Align(
+      child: Container(
+        height: 50,
+        width: 120,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+        child: InkWell(
+          onTap: () => {navigateToDetail(context, id)},
+          child: button(),
+        ),
+      ),
+    );
+  }
+
+  Widget button() {
+    return ElevatedButton(
+      child: Text("Detalles".toUpperCase(), style: TextStyle(fontSize: 14)),
+      style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.red)))),
+    );
   }
 
   Future<BitmapDescriptor> createMarkerImageFromAsset(String path) async {
@@ -169,5 +300,9 @@ class SearchController {
     BitmapDescriptor bitmapDescriptor =
         await BitmapDescriptor.fromAssetImage(configuration, path);
     return bitmapDescriptor;
+  }
+
+  navigateToDetail(BuildContext context, String id) {
+    Navigator.pushNamed(context, 'detail_event', arguments: id);
   }
 }

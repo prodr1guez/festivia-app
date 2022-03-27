@@ -18,14 +18,12 @@ class EventProvider {
     String errorMessage;
 
     try {
-      final id = MinId.getId('3{w}3{d}3{w}3{d}');
-      print('ID:: $id');
-      _ref.doc(id).set(event.toJson());
+      _ref.doc(event.id).set(event.toJson());
 
       HostEvent eventHost =
-          HostEvent(id: id, image: event.image, name: event.tittle);
+          HostEvent(id: event.id, image: event.image, name: event.tittle);
       _clientProvider.addEvent(
-          eventHost.toJson(), _authProvider.getUser().uid, id);
+          eventHost.toJson(), _authProvider.getUser().uid, event.id);
     } catch (error) {
       errorMessage = error.toString();
     }
