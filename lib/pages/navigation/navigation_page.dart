@@ -37,7 +37,7 @@ class _NavigationPageState extends State<NavigationPage> {
         size: 30,
       ),
       Icon(
-        Icons.favorite,
+        Icons.event_available_rounded,
         size: 30,
       ),
       Icon(
