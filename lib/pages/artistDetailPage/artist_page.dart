@@ -1,4 +1,4 @@
-import 'package:festivia/pages/artistPage/artist_page_controller.dart';
+import 'package:festivia/pages/artistDetailPage/artist_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
 import 'package:festivia/widgets/button_app.dart';

@@ -57,6 +57,6 @@ class MiniCardHome extends StatelessWidget {
   }
 
   navigateToDetail(BuildContext context, String id) {
-    Navigator.pushNamed(context, 'artist_page', arguments: id);
+    Navigator.pushNamed(context, 'artis_highlights_page', arguments: id);
   }
 }
