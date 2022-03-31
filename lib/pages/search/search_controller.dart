@@ -35,7 +35,7 @@ class SearchController {
     _geofireProvider = new GeofireProvider();
     _position = await Geolocator.getLastKnownPosition();
     _latLng = LatLng(_position.latitude, _position.longitude);
-    markerDriver = await createMarkerImageFromAsset('assets/marker-fav.png');
+    markerDriver = await createMarkerImageFromAsset('assets/ubicacion.png');
   }
 
   void checkGPS() async {

@@ -4,27 +4,25 @@ import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/client_provider.dart';
+import 'package:festivia/providers/event_provider.dart';
 import 'package:min_id/min_id.dart';
 
-class EventProvider {
+class TicketProvider {
   CollectionReference _ref;
   ClientProvider _clientProvider = new ClientProvider();
   AuthProvider _authProvider = new AuthProvider();
+  EventProvider _eventProvider = new EventProvider();
 
-  EventProvider() {
-    _ref = FirebaseFirestore.instance.collection('Events');
-  }
-
-  Future<void> create(Event event) {
+  Future<void> create(Ticket ticket, String idEvent) async {
     String errorMessage;
 
+    print("TEST 1     " + _authProvider.getUser().uid);
+    print("TEST IDEVENT    " + idEvent);
     try {
-      _ref.doc(event.id).set(event.toJson());
+      await _clientProvider.addTicket(
+          ticket.toJson(), _authProvider.getUser().uid, ticket.ticketId);
 
-      HostEvent eventHost =
-          HostEvent(id: event.id, image: event.image, name: event.tittle);
-      _clientProvider.addEvent(
-          eventHost.toJson(), _authProvider.getUser().uid, event.id);
+      await _eventProvider.addTicketInEvent(ticket, idEvent);
     } catch (error) {
       errorMessage = error.toString();
     }
@@ -43,23 +41,6 @@ class EventProvider {
     }
 
     return null;
-  }
-
-  Future<void> addTicketInEvent(Ticket ticket, String idEvent) async {
-    String errorMessage;
-    try {
-      _ref
-          .doc(idEvent)
-          .collection("tickets")
-          .doc(ticket.ticketId)
-          .set(ticket.toJson());
-    } catch (error) {
-      errorMessage = error.toString();
-    }
-
-    if (errorMessage != null) {
-      return Future.error(errorMessage);
-    }
   }
 
   /*

@@ -1,8 +1,9 @@
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-class ReserveTicketController {
+class TicketPageController {
   Function refresh;
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -12,17 +13,15 @@ class ReserveTicketController {
   var arguments;
   Event event;
   String dateParsed = "";
-  String idEvent;
+  String ticketId = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
 
     arguments = ModalRoute.of(context).settings.arguments as Map;
-    print(arguments["isFree"]);
-    print(arguments["isPaidOff"]);
-    idEvent = arguments["idEvent"];
-    dateParsed = arguments["EndFreePass"];
+    ticketId = "ABC123";
+    print("TICKETPAGE: " + ticketId);
     refresh();
   }
 
@@ -47,10 +46,5 @@ class ReserveTicketController {
       "isFree": isFree,
       "isPaidOff": isPaidOff,
     });
-  }
-
-  goToOrderPage() {
-    Navigator.pushNamed(context, 'order',
-        arguments: {"type": "isFree", "idEvent": idEvent});
   }
 }

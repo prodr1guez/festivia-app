@@ -45,4 +45,9 @@ class ClientProvider {
       Map<String, dynamic> data, String idClient, String idEvent) {
     return _ref.doc(idClient).collection("events").doc(idEvent).set(data);
   }
+
+  Future<void> addTicket(
+      Map<String, dynamic> data, String idClient, String idEvent) {
+    return _ref.doc(idClient).collection("tickets").doc(idEvent).set(data);
+  }
 }

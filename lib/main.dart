@@ -1,3 +1,4 @@
+import 'package:festivia/pages/artistPage/artist_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:festivia/pages/detailEvent/detail_event_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:festivia/pages/order/order_page.dart';
 import 'package:festivia/pages/register/register_page.dart';
 import 'package:festivia/pages/reserveTicket/reserve_ticket_page.dart';
 import 'package:festivia/pages/start_page.dart';
+import 'package:festivia/pages/ticketPage/ticket_page.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,7 +49,9 @@ class _MyAppState extends State<MyApp> {
         'my_events': (BuildContext context) => MyEvents(),
         'detail_event': (BuildContext context) => DetailEvent(),
         'reserve_tickets': (BuildContext context) => ReserveTickets(),
-        'order': (BuildContext context) => OrderPage()
+        'order': (BuildContext context) => OrderPage(),
+        'artist_page': (BuildContext context) => ArtistPage(),
+        'ticket_page': (BuildContext context) => TicketPage()
       },
     );
   }

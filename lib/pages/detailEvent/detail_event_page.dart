@@ -25,30 +25,6 @@ class _DetailEventState extends State<DetailEvent> {
 
   bool _isOpen = false;
   PanelController _panelController = PanelController();
-  var _imageList = [
-    'images/1.jpg',
-    'images/2.jpeg',
-    'images/3.jpg',
-    'images/4.jpeg',
-    'images/5.jpg',
-    'images/6.jpg',
-    'images/7.jpeg',
-    'images/8.jpg',
-    'images/9.jpg',
-    'images/10.jpeg',
-    'images/11.png',
-    'images/12.jpeg',
-    'images/13.jpg',
-    'images/14.jpg',
-    'images/15.jpg',
-    'images/16.jpeg',
-    'images/17.jpg',
-    'images/18.jpeg',
-  ];
-
-  /// **********************************************
-  /// LIFE CYCLE METHODS
-  /// **********************************************
 
   @override
   Widget build(BuildContext context) {

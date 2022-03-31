@@ -25,7 +25,7 @@ class DetailEventController {
 
   void getEventInfo() async {
     event = await _eventProvider.getById(idEvent);
-    print(event.image);
+
     refresh();
   }
 
@@ -43,7 +43,8 @@ class DetailEventController {
     Navigator.pushNamed(context, 'reserve_tickets', arguments: {
       "isFree": isFree,
       "isPaidOff": isPaidOff,
-      "EndFreePass": event.dateEndFreePassParsed
+      "EndFreePass": event.dateEndFreePassParsed,
+      "idEvent": idEvent
     });
   }
 }
