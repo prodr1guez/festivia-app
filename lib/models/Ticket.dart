@@ -14,24 +14,40 @@ class Ticket {
     this.payId,
     this.name,
     this.type,
+    this.date,
+    this.nameEvent,
+    this.location,
+    this.image,
   });
 
   String ticketId;
   String payId;
   String name;
   String type;
+  String date;
+  String nameEvent;
+  String location;
+  String image;
 
   factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
-        ticketId: json["TicketID"],
-        payId: json["PayId"],
+        ticketId: json["ticketId"],
+        payId: json["payId"],
         name: json["name"],
         type: json["type"],
+        date: json["date"],
+        nameEvent: json["nameEvent"],
+        location: json["location"],
+        image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
-        "TicketID": ticketId,
-        "PayId": payId,
+        "ticketId": ticketId,
+        "payId": payId,
         "name": name,
         "type": type,
+        "date": date,
+        "nameEvent": nameEvent,
+        "location": location,
+        "image": image,
       };
 }

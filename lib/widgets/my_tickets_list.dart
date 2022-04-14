@@ -1,12 +1,13 @@
-import 'package:festivia/models/Artist.dart';
 import 'package:festivia/models/HostEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 
-class ArtistList extends StatelessWidget {
-  AsyncSnapshot<List<Artist>> snapshot;
+import '../models/Ticket.dart';
 
-  ArtistList({this.snapshot});
+class MyTicketsList extends StatelessWidget {
+  AsyncSnapshot<List<Ticket>> snapshot;
+
+  MyTicketsList({this.snapshot});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,10 @@ class ArtistList extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             itemCount: snapshot.data == null ? 0 : snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
-              Artist artist = snapshot.data[index];
+              Ticket ticket = snapshot.data[index];
               return InkWell(
                 onTap: () {
-                  navigateToDetail(context, artist);
+                  navigateToDetail(context, ticket);
                 },
                 child: Card(
                     semanticContainer: true,
@@ -27,21 +28,23 @@ class ArtistList extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                            height: 170,
+                            height: 130,
                             width: 400,
                             child: ParallaxImage(
                                 extent: 150,
-                                image: NetworkImage(artist.image))),
+                                image: NetworkImage(ticket.image))),
                         Container(
                           height: 40,
-                          child: Center(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
                             child: Text(
-                              artist.name,
+                              ticket.nameEvent,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     shape: RoundedRectangleBorder(
@@ -53,7 +56,14 @@ class ArtistList extends StatelessWidget {
             }));
   }
 
-  navigateToDetail(BuildContext context, Artist artist) {
-    Navigator.pushNamed(context, 'artist_page', arguments: artist);
+  navigateToDetail(BuildContext context, Ticket ticket) {
+    Navigator.pushNamed(context, 'ticket_page', arguments: {
+      "type": ticket.type,
+      "date": ticket.date,
+      "location": ticket.location,
+      "nameEvent": ticket.nameEvent,
+      "image": ticket.image,
+      "code": ticket.ticketId
+    });
   }
 }

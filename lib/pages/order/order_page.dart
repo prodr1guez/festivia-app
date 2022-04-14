@@ -71,7 +71,7 @@ class _OrderPageState extends State<OrderPage> {
                 "Todo listo?",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              _buttonReserve2(),
+              _controller.type == "free" ? _buttonReserve() : _buttonReserve2()
             ],
           ))
         ],
@@ -86,9 +86,8 @@ class _OrderPageState extends State<OrderPage> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: () => launch(
-              "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=327976969-8a7dafcd-ce05-47cf-a915-c003ed2075df"),
-          text: 'ir al Checkout',
+          onPressed: () => _controller.addTicketFree(),
+          text: 'Reservar',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
         ),
@@ -103,7 +102,7 @@ class _OrderPageState extends State<OrderPage> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: () => {_controller.addTicket()},
+          onPressed: () => {createOrder()},
           text: 'ir al Checkout',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
@@ -151,7 +150,7 @@ class _OrderPageState extends State<OrderPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
-        controller: _controller.usernameController,
+        controller: _controller.nameController,
         decoration: InputDecoration(
             labelText: 'Nombre',
             suffixIcon: Icon(
@@ -165,7 +164,7 @@ class _OrderPageState extends State<OrderPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
-        controller: _controller.usernameController,
+        controller: _controller.nameController,
         decoration: InputDecoration(
             labelText: 'Apellido',
             suffixIcon: Icon(
@@ -206,7 +205,6 @@ class _OrderPageState extends State<OrderPage> {
       if (result != null) {
         var linkMP = result['response']['init_point'];
         var preferenceId = result['response']['id'];
-        print("test" + preferenceId);
 
         var response = await MercadoPagoMobileCheckout.startCheckout(
             globals.mpPublicKey, preferenceId);
@@ -226,6 +224,11 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<Map<String, dynamic>> armarPreferencia() async {
     var mp = MP(globals.mpClientID, globals.mpClientSecret);
+
+    print(_controller.priceGeneral);
+    print(_controller.description);
+    print(_controller.nameController.text);
+    print(_controller.emailController.text);
     var preference = {
       "items": [
         {
@@ -233,13 +236,13 @@ class _OrderPageState extends State<OrderPage> {
           "title": "Test Modified",
           "quantity": 1,
           "currency_id": "ARS",
-          "unit_price": 1.0,
-          "description": "ticket"
+          "unit_price": _controller.priceGeneral,
+          "description": _controller.description
         }
       ],
       "payer": {
-        "name": "valentina aliaga",
-        "email": "valea200215@gmail.com",
+        "name": _controller.nameController.text,
+        "email": _controller.emailController.text,
       },
       "payment_methods": {
         "excluded_payment_types": [

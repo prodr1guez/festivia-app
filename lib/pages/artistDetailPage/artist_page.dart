@@ -37,7 +37,7 @@ class _ArtistPageState extends State<ArtistPage> {
           /// Sliding Panel
           SlidingUpPanel(
             parallaxEnabled: true,
-            parallaxOffset: 0.5,
+            parallaxOffset: 1,
             controller: _panelController,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(32),
@@ -51,8 +51,9 @@ class _ArtistPageState extends State<ArtistPage> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(
-                          "https://scontent.fafa1-1.fna.fbcdn.net/v/t1.6435-9/209408089_939074876670084_6207235537546520818_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=n4luqbTggF0AX-ao0th&_nc_oc=AQnO8Dv1NsDZUcd-WNd65zwqsjPl1HuKGUBlUal0QNOCDXtrRuWYQTM7qoN0hBF_Rvo&_nc_ht=scontent.fafa1-1.fna&oh=00_AT_liW1FlFOUx3EOYQ822AVdwwo2SfVJwvptNungkzQtVQ&oe=626943A3"),
+                      image: NetworkImage(_controller.artist.image == null
+                          ? ""
+                          : _controller.artist.image),
                       fit: BoxFit.cover),
                 ),
               ),
@@ -134,7 +135,9 @@ class _ArtistPageState extends State<ArtistPage> {
                     color: Colors.red,
                   ),
                   Text(
-                    "A 120 personas les gusta este artista",
+                    " A " +
+                        _controller.artist.likes.toString() +
+                        " personas les gusta este artista",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 15,
@@ -182,7 +185,7 @@ class _ArtistPageState extends State<ArtistPage> {
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
                       child: Text(
-                        "Valentina Chaves es una joven DJ de la ciudad de Mendoza. Su sonido vanguardista, orientado hacia el Progressive y Deep House, se caracteriza por la prolijidad y la presencia de una fina selección musical en la cual el buen groove es imprescindible. La música la ha llevado a recorrer diversas discotecas de la región, conectándola con una amplia selección de artistas y referentes del Progressive House a nivel mundial como Hernan Cattaneo, Nick Warren, Sasha, Guy Mantzur, Henry Saiz, Graziano Raffa, John Cosani, Mariano Mellino, Kevin Di Serna, entre otros. Actualmente su foco está en el proceso de trasladar sus conocimientos y experiencias en la creación y producción musical de su autoría. Su primer contrato firmado fue para el sello ‘’Soundteller Records’’ con el track Frankie M & Valentina Chaves – La Prima (Original Mix) el cual recibió el support de muchos artistas y fue incluido en el episodio ‘’Resident 431’’ de Hernan Cattaneo. ",
+                        _controller.artist.bio,
                         style: TextStyle(
                           fontSize: 17,
                           fontFamily: "Montserrat",
@@ -203,7 +206,7 @@ class _ArtistPageState extends State<ArtistPage> {
   Container _infoSection() {
     return Container(
       child: Center(
-        child: Text("#PROGRESSIVEHOUSE   #DEEPHOUSE  #ORGANICHOUSE",
+        child: Text(_controller.artist.genres[0],
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'NimbusSanL',
@@ -223,7 +226,7 @@ class _ArtistPageState extends State<ArtistPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Valentina Chaves",
+              _controller.artist.name,
               style: TextStyle(
                 fontFamily: 'NimbusSanL',
                 fontWeight: FontWeight.w700,

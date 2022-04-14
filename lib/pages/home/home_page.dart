@@ -42,11 +42,10 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
-                      child: Text(
-                        "Festivia",
-                        style: TextStyle(fontSize: 30),
-                      )),
+                      height: 40,
+                      width: 120,
+                      margin: EdgeInsets.only(left: 20, top: 10),
+                      child: Image.asset("assets/festivia-cut.png")),
                 ),
                 FutureBuilder(
                     future: _con.getBannerMain(),
@@ -62,10 +61,11 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
+                      margin: EdgeInsets.only(left: 20, top: 10),
                       child: Text(
                         "Fiestas Recomendadas",
-                        style: TextStyle(fontSize: 23),
+                        style: TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.bold),
                       )),
                 ),
                 FutureBuilder(
@@ -80,14 +80,17 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.only(left: 20, top: 20),
                       child: Text(
                         "Clubs Recomendados",
-                        style: TextStyle(fontSize: 23),
+                        style: TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.bold),
                       )),
                 ),
                 FutureBuilder(
                     future: _con.getSuggestsClubs(),
                     builder:
                         (context, AsyncSnapshot<List<SuggestClub>> snapshot) {
-                      return CardClubHome(snapshot: snapshot);
+                      return Container(
+                          margin: EdgeInsets.only(bottom: 80),
+                          child: CardClubHome(snapshot: snapshot));
                     }),
               ],
             ),

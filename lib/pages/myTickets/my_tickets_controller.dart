@@ -1,28 +1,30 @@
 import 'package:festivia/models/BannerMainHome.dart';
 import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/providers/auth_provider.dart';
-import 'package:festivia/providers/my_events_provider.dart';
+
 import 'package:flutter/material.dart';
 
-class MyEventController {
+import '../../models/Ticket.dart';
+import '../../providers/my_tickets_provider.dart';
+
+class MyTicketsController {
   Function refresh;
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   List<BannerMainHome> list = List.empty();
 
-  MyEventsProvider _myEventsProvider;
+  MyTicketsProvider _myTicketsProvider;
   AuthProvider _authProvider;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    _myEventsProvider = new MyEventsProvider();
+    _myTicketsProvider = new MyTicketsProvider();
     _authProvider = new AuthProvider();
     refresh();
   }
 
-  Future<List<HostEvent>> getMyEvents() async {
-    print(_authProvider.getUser());
-    return await _myEventsProvider.getMyEvents(_authProvider.getUser().uid);
+  Future<List<Ticket>> getMyTickets() async {
+    return await _myTicketsProvider.getMyTickets(_authProvider.getUser().uid);
   }
 }

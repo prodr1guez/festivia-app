@@ -58,7 +58,7 @@ class SearchController {
       await _determinePosition();
       _position = await Geolocator.getLastKnownPosition(); // UNA VEZ
       centerPosition();
-      getNearbyDrivers();
+      await getNearbyDrivers();
     } catch (error) {
       print('Error en la localizacion: $error');
     }
@@ -117,9 +117,9 @@ class SearchController {
     _mapController.complete(controller);
   }
 
-  void getNearbyDrivers() {
-    Stream<List<DocumentSnapshot>> stream = _geofireProvider.getNearbyDrivers(
-        _position.latitude, _position.longitude, 50);
+  Future<void> getNearbyDrivers() async {
+    Stream<List<DocumentSnapshot>> stream = await _geofireProvider
+        .getNearbyDrivers(_position.latitude, _position.longitude, 50);
 
     print("entrando");
 

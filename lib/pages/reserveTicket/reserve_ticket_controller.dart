@@ -1,11 +1,13 @@
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReserveTicketController {
   Function refresh;
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
+  final oCcy = new NumberFormat("#,##0.00", "es");
 
   EventProvider _eventProvider = new EventProvider();
 
@@ -13,16 +15,37 @@ class ReserveTicketController {
   Event event;
   String dateParsed = "";
   String idEvent;
+  double priceGeneral = 0;
+  String infoFree = "";
+  String infoGeneral = "";
+  String dateFree = "";
+  String dateGeneral = "";
+  bool isFree = false;
+  bool isGeneral = false;
+  double priceService = 0.15;
+  String priceParced = "";
+  String location = "";
+  String nameEvent = "";
+  String date = "";
+  String image = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
 
     arguments = ModalRoute.of(context).settings.arguments as Map;
-    print(arguments["isFree"]);
-    print(arguments["isPaidOff"]);
-    idEvent = arguments["idEvent"];
+
+    isFree = arguments["isFree"];
     dateParsed = arguments["EndFreePass"];
+    isGeneral = arguments["isGeneral"];
+    priceGeneral = arguments["priceGeneral"];
+    nameEvent = arguments["nameEvent"];
+    date = arguments["date"];
+    image = arguments["image"];
+    priceGeneral = priceGeneral + (priceGeneral * priceService);
+    priceParced = oCcy.format(priceGeneral);
+    infoFree = arguments["info"];
+    idEvent = arguments["idEvent"];
     refresh();
   }
 
@@ -49,8 +72,27 @@ class ReserveTicketController {
     });
   }
 
-  goToOrderPage() {
+  void generalToOrderPage() {
+    Navigator.pushNamed(context, 'order', arguments: {
+      "type": "general",
+      "idEvent": idEvent,
+      "priceGeneral": priceGeneral
+    });
+  }
+
+  void freeToOrderPage() {
+    Navigator.pushNamed(context, 'order', arguments: {
+      "type": "free",
+      "idEvent": idEvent,
+      "date": date,
+      "location": location,
+      "nameEvent": nameEvent,
+      "image": image
+    });
+  }
+
+  void vipToOrderPage() {
     Navigator.pushNamed(context, 'order',
-        arguments: {"type": "isFree", "idEvent": idEvent});
+        arguments: {"type": "vip", "idEvent": idEvent});
   }
 }

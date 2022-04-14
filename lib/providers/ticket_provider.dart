@@ -18,6 +18,8 @@ class TicketProvider {
 
     print("TEST 1     " + _authProvider.getUser().uid);
     print("TEST IDEVENT    " + idEvent);
+
+    print(ticket.toJson().toString());
     try {
       await _clientProvider.addTicket(
           ticket.toJson(), _authProvider.getUser().uid, ticket.ticketId);

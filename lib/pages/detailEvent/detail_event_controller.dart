@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,19 +34,26 @@ class DetailEventController {
   void goToReserve() {
     bool isFree = false;
     bool isPaidOff = false;
+    double priceGeneral;
     if (event?.isFree != null && event.isFree) {
       isFree = true;
     }
 
     if (event?.isPaidOff != null && event.isPaidOff) {
       isPaidOff = true;
+      priceGeneral = double.parse(event.price);
     }
 
     Navigator.pushNamed(context, 'reserve_tickets', arguments: {
       "isFree": isFree,
-      "isPaidOff": isPaidOff,
+      "isGeneral": isPaidOff,
+      "priceGeneral": priceGeneral,
+      "info": event.description,
       "EndFreePass": event.dateEndFreePassParsed,
-      "idEvent": idEvent
+      "idEvent": idEvent,
+      "nameEvent": event.tittle,
+      "date": event.dateStartParsed,
+      "image": event.image
     });
   }
 }

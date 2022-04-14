@@ -1,4 +1,5 @@
 import 'package:festivia/pages/ArtistHighlights/artist_highlights_page.dart';
+import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:festivia/pages/detailEvent/detail_event_page.dart';
@@ -53,7 +54,8 @@ class _MyAppState extends State<MyApp> {
         'order': (BuildContext context) => OrderPage(),
         'artist_page': (BuildContext context) => ArtistPage(),
         'artis_highlights_page': (BuildContext context) => ArtistHighlights(),
-        'ticket_page': (BuildContext context) => TicketPage()
+        'ticket_page': (BuildContext context) => TicketPage(),
+        'add_artist_page': (BuildContext context) => AddArtist()
       },
     );
   }

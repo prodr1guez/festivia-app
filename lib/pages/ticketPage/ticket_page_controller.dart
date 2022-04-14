@@ -12,16 +12,24 @@ class TicketPageController {
 
   var arguments;
   Event event;
-  String dateParsed = "";
+  String date = "";
   String ticketId = "";
+  String image = "";
+  String location = "";
+  String nameEvent = "";
+  String type = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
 
     arguments = ModalRoute.of(context).settings.arguments as Map;
-    ticketId = "ABC123";
-    print("TICKETPAGE: " + ticketId);
+    ticketId = arguments["code"];
+    image = arguments["image"];
+    nameEvent = arguments["nameEvent"];
+    type = arguments["type"];
+    date = arguments["date"];
+
     refresh();
   }
 

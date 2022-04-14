@@ -29,27 +29,35 @@ class _TicketPageState extends State<TicketPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                  height: 45,
+                  width: 150,
+                  margin: EdgeInsets.only(left: 10, top: 10),
+                  child: Image.asset("assets/festivia-cut.png")),
+            ),
             Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(bottom: 10, left: 15),
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(bottom: 10, top: 20),
               child: Text(
-                "Anana party 2.0",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                _controller.nameEvent,
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(bottom: 10, left: 15),
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(bottom: 10),
               child: Text(
                 "San Martin 300, Tunuyan-Mendoza",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(bottom: 10, left: 15),
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(bottom: 10),
               child: Text(
-                "Sabado 2 de Abril de 2022 a las 00:00",
+                _controller.date,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
@@ -60,8 +68,8 @@ class _TicketPageState extends State<TicketPage> {
             Container(
               margin: EdgeInsets.only(top: 15),
               child: Text(
-                "Codigo: 123ABC",
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                _controller.ticketId,
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             )
           ],

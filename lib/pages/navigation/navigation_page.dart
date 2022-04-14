@@ -1,8 +1,10 @@
 import 'package:festivia/pages/add/add_page.dart';
-import 'package:festivia/pages/favourite/favourite_page.dart';
+import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
+import 'package:festivia/pages/myTickets/my_tickets_page.dart';
 import 'package:festivia/pages/profile/profile_page.dart';
 import 'package:festivia/pages/search/search_page.dart';
+import 'package:festivia/pages/ticketPage/ticket_page.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -18,7 +20,8 @@ class _NavigationPageState extends State<NavigationPage> {
     HomePage(),
     SearchPage(),
     AddPage(),
-    FavouritePage(),
+    //AddArtist(),
+    MyTickets(),
     ProfilePage()
   ];
   @override

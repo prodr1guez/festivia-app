@@ -18,9 +18,8 @@ class ArtistHighlightsController {
   }
 
   Future<List<Artist>> getArtist() async {
-    print("hola");
     var artist = await _artistsProvider.getArtists();
-    print(artist);
+
     return artist;
   }
 }

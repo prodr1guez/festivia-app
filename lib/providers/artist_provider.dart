@@ -21,4 +21,15 @@ class ArtistProvider {
 
     return artists;
   }
+
+  Future<Artist> getArtistById(String id) async {
+    DocumentSnapshot document = await _ref.doc(id).get();
+
+    if (document.exists) {
+      Artist artist = Artist.fromJson(document.data());
+      return artist;
+    }
+
+    return null;
+  }
 }
