@@ -23,11 +23,9 @@ class GeofireProvider {
     return _ref.doc(id).snapshots(includeMetadataChanges: true);
   }
 
-  Future<void> create(String id, double lat, double lng) {
+  Future<void> create(String id, double lat, double lng, String end) {
     GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: lng);
-    return _ref
-        .doc(id)
-        .set({'status': 'drivers_available', 'position': myLocation.data});
+    return _ref.doc(id).set({'end': end, 'position': myLocation.data});
   }
 
   Future<void> createWorking(String id, double lat, double lng) {

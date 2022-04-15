@@ -24,13 +24,14 @@ class Event {
     this.isTimeLimit,
     this.dateEndFreePass,
     this.dateEndFreePassParsed,
-    this.maxFreeTicketsOrder,
     this.maxTicketsFreePass,
     this.isPaidOff,
     this.price,
-    this.maxTicketsPaidOff,
     this.maxTicketsPaidOffEvent,
     this.idHost,
+    this.location,
+    this.descriptionTicketFree,
+    this.descriptionTicketGeneral,
   });
 
   String id;
@@ -47,13 +48,14 @@ class Event {
   bool isTimeLimit;
   String dateEndFreePass;
   String dateEndFreePassParsed;
-  String maxFreeTicketsOrder;
   String maxTicketsFreePass;
   bool isPaidOff;
   String price;
-  String maxTicketsPaidOff;
   String maxTicketsPaidOffEvent;
   String idHost;
+  String location;
+  String descriptionTicketFree;
+  String descriptionTicketGeneral;
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
         id: json["id"],
@@ -70,13 +72,14 @@ class Event {
         isTimeLimit: json["isTimeLimit"],
         dateEndFreePass: json["dateEndFreePass"],
         dateEndFreePassParsed: json["dateEndFreePassParsed"],
-        maxFreeTicketsOrder: json["maxFreeTicketsOrder"],
         maxTicketsFreePass: json["maxTicketsFreePass"],
         isPaidOff: json["isPaidOff"],
         price: json["price"],
-        maxTicketsPaidOff: json["maxTicketsPaidOff"],
         maxTicketsPaidOffEvent: json["maxTicketsPaidOffEvent"],
         idHost: json["idHost"],
+        location: json["location"],
+        descriptionTicketFree: json["descriptionTicketFree"],
+        descriptionTicketGeneral: json["descriptionTicketGeneral"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -94,12 +97,13 @@ class Event {
         "isTimeLimit": isTimeLimit,
         "dateEndFreePass": dateEndFreePass,
         "dateEndFreePassParsed": dateEndFreePassParsed,
-        "maxFreeTicketsOrder": maxFreeTicketsOrder,
         "maxTicketsFreePass": maxTicketsFreePass,
         "isPaidOff": isPaidOff,
         "price": price,
-        "maxTicketsPaidOff": maxTicketsPaidOff,
         "maxTicketsPaidOffEvent": maxTicketsPaidOffEvent,
         "idHost": idHost,
+        "location": location,
+        "descriptionTicketFree": descriptionTicketFree,
+        "descriptionTicketGeneral": descriptionTicketGeneral,
       };
 }

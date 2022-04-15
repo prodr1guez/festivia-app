@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:festivia/api/env.dart';
-import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:festivia/providers/storage_provider.dart';
@@ -19,6 +18,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:min_id/min_id.dart';
+import '../../models/Event.dart';
 import '../../providers/geofire_provider.dart';
 
 class AddController {
@@ -39,6 +39,10 @@ class AddController {
   TextEditingController passwordController = new TextEditingController();
   TextEditingController confirmPasswordController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
+  TextEditingController descriptionTicketFreeController =
+      new TextEditingController();
+  TextEditingController descriptionTicketGeneralController =
+      new TextEditingController();
   TextEditingController priceController = new TextEditingController();
   DropdownEditingController ageMinController =
       new DropdownEditingController<String>();
@@ -150,7 +154,7 @@ class AddController {
       String idHost = _authProvider.getUser().uid;
       String id = MinId.getId('3{w}3{d}3{w}3{d}');
 
-      Event event = new Event(
+      Event event = Event(
           id: id,
           image: imageUrl,
           tittle: tittle,
@@ -165,16 +169,17 @@ class AddController {
           isTimeLimit: istimeLimit,
           dateEndFreePass: dateEndFreePass,
           dateEndFreePassParsed: dateEndFreePassParsed,
-          maxFreeTicketsOrder: maxFreeTicketsOrder,
           maxTicketsFreePass: maxTicketsFreePass,
           isPaidOff: isPaidOff,
           price: price,
-          maxTicketsPaidOff: maxTicketsPaidOff,
           maxTicketsPaidOffEvent: maxTicketsPaidOffEvent,
-          idHost: idHost);
+          idHost: idHost,
+          location: from,
+          descriptionTicketFree: descriptionTicketFreeController.text,
+          descriptionTicketGeneral: descriptionTicketGeneralController.text);
 
       await _eventProvider.create(event);
-      saveLocation(id);
+      saveLocation(id, dateEnd);
     }
 
     _progressDialog.hide();
@@ -218,8 +223,9 @@ class AddController {
     refresh();
   }
 
-  void saveLocation(String id) async {
-    await _geofireProvider.create(id, _position.latitude, _position.longitude);
+  void saveLocation(String id, String end) async {
+    await _geofireProvider.create(
+        id, _position.latitude, _position.longitude, end);
     _progressDialog.hide();
   }
 

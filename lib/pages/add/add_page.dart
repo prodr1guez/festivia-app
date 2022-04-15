@@ -146,22 +146,13 @@ class _AddPageState extends State<AddPage> {
                     margin: EdgeInsets.only(top: 10, right: 20),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("Tickets maximos \n por pedido")),
-                  ),
-                  _dropMaxOrderTicketsFree()
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 10, right: 20),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
                         child: Text("Tickets maximos \n para el evento")),
                   ),
                   _dropMaxEventTicketsFree()
                 ],
-              )
+              ),
+              _textDescriptionTickets(),
+              _textFieldDescriptionFree(),
             ],
           )),
     );
@@ -190,6 +181,7 @@ class _AddPageState extends State<AddPage> {
                     height: 40,
                     margin: EdgeInsets.only(left: 10, right: 5),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: _controller.priceController,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
@@ -209,22 +201,13 @@ class _AddPageState extends State<AddPage> {
                     margin: EdgeInsets.only(top: 10, right: 20),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("Tickets maximos \n por pedido")),
-                  ),
-                  _dropMaxOrderTicketsPaidOff()
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 10, right: 20),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
                         child: Text("Tickets maximos \n para el evento")),
                   ),
                   _dropMaxEventTicketsPaidOff()
                 ],
-              )
+              ),
+              _textDescriptionTickets(),
+              _textFieldDescriptionGeneral()
             ],
           )),
     );
@@ -625,6 +608,18 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+  Widget _textDescriptionTickets() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(bottom: 10, top: 10),
+      child: Text(
+        'Descripcion',
+        style: TextStyle(
+            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+      ),
+    );
+  }
+
   Widget _textDropGenders() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -692,6 +687,34 @@ class _AddPageState extends State<AddPage> {
         maxLines: 10,
         decoration: InputDecoration(
           hintText: "Cuentale a la gente sobre su evento",
+          filled: true,
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldDescriptionFree() {
+    return Container(
+      height: 10 * 10.0,
+      child: TextField(
+        controller: _controller.descriptionTicketFreeController,
+        maxLines: 10,
+        decoration: InputDecoration(
+          hintText: "Detalles sobre esta entrada",
+          filled: true,
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldDescriptionGeneral() {
+    return Container(
+      height: 10 * 10.0,
+      child: TextField(
+        controller: _controller.descriptionTicketGeneralController,
+        maxLines: 10,
+        decoration: InputDecoration(
+          hintText: "Detalles sobre esta entrada",
           filled: true,
         ),
       ),

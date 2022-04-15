@@ -97,9 +97,4 @@ class AddArtistController {
     Navigator.pop(context);
     refresh();
   }
-
-  void saveLocation(String id) async {
-    await _geofireProvider.create(id, _position.latitude, _position.longitude);
-    _progressDialog.hide();
-  }
 }
