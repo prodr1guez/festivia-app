@@ -26,7 +26,7 @@ class ProfileController {
   PickedFile pickedFile;
   File imageFile;
 
-  Client client;
+  Client client = new Client();
 
   Future init(BuildContext context, Function refresh) {
     this.context = context;
@@ -122,4 +122,9 @@ class ProfileController {
   }
 
   void goToEditProfile() {}
+
+  Future<void> logout() async {
+    await _authProvider.signOut();
+    Navigator.pushNamed(context, 'start');
+  }
 }

@@ -14,7 +14,7 @@ class ReserveTicketController {
   var arguments;
   Event event;
   String dateParsed = "";
-  String idEvent;
+  String idEvent = "";
   double priceGeneral = 0;
   String infoFree = "";
   String infoGeneral = "";
@@ -42,10 +42,12 @@ class ReserveTicketController {
     nameEvent = arguments["nameEvent"];
     date = arguments["date"];
     image = arguments["image"];
+    idEvent = arguments["idEvent"];
+    location = arguments["location"];
     priceGeneral = priceGeneral + (priceGeneral * priceService);
     priceParced = oCcy.format(priceGeneral);
-    infoFree = arguments["info"];
-    idEvent = arguments["idEvent"];
+    infoFree = arguments["descriptionTicketFree"];
+    infoGeneral = arguments["descriptionTicketGeneral"];
     refresh();
   }
 
@@ -76,7 +78,11 @@ class ReserveTicketController {
     Navigator.pushNamed(context, 'order', arguments: {
       "type": "general",
       "idEvent": idEvent,
-      "priceGeneral": priceGeneral
+      "priceGeneral": priceGeneral,
+      "date": date,
+      "location": location,
+      "nameEvent": nameEvent,
+      "image": image
     });
   }
 

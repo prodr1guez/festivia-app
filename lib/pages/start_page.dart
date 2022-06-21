@@ -19,16 +19,24 @@ class _StartPageState extends State<StartPage> {
       body: DecoratedBox(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/party.jpg"), fit: BoxFit.cover)),
+                image: AssetImage("assets/backf.jpg"), fit: BoxFit.cover)),
         child: Column(
           children: [
             Padding(
               child: Image.asset(
                 'assets/logo.png',
-                width: 350.0,
+                width: 300.0,
                 height: 250.0,
               ),
-              padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+              padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 50),
+              child: Image.asset(
+                'assets/noname.png',
+                width: 270.0,
+                height: 40.0,
+              ),
             ),
             _buttonLogin(),
             _buttonRegister()

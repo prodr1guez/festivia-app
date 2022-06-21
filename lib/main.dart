@@ -3,9 +3,13 @@ import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:festivia/pages/detailEvent/detail_event_page.dart';
+import 'package:festivia/pages/detailEventHost/detail_event_host_page.dart';
+import 'package:festivia/pages/eventStats/event_stats_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
 import 'package:festivia/pages/login/login_page.dart';
+import 'package:festivia/pages/map/map_page.dart';
 import 'package:festivia/pages/myEvents/my_events_page.dart';
+import 'package:festivia/pages/myTickets/my_tickets_page.dart';
 import 'package:festivia/pages/navigation/navigation_page.dart';
 import 'package:festivia/pages/order/order_page.dart';
 import 'package:festivia/pages/register/register_page.dart';
@@ -45,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         'home': (BuildContext context) => HomePage(),
         'navigation': (BuildContext context) => NavigationPage(),
         'add': (BuildContext context) => NavigationPage(),
-        'favourite': (BuildContext context) => NavigationPage(),
+        'my_tickets': (BuildContext context) => MyTickets(),
         'profile': (BuildContext context) => NavigationPage(),
         'detail_club': (BuildContext context) => DetailClubPage(),
         'my_events': (BuildContext context) => MyEvents(),
@@ -55,7 +59,10 @@ class _MyAppState extends State<MyApp> {
         'artist_page': (BuildContext context) => ArtistPage(),
         'artis_highlights_page': (BuildContext context) => ArtistHighlights(),
         'ticket_page': (BuildContext context) => TicketPage(),
-        'add_artist_page': (BuildContext context) => AddArtist()
+        'add_artist_page': (BuildContext context) => AddArtist(),
+        'detail_event_host': (BuildContext context) => DetailEventHost(),
+        'event_stats': (BuildContext context) => EventStatsPage(),
+        'map_page': (BuildContext context) => MapPage(),
       },
     );
   }

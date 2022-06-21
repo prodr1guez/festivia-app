@@ -2,7 +2,7 @@ import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 
-class DetailEventController {
+class DetailEventHostController {
   Function refresh;
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -57,5 +57,21 @@ class DetailEventController {
       "descriptionTicketGeneral": event.descriptionTicketGeneral,
       "location": event.location
     });
+  }
+
+  void goToEventStats() {
+    bool isFree = false;
+    bool isPaidOff = false;
+    double priceGeneral;
+    if (event?.isFree != null && event.isFree) {
+      isFree = true;
+    }
+
+    if (event?.isPaidOff != null && event.isPaidOff) {
+      isPaidOff = true;
+      priceGeneral = double.parse(event.price);
+    }
+
+    Navigator.pushNamed(context, 'event_stats');
   }
 }

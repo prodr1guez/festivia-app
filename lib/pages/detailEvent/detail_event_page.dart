@@ -70,7 +70,8 @@ class _DetailEventState extends State<DetailEvent> {
                   image: DecorationImage(
                     image: _controller.event?.image != null
                         ? NetworkImage(_controller.event?.image)
-                        : AssetImage('assets/party.jpg'),
+                        : NetworkImage(
+                            'https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -242,7 +243,9 @@ class _DetailEventState extends State<DetailEvent> {
               color: Colors.red,
             ),
             Text(
-              'Republic Bar',
+              _controller.event?.location != null
+                  ? _controller.event?.location
+                  : "",
               style: TextStyle(
                   fontFamily: 'NimbusSanL',
                   fontStyle: FontStyle.italic,

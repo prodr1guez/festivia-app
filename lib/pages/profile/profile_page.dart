@@ -17,7 +17,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('INIT STATE');
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _con.init(context, refresh);
@@ -27,15 +26,153 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: _buttonRegister(),
       key: _con.key,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
-              children: [_bannerApp(), _rowButtons()],
+              children: [
+                _bannerApp(),
+                _rowButtons(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: Text(
+                        "Tus datos",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                ),
+                RowEmail(),
+                RowPhone(),
+                RowCity(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      margin: EdgeInsets.only(left: 20, top: 15),
+                      child: Text(
+                        "Datos de facturación",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                ),
+                RowCbu(),
+                RowAlias(),
+                RowTitular(),
+              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Container RowEmail() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "Email: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "pablo_rodr1guez@hotmail.com ",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container RowPhone() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "Teléfono: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "2612541365",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container RowCity() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "Ciudad: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "Mendoza",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container RowCbu() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "CBU: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "000012131241131212",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container RowAlias() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "Alias: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "prodriguez.bru.5668",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container RowTitular() {
+    return Container(
+      margin: EdgeInsets.only(left: 20, top: 5),
+      child: Row(
+        children: [
+          Text(
+            "Nombre Titular: ",
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            "Pablo Agustin Rodriguez Diaz",
+            style: TextStyle(fontSize: 16),
+          )
+        ],
       ),
     );
   }
@@ -64,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
             color: utils.Colors.festiviaColor,
             textColor: Colors.white,
           ),
-        )
+        ),
       ],
     );
   }
@@ -72,10 +209,10 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buttonRegister() {
     return Container(
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+      margin: EdgeInsets.only(left: 30, right: 30, bottom: 100),
       child: ButtonApp(
-        onPressed: _con.update,
-        text: 'Actualizar ahora',
+        onPressed: _con.logout,
+        text: 'Cerrar sesión',
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
       ),
@@ -90,12 +227,10 @@ class _ProfilePageState extends State<ProfilePage> {
         GestureDetector(
           onTap: _con.showAlertDialog,
           child: CircleAvatar(
-            backgroundImage: _con.imageFile != null
-                ? AssetImage(_con.imageFile?.path ?? 'assets/place_holder.png')
-                : _con.client?.image != null
-                    ? NetworkImage(_con.client?.image)
-                    : AssetImage(
-                        _con.imageFile?.path ?? 'assets/place_holder.png'),
+            backgroundImage: _con.client.image != null
+                ? NetworkImage(_con.client?.image)
+                : AssetImage(
+                    _con.imageFile?.path ?? 'assets/holder_profile.jpeg'),
             radius: 100,
           ),
         ),
@@ -111,34 +246,6 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         )
       ],
-    );
-  }
-
-  Widget _textLogin() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: Text(
-        'Editar perfil',
-        style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
-      ),
-    );
-  }
-
-  Widget _textFieldUsername() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      child: TextField(
-        controller: _con.usernameController,
-        decoration: InputDecoration(
-            hintText: 'Pepito Perez',
-            labelText: 'Nombre de usuario',
-            suffixIcon: Icon(
-              Icons.person_outline,
-              color: utils.Colors.festiviaColor,
-            )),
-      ),
     );
   }
 

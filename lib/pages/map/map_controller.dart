@@ -12,16 +12,17 @@ import 'package:location/location.dart' as location;
 import '../../models/Event.dart';
 import '../../providers/event_provider.dart';
 
-class SearchController {
+class MapController {
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Function refresh;
   Completer<GoogleMapController> _mapController = Completer();
   GeofireProvider _geofireProvider;
   Position _position;
+  Position position_club =
+      Position(longitude: -69.0147801, latitude: -33.5811374);
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor markerDriver;
-  LatLng _latLng;
   Event event;
   EventProvider _eventProvider = new EventProvider();
 
@@ -31,11 +32,11 @@ class SearchController {
     checkGPS();
     _geofireProvider = new GeofireProvider();
     _position = await Geolocator.getLastKnownPosition();
-    _latLng = LatLng(_position.latitude, _position.longitude);
     markerDriver = await createMarkerImageFromAsset('assets/ubicacion.png');
   }
 
   void checkGPS() async {
+    print("haja");
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
       print('GPS ACTIVADO');
@@ -53,7 +54,7 @@ class SearchController {
   void updateLocation() async {
     try {
       await _determinePosition();
-      _position = await Geolocator.getLastKnownPosition(); // UNA VEZ
+// UNA VEZ
       centerPosition();
       await getNearbyDrivers();
     } catch (error) {
@@ -61,9 +62,9 @@ class SearchController {
     }
   }
 
-  void centerPosition() {
-    if (_position != null) {
-      animateCameraToPosition(_position.latitude, _position.longitude);
+  void centerPosition([double lat, double long]) {
+    if (lat != null && long != null) {
+      animateCameraToPosition(position_club.latitude, position_club.longitude);
     } else {
       utils.Snackbar.showSnackbar(
           context, key, 'Activa el GPS para obtener la posicion');
@@ -74,7 +75,7 @@ class SearchController {
     GoogleMapController controller = await _mapController.future;
     if (controller != null) {
       controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          bearing: 0, target: LatLng(latitude, longitude), zoom: 14)));
+          bearing: 0, target: LatLng(latitude, longitude), zoom: 15)));
     }
   }
 
@@ -106,7 +107,7 @@ class SearchController {
   }
 
   CameraPosition initialPosition =
-      CameraPosition(target: LatLng(-33.5879532, -69.0135705), zoom: 14.0);
+      CameraPosition(target: LatLng(-33.5811374, -69.0147801), zoom: 15);
 
   void onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(
@@ -115,79 +116,25 @@ class SearchController {
   }
 
   Future<void> getNearbyDrivers() async {
-    Stream<List<DocumentSnapshot>> stream = await _geofireProvider
-        .getNearbyDrivers(_position.latitude, _position.longitude, 50);
+    addMarker("d.id", position_club.latitude, position_club.longitude,
+        'Fiesta disponible', "d.id", markerDriver);
 
-    print("entrando");
-
-    stream.listen((List<DocumentSnapshot> documentList) {
-      print(documentList);
-      for (DocumentSnapshot d in documentList) {
-        print('DOCUMENT: $d');
-      }
-
-      for (MarkerId m in markers.keys) {
-        bool remove = true;
-
-        for (DocumentSnapshot d in documentList) {
-          if (m.value == d.id) {
-            remove = false;
-          }
-        }
-
-        if (remove) {
-          markers.remove(m);
-          refresh();
-        }
-      }
-
-      for (DocumentSnapshot d in documentList) {
-        GeoPoint point = d.get("position")["geopoint"];
-
-        String available = d.get("expired");
-
-        print(DateParse().CompareDate(available));
-
-        if (DateParse().CompareDate(available) == "available") {
-          addMarker(d.id, point.latitude, point.longitude, 'Fiesta disponible',
-              d.id, markerDriver);
-        }
-      }
-
-      refresh();
-    });
+    refresh();
   }
 
   void addMarker(String markerId, double lat, double lng, String title,
       String content, BitmapDescriptor iconMarker) {
     MarkerId id = MarkerId(markerId);
     Marker marker = Marker(
-        markerId: id,
-        icon: iconMarker,
-        position: LatLng(lat, lng),
-        draggable: false,
-        zIndex: 2,
-        flat: true,
-        anchor: Offset(0.5, 0.5),
-        rotation: _position.heading,
-        onTap: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (builder) {
-                return FutureBuilder(
-                    future: getEventInfo(markerId),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<Event> snapshot) {
-                      if (snapshot.hasData) {
-                        return _buildBottonNavigationMethod(snapshot.data.id);
-                      } else {
-                        return Container(
-                          height: 150,
-                        );
-                      }
-                    });
-              });
-        });
+      markerId: id,
+      icon: iconMarker,
+      position: LatLng(lat, lng),
+      draggable: false,
+      zIndex: 2,
+      flat: true,
+      anchor: Offset(0.5, 0.5),
+      rotation: _position.heading,
+    );
 
     markers[id] = marker;
   }
@@ -284,7 +231,7 @@ class SearchController {
         width: 120,
         margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
         child: InkWell(
-          onTap: () => {navigateToDetail(context, id)},
+          onTap: () => {navigateToDetail(context)},
           child: button(),
         ),
       ),
@@ -311,7 +258,7 @@ class SearchController {
     return bitmapDescriptor;
   }
 
-  navigateToDetail(BuildContext context, String id) {
-    Navigator.pushNamed(context, 'detail_event', arguments: id);
+  navigateToDetail(BuildContext context) {
+    Navigator.pushNamed(context, 'map_page');
   }
 }

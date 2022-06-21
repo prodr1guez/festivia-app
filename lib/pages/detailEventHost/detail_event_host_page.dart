@@ -1,23 +1,19 @@
-import 'package:festivia/pages/detailClub/detail_club_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../map/map_controller.dart';
-import '../search/search_controller.dart';
+import 'detail_event_host_controller.dart';
 
-class DetailClubPage extends StatefulWidget {
+class DetailEventHost extends StatefulWidget {
   @override
-  _DetailClubPageState createState() => _DetailClubPageState();
+  _DetailEventHostState createState() => _DetailEventHostState();
 }
 
-class _DetailClubPageState extends State<DetailClubPage> {
-  DetailClubController _controller = new DetailClubController();
-  MapController _con = MapController();
+class _DetailEventHostState extends State<DetailEventHost> {
+  DetailEventHostController _controller = new DetailEventHostController();
 
   @override
   void initState() {
@@ -26,7 +22,6 @@ class _DetailClubPageState extends State<DetailClubPage> {
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.init(context, refresh);
-      _con.init(context, refresh);
     });
   }
 
@@ -37,6 +32,18 @@ class _DetailClubPageState extends State<DetailClubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      bottomNavigationBar: Container(
+        child: Card(
+            color: utils.Colors.BackgroundGrey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [_buttonEditEvent(), _buttonReserve()],
+            )),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -57,8 +64,8 @@ class _DetailClubPageState extends State<DetailClubPage> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: _controller.club?.image != null
-                        ? NetworkImage(_controller.club?.image)
+                    image: _controller.event?.image != null
+                        ? NetworkImage(_controller.event?.image)
                         : NetworkImage(
                             'https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png'),
                     fit: BoxFit.cover,
@@ -104,23 +111,12 @@ class _DetailClubPageState extends State<DetailClubPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: hPadding),
+              height: MediaQuery.of(context).size.height * 0.35,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: _titleSection(),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          "Proximos eventos:",
-                          style: TextStyle(fontSize: 20),
-                        )),
-                  ),
+                  _titleSection(),
                   _infoSection(),
                 ],
               ),
@@ -142,7 +138,7 @@ class _DetailClubPageState extends State<DetailClubPage> {
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       child: Text(
-                        _controller.club?.description ?? "",
+                        _controller.event?.description ?? "",
                         style: TextStyle(fontSize: 18),
                       )),
                 )
@@ -159,18 +155,12 @@ class _DetailClubPageState extends State<DetailClubPage> {
   /// Info Section
   Row _infoSection() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(right: 20),
-          width: 140,
-          height: 70,
-          color: Colors.black,
-        ),
-        Container(
-          width: 140,
-          height: 70,
-          color: Colors.black,
-        )
+        _infoCell(title: 'Edad', value: _controller.event?.ageMin),
+        _infoCell(
+            title: 'Musica', value: _controller.event?.genders.toString()),
+        _infoCell(title: 'Tipo', value: 'After party'),
       ],
     );
   }
@@ -189,8 +179,7 @@ class _DetailClubPageState extends State<DetailClubPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.network(
-                  "https://developer.augmentedlogic.com/image/style/tcard/osm-og.jpg"),
+              Text(title),
               Container(
                 margin: EdgeInsets.only(top: 3),
                 child: Text(
@@ -209,42 +198,72 @@ class _DetailClubPageState extends State<DetailClubPage> {
     return Column(
       children: <Widget>[
         Text(
-          _controller.club?.name != null ? _controller.club?.name : "",
+          _controller.event?.tittle != null ? _controller.event?.tittle : "",
           style: TextStyle(
             fontFamily: 'NimbusSanL',
             fontWeight: FontWeight.w700,
             fontSize: 30,
           ),
         ),
-        _rowButtons(),
-        /*
-        Container(
-          height: 150,
-          margin: EdgeInsets.only(top: 10),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
-              bottomLeft: Radius.circular(15),
-            ),
-            child: _googleMapsWidget(),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          'Desde: ' + (_controller.event?.dateStartParsed ?? " "),
+          style: TextStyle(
+            fontFamily: 'NimbusSanL',
+            fontStyle: FontStyle.italic,
+            fontSize: 16,
           ),
-        ),*/
-        //_buttonReserve()
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          'Hasta: ' + (_controller.event?.dateEndParsed ?? " "),
+          style: TextStyle(
+            fontFamily: 'NimbusSanL',
+            fontStyle: FontStyle.italic,
+            fontSize: 16,
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.location_on,
+              color: Colors.red,
+            ),
+            Text(
+              _controller.event?.location != null
+                  ? _controller.event?.location
+                  : "",
+              style: TextStyle(
+                  fontFamily: 'NimbusSanL',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red),
+            ),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buttonReserve() {
     return Container(
-      height: 40,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      height: 50,
+      width: 150,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: () => _con.navigateToDetail(context),
-          icon: Icons.location_pin,
-          text: 'Como llegar a Republic bar',
+          onPressed: _controller.goToEventStats,
+          text: 'Estadisticas',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
         ),
@@ -252,38 +271,19 @@ class _DetailClubPageState extends State<DetailClubPage> {
     );
   }
 
-  Widget _googleMapsWidget() {
-    return Image.network(
-        "https://developer.augmentedlogic.com/image/style/tcard/osm-og.jpg");
-  }
-
-  Row _rowButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-          height: 40,
-          width: 130,
-          child: ButtonApp(
-            icon: Icons.arrow_forward_ios,
-            text: 'Como llegar',
-            color: utils.Colors.festiviaColor,
-            textColor: Colors.white,
-          ),
+  Widget _buttonEditEvent() {
+    return Container(
+      height: 50,
+      width: 150,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
+      child: Container(
+        child: ButtonApp(
+          onPressed: _controller.goToReserve,
+          text: 'Editar',
+          color: utils.Colors.festiviaColor,
+          textColor: Colors.white,
         ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-          height: 40,
-          width: 130,
-          child: ButtonApp(
-            text: 'Contacto',
-            color: utils.Colors.festiviaColor,
-            textColor: Colors.white,
-          ),
-        ),
-      ],
+      ),
     );
   }
 

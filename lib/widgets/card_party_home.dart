@@ -90,6 +90,6 @@ class CardPartyHome extends StatelessWidget {
   }
 
   navigateToDetail(BuildContext context, String type, String id) {
-    Navigator.pushNamed(context, 'detail_club', arguments: id);
+    Navigator.pushNamed(context, 'detail_event', arguments: id);
   }
 }

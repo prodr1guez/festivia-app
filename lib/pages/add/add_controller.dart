@@ -225,7 +225,7 @@ class AddController {
 
   void saveLocation(String id, String end) async {
     await _geofireProvider.create(
-        id, _position.latitude, _position.longitude, end);
+        id, _position.latitude, _position.longitude, dateEnd);
     _progressDialog.hide();
   }
 
@@ -242,6 +242,7 @@ class AddController {
           await _places.getDetailsByPlaceId(p.placeId, language: 'es');
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
+      print(p.description + "------");
       List<Address> address =
           await Geocoder.local.findAddressesFromQuery(p.description);
       if (address != null) {
@@ -253,6 +254,7 @@ class AddController {
 
             if (isFrom) {
               from = '$direction, $city, $department';
+              print(from + "-------");
               _position = Position(longitude: lng, latitude: lat);
 
               fromLatLng = new LatLng(lat, lng);

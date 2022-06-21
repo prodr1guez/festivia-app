@@ -1,4 +1,5 @@
 import 'package:festivia/pages/add/add_controller.dart';
+import 'package:festivia/utils/DateParsed.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -435,23 +436,15 @@ class _AddPageState extends State<AddPage> {
         onPressed: () {
           DatePicker.showDateTimePicker(context,
               locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
-            print('change $date in time zone ' +
-                date.timeZoneOffset.inHours.toString());
-            initializeDateFormatting('es_ES', null);
-            final dateTime = DateTime.parse(date.toString());
-            final formatTime = DateFormat('HH:mm a');
-            final formatDate = DateFormat('EEE, M/d/y');
-            final clockString = formatTime.format(dateTime);
-            final DateString = DateFormat.yMMMMd('es_AR').format(dateTime);
-            dateStartParsed = DateString + " a las " + clockString;
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateStartParsed = dateString + " a las " + clockString;
             dateStart = date.toString();
-            print(DateFormat('yyyy-MM-dd – kk:mm').format(dateTime));
-            print("asd");
           }, onConfirm: (date) {
             _controller.dateStart = dateStart;
             _controller.dateStartParsed = dateStartParsed;
             refresh();
-          }, currentTime: DateTime(2022, 1, 1, 24, 00, 34));
+          }, currentTime: DateTime.now());
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white)),
@@ -471,21 +464,15 @@ class _AddPageState extends State<AddPage> {
         onPressed: () {
           DatePicker.showDateTimePicker(context,
               locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
-            print('change $date in time zone ' +
-                date.timeZoneOffset.inHours.toString());
-            initializeDateFormatting('es_ES', null);
-            final dateTime = DateTime.parse(date.toString());
-            final formatTime = DateFormat('HH:mm a');
-            final formatDate = DateFormat('EEE, M/d/y');
-            final clockString = formatTime.format(dateTime);
-            final DateString = DateFormat.yMMMMd('es_AR').format(dateTime);
-            dateEndParse = DateString + " a las " + clockString;
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateEndParse = dateString + " a las " + clockString;
             dateEnd = date.toString();
           }, onConfirm: (date) {
             _controller.dateEnd = dateEnd;
             _controller.dateEndParsed = dateEndParse;
             refresh();
-          }, currentTime: DateTime(2022, 1, 1, 24, 00, 34));
+          }, currentTime: DateTime.now());
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white)),
@@ -505,21 +492,15 @@ class _AddPageState extends State<AddPage> {
         onPressed: () {
           DatePicker.showDateTimePicker(context,
               locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
-            print('change $date in time zone ' +
-                date.timeZoneOffset.inHours.toString());
-            initializeDateFormatting('es_ES', null);
-            final dateTime = DateTime.parse(date.toString());
-            final formatTime = DateFormat('HH:mm a');
-            final formatDate = DateFormat('EEE, M/d/y');
-            final clockString = formatTime.format(dateTime);
-            final DateString = DateFormat.yMMMMd('es_AR').format(dateTime);
-            dateEndFreePassParsed = DateString + " a las " + clockString;
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateEndFreePassParsed = dateString + " a las " + clockString;
             dateEndFreePass = date.toString();
           }, onConfirm: (date) {
             _controller.dateEndFreePassParsed = dateEndFreePassParsed;
             _controller.dateEndFreePass = dateEndFreePass;
             refresh();
-          }, currentTime: DateTime(2022, 1, 1, 24, 00, 34));
+          }, currentTime: DateTime.now());
         },
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white)),

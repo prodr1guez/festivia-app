@@ -23,12 +23,12 @@ class AuthProvider {
   }
 
   void checkIfUserIsLogged(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User user) {
+    FirebaseAuth.instance.authStateChanges().listen((User user) async {
       if (user != null) {
         Navigator.pushNamedAndRemoveUntil(
             context, 'navigation', (route) => false);
 
-        print('El usuario esta logeado');
+        print('El usuario esta logeado1');
       } else {
         print('El usuario no esta logeado');
       }

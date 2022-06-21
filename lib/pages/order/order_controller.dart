@@ -7,6 +7,10 @@ import 'package:festivia/providers/ticket_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:min_id/min_id.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:festivia/utils/snackbar.dart' as utils;
+
+import '../../utils/my_progress_dialog.dart';
 //import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 
 class OrderController {
@@ -15,7 +19,9 @@ class OrderController {
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   List<BannerMainHome> list = List.empty();
   TextEditingController nameController = new TextEditingController();
+  TextEditingController lastNameController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
+  ProgressDialog _progressDialog;
 
   MyEventsProvider _myEventsProvider;
   AuthProvider _authProvider;
@@ -39,6 +45,8 @@ class OrderController {
     this.context = context;
     this.refresh = refresh;
     arguments = ModalRoute.of(context).settings.arguments as Map;
+    _progressDialog =
+        MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
 
     print(arguments);
     idEvent = arguments["idEvent"];
@@ -54,6 +62,7 @@ class OrderController {
     _clientProvider = new ClientProvider();
 
     nameController.text = name;
+    lastNameController.text = lastname;
     emailController.text = _authProvider.getUser().email;
 
     refresh();
@@ -65,17 +74,10 @@ class OrderController {
     //     "327976969-f7642b8c-b895-4bd6-9aee-adea2d577883");
   }
 
-  void addTicket() {
+  Future<void> addTicket() async {
+    _progressDialog.show();
     String id = MinId.getId('3{w}3{d}').toUpperCase();
-    Ticket ticket = Ticket(ticketId: id);
-    print("ORDERPAGE:  " + id);
-    //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
 
-    //_ticketProvider.create(ticket, idEvent);
-  }
-
-  void addTicketFree() {
-    String id = MinId.getId('3{w}3{d}').toUpperCase();
     Ticket ticket = Ticket(
         ticketId: id,
         payId: _authProvider.getUser().uid,
@@ -84,9 +86,43 @@ class OrderController {
         type: type,
         date: date,
         image: image);
-    print("ORDERPAGE:  " + ticket.toString());
-    //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
+    print("ORDERPAGE:  " + id);
 
-    _ticketProvider.create(ticket, idEvent);
+    await _ticketProvider.create(ticket, idEvent);
+
+    _progressDialog.hide();
+
+    Navigator.pushNamedAndRemoveUntil(context, 'navigation', (route) => false,
+        arguments: {"index": 3});
+  }
+
+  Future<void> addTicketFree() async {
+    if (nameController.text.isEmpty || lastNameController.text.isEmpty) {
+      utils.Snackbar.showSnackbar(context, key, 'Complete todo los datos');
+    } else {
+      _progressDialog.show();
+      String id = MinId.getId('3{w}3{d}').toUpperCase();
+      Ticket ticket = Ticket(
+          ticketId: id,
+          payId: _authProvider.getUser().uid,
+          name: nameController.text,
+          nameEvent: nameEvent,
+          type: type,
+          date: date,
+          image: image);
+      print("ORDERPAGE:  " + ticket.toString());
+      //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
+
+      await _ticketProvider.create(ticket, idEvent);
+
+      _progressDialog.hide();
+
+      utils.Snackbar.showSnackbar(
+          context, key, 'El usuario se registro correctamente');
+      print('El usuario se registro correctamente');
+
+      Navigator.pushNamedAndRemoveUntil(context, 'navigation', (route) => false,
+          arguments: {"index": 3});
+    }
   }
 }

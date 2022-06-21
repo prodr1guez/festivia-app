@@ -35,6 +35,6 @@ class MyEventslist extends StatelessWidget {
   }
 
   navigateToDetail(BuildContext context, String id) {
-    Navigator.pushNamed(context, 'detail_event', arguments: id);
+    Navigator.pushNamed(context, 'detail_event_host', arguments: id);
   }
 }

@@ -14,8 +14,7 @@ class GeofireProvider {
       double lat, double lng, double radius) {
     GeoFirePoint center = _geo.point(latitude: lat, longitude: lng);
     return _geo
-        .collection(
-            collectionRef: _ref.where('status', isEqualTo: 'drivers_available'))
+        .collection(collectionRef: _ref)
         .within(center: center, radius: radius, field: 'position');
   }
 
@@ -23,9 +22,9 @@ class GeofireProvider {
     return _ref.doc(id).snapshots(includeMetadataChanges: true);
   }
 
-  Future<void> create(String id, double lat, double lng, String end) {
+  Future<void> create(String id, double lat, double lng, String date) {
     GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: lng);
-    return _ref.doc(id).set({'end': end, 'position': myLocation.data});
+    return _ref.doc(id).set({'expired': date, 'position': myLocation.data});
   }
 
   Future<void> createWorking(String id, double lat, double lng) {

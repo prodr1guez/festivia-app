@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:festivia/utils/globals.dart' as globals;
 import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
+import 'package:festivia/utils/snackbar.dart' as utils;
 
 import '../../models/Order.dart';
 import '../../providers/MP.dart';
@@ -48,8 +49,9 @@ class _OrderPageState extends State<OrderPage> {
               semanticContainer: true,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               child: Image(
-                image: NetworkImage(
-                    "https://static6.ticketek.com.ar/cms_static/sites/default/files/images/show-header/pack-portada-960x400.png"),
+                image: NetworkImage(_controller.image.isNotEmpty
+                    ? _controller.image
+                    : "https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png"),
                 fit: BoxFit.cover,
               ),
               shape: RoundedRectangleBorder(
@@ -128,7 +130,7 @@ class _OrderPageState extends State<OrderPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 20, top: 70),
       child: Text(
-        'Festivia party 2.0',
+        _controller.nameEvent,
         style: TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
       ),
@@ -140,7 +142,7 @@ class _OrderPageState extends State<OrderPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 20, top: 5),
       child: Text(
-        'Sabado 2 de julio de 2022 | 17:00 - 01:30',
+        _controller.date,
         style: TextStyle(color: Colors.black, fontSize: 14),
       ),
     );
@@ -164,7 +166,7 @@ class _OrderPageState extends State<OrderPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
-        controller: _controller.nameController,
+        controller: _controller.lastNameController,
         decoration: InputDecoration(
             labelText: 'Apellido',
             suffixIcon: Icon(
@@ -194,13 +196,17 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   createOrder() async {
-    Order order = new Order(name: "Festivia", price: "10.0");
-    startMp();
+    print("-----" + _controller.lastNameController.text + "-----");
+    if (_controller.nameController.text.isEmpty ||
+        _controller.lastNameController.text.isEmpty) {
+      utils.Snackbar.showSnackbar(
+          context, _controller.key, 'Complete todo los datos');
+    } else {
+      startMp();
+    }
   }
 
   void startMp() {
-    print("--");
-
     armarPreferencia().then((result) async {
       if (result != null) {
         var linkMP = result['response']['init_point'];
@@ -228,12 +234,16 @@ class _OrderPageState extends State<OrderPage> {
     print(_controller.priceGeneral);
     print(_controller.description);
     print(_controller.nameController.text);
+    print(_controller.lastNameController.text);
     print(_controller.emailController.text);
     var preference = {
       "items": [
         {
           "id": "1234",
-          "title": "Test Modified",
+          "title": "Entrada: " +
+              _controller.nameEvent +
+              ", " +
+              _controller.description,
           "quantity": 1,
           "currency_id": "ARS",
           "unit_price": _controller.priceGeneral,
@@ -253,7 +263,6 @@ class _OrderPageState extends State<OrderPage> {
 
     var result = await mp.createPreference(preference);
 
-    print("okey" + result.toString());
     return result;
   }
 }
