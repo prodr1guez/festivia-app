@@ -1,4 +1,6 @@
+import 'package:festivia/models/Event.dart';
 import 'package:festivia/pages/detailClub/detail_club_controller.dart';
+import 'package:festivia/widgets/events_clubs.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
@@ -7,6 +9,10 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../models/HostEvent.dart';
+import '../../models/data.dart';
+import '../../widgets/mini_card_home.dart';
+import '../../widgets/my_events_list.dart';
 import '../map/map_controller.dart';
 import '../search/search_controller.dart';
 
@@ -121,7 +127,12 @@ class _DetailClubPageState extends State<DetailClubPage> {
                           style: TextStyle(fontSize: 20),
                         )),
                   ),
-                  _infoSection(),
+                  FutureBuilder(
+                      future: _controller.getEventsClub(),
+                      builder:
+                          (context, AsyncSnapshot<List<HostEvent>> snapshot) {
+                        return EventsClubs(snapshot: snapshot);
+                      }),
                 ],
               ),
             ),
@@ -136,15 +147,19 @@ class _DetailClubPageState extends State<DetailClubPage> {
                         style: TextStyle(fontSize: 30),
                       )),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      child: Text(
-                        _controller.club?.description ?? "",
-                        style: TextStyle(fontSize: 18),
-                      )),
+                Container(
+                  margin: EdgeInsets.only(bottom: 50),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                        padding: EdgeInsets.all(10),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        child: Text(
+                          _controller.club?.description ?? "",
+                          style: TextStyle(fontSize: 18),
+                        )),
+                  ),
                 )
               ],
             )
@@ -267,6 +282,9 @@ class _DetailClubPageState extends State<DetailClubPage> {
           height: 40,
           width: 130,
           child: ButtonApp(
+            onPressed: () {
+              _controller.navigateToMapPage(context);
+            },
             icon: Icons.arrow_forward_ios,
             text: 'Como llegar',
             color: utils.Colors.festiviaColor,
@@ -279,6 +297,9 @@ class _DetailClubPageState extends State<DetailClubPage> {
           width: 130,
           child: ButtonApp(
             text: 'Contacto',
+            onPressed: () {
+              _controller.navigateToContactClub(context);
+            },
             color: utils.Colors.festiviaColor,
             textColor: Colors.white,
           ),

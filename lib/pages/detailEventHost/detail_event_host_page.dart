@@ -238,16 +238,19 @@ class _DetailEventHostState extends State<DetailEventHost> {
               Icons.location_on,
               color: Colors.red,
             ),
-            Text(
-              _controller.event?.location != null
-                  ? _controller.event?.location
-                  : "",
-              style: TextStyle(
-                  fontFamily: 'NimbusSanL',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red),
+            Container(
+              width: 300,
+              child: Text(
+                _controller.event?.location != null
+                    ? _controller.event?.location
+                    : "",
+                style: TextStyle(
+                    fontFamily: 'NimbusSanL',
+                    fontStyle: FontStyle.italic,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
+              ),
             ),
           ],
         ),

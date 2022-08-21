@@ -17,16 +17,26 @@ class ClubProvider {
     _ref = FirebaseFirestore.instance.collection('Clubs');
   }
 
-  Future<void> create(Event event) {
+  Future<List<Club>> getClubs() async {
+    QuerySnapshot querySnapshot = await _ref.get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<Club> clubs = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      clubs.add(Club.fromJson(data));
+    }
+
+    clubs.shuffle();
+    return clubs;
+  }
+
+  Future<void> create(Club club) {
     String errorMessage;
 
     try {
-      _ref.doc(event.id).set(event.toJson());
-
-      HostEvent eventHost =
-          HostEvent(id: event.id, image: event.image, name: event.tittle);
-      _clientProvider.addEvent(
-          eventHost.toJson(), _authProvider.getUser().uid, event.id);
+      _ref.doc(club.id).set(club.toJson());
     } catch (error) {
       errorMessage = error.toString();
     }
@@ -36,8 +46,28 @@ class ClubProvider {
     }
   }
 
+  Future<void> increaseAssistans(String id) {
+    return _ref.doc(id).update({
+      "assistantsNextEvents": FieldValue.increment(1),
+    });
+  }
+
+  Future<void> increaseRevenue(String id, double revenue) {
+    return _ref.doc(id).update({
+      "revenueYear": FieldValue.increment(revenue),
+      "ticketsYear": FieldValue.increment(1),
+      "currentRevenue": FieldValue.increment(revenue),
+      "ticketsNextEvents": FieldValue.increment(1),
+    });
+  }
+
+  Future<void> addEvent(
+      Map<String, dynamic> data, String idClub, String idEvent) {
+    return _ref.doc(idClub).collection("events").doc(idEvent).set(data);
+  }
+
   Future<Club> getById(String id) async {
-    DocumentSnapshot document = await _ref.doc("GJmOjrJQCXCnhs3zhdNF").get();
+    DocumentSnapshot document = await _ref.doc(id).get();
 
     if (document.exists) {
       Club club = Club.fromJson(document.data());
@@ -64,6 +94,34 @@ class ClubProvider {
     }
   }
 
+  Future<List<HostEvent>> EventsClub(String id) async {
+    QuerySnapshot querySnapshot = await _ref.doc(id).collection("events").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<HostEvent> events = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      events.add(HostEvent.fromJson(data));
+    }
+
+    return events;
+  }
+
+  Future<List<HostEvent>> EventsForClub(String id) async {
+    QuerySnapshot querySnapshot = await _ref.doc(id).collection("events").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<HostEvent> events = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      events.add(HostEvent.fromJson(data));
+    }
+
+    return events;
+  }
+
   /*
 
   Stream<DocumentSnapshot> getByIdStream(String id) {
@@ -80,8 +138,8 @@ class ClubProvider {
 
     return null;
   }
-
+  */
   Future<void> update(Map<String, dynamic> data, String id) {
     return _ref.doc(id).update(data);
-  }*/
+  }
 }

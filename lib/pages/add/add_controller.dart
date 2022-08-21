@@ -75,10 +75,10 @@ class AddController {
   String ageMin;
   String dateEndFreePass;
   String dateEndFreePassParsed;
-  String maxTicketsFreePass;
+  int maxTicketsFreePass;
   String maxFreeTicketsOrder;
   String maxTicketsPaidOff;
-  String maxTicketsPaidOffEvent;
+  int maxTicketsPaidOffEvent;
 
   bool isFree = false;
   bool istimeLimit = false;
@@ -102,13 +102,16 @@ class AddController {
   }
 
   publish() async {
+    var maxTicketFree = maxTicketsFreeEventController.value.toString();
+    var maxTicketsPaid = maxTicketsPaidOffEventController.value.toString();
+
     tittle = tittleEvent.text;
     description = descriptionController.text;
     ageMin = ageMinController.value.toString();
     maxFreeTicketsOrder = maxTicketsFreeOrderController.value.toString();
-    maxTicketsFreePass = maxTicketsFreeEventController.value.toString();
+    maxTicketsFreePass = int.parse(maxTicketFree);
     maxTicketsPaidOff = maxTicketsPaidOffController.value.toString();
-    maxTicketsPaidOffEvent = maxTicketsPaidOffEventController.value.toString();
+    maxTicketsPaidOffEvent = int.parse(maxTicketsPaid);
     price = priceController.text;
 
     print(tittle);
@@ -141,9 +144,10 @@ class AddController {
       print('debes ingresar todos los campos');
       utils.Snackbar.showSnackbar(
           context, key, 'Debes ingresar todos los campos');
+
       return;
     }
-    _progressDialog.show();
+    await _progressDialog.show();
 
     if (pickedFile == null) {
       print("Ingrese una foto");
@@ -170,6 +174,11 @@ class AddController {
           dateEndFreePass: dateEndFreePass,
           dateEndFreePassParsed: dateEndFreePassParsed,
           maxTicketsFreePass: maxTicketsFreePass,
+          assistants: 0,
+          freeTicketsSold: 0,
+          generalTicketsSold: 0,
+          revenue: 0,
+          vipTicketsSold: 0,
           isPaidOff: isPaidOff,
           price: price,
           maxTicketsPaidOffEvent: maxTicketsPaidOffEvent,
@@ -182,7 +191,7 @@ class AddController {
       saveLocation(id, dateEnd);
     }
 
-    _progressDialog.hide();
+    await _progressDialog.hide();
 
     utils.Snackbar.showSnackbar(context, key, 'Se publicó el evento');
   }

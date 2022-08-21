@@ -2,6 +2,8 @@ import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/DateParsed.dart';
+
 class DetailEventController {
   Function refresh;
   BuildContext context;
@@ -11,21 +13,18 @@ class DetailEventController {
 
   String idEvent;
   Event event;
-  String dateParsed;
+  String dateStartParsed = "";
+  String dateEndParsed = "";
   String location;
 
-  Future init(BuildContext context, Function refresh) async {
+  Future init(BuildContext context, Function refresh, String idEvent) async {
     this.context = context;
     this.refresh = refresh;
-
-    idEvent = ModalRoute.of(context).settings.arguments as String;
-    print(idEvent + "-------");
-
-    getEventInfo();
+    getEventInfo(idEvent);
   }
 
-  void getEventInfo() async {
-    event = await _eventProvider.getById(idEvent);
+  void getEventInfo(String id) async {
+    event = await _eventProvider.getById(id);
 
     refresh();
   }
@@ -54,8 +53,12 @@ class DetailEventController {
       "date": event.dateStartParsed,
       "image": event.image,
       "descriptionTicketFree": event.descriptionTicketFree,
+      "maxTicketsFree": event.maxTicketsFreePass,
+      "maxTicketsGeneral": event.maxTicketsPaidOffEvent,
       "descriptionTicketGeneral": event.descriptionTicketGeneral,
-      "location": event.location
+      "location": event.location,
+      "typeHost": event.typeHost,
+      "idHost": event.idHost
     });
   }
 }

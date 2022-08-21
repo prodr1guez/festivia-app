@@ -101,7 +101,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         child: Text(
-                          "¡Quedan 4 Lugares!",
+                          _controller.availableTicketsFreeText,
                           style: TextStyle(
                               fontSize: 13, fontWeight: FontWeight.bold),
                         ),
@@ -187,7 +187,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 5),
                             child: Text(
-                              "¡Quedan 7 Lugares!",
+                              _controller.availableTicketsGeneralText,
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold),
                             ),

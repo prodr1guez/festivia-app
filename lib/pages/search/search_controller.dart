@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:festivia/providers/geofire_provider.dart';
 import 'package:festivia/utils/DateParsed.dart';
@@ -11,6 +13,7 @@ import 'package:location/location.dart' as location;
 
 import '../../models/Event.dart';
 import '../../providers/event_provider.dart';
+import '../detailEvent/detail_event_page.dart';
 
 class SearchController {
   BuildContext context;
@@ -18,10 +21,12 @@ class SearchController {
   Function refresh;
   Completer<GoogleMapController> _mapController = Completer();
   GeofireProvider _geofireProvider;
-  Position _position;
+  Position _position = Position(
+    longitude: 32.8833303,
+    latitude: -68.8935386,
+  );
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   BitmapDescriptor markerDriver;
-  LatLng _latLng;
   Event event;
   EventProvider _eventProvider = new EventProvider();
 
@@ -31,7 +36,6 @@ class SearchController {
     checkGPS();
     _geofireProvider = new GeofireProvider();
     _position = await Geolocator.getLastKnownPosition();
-    _latLng = LatLng(_position.latitude, _position.longitude);
     markerDriver = await createMarkerImageFromAsset('assets/ubicacion.png');
   }
 
@@ -203,12 +207,15 @@ class SearchController {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            height: 150,
-            width: 450,
-            child: Image.network(
-              event.image,
-              fit: BoxFit.fill,
+          Hero(
+            tag: "eventHighlight$idEvent",
+            child: Container(
+              height: 150,
+              width: 450,
+              child: CachedNetworkImage(
+                imageUrl: event.image,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Row(
@@ -312,6 +319,11 @@ class SearchController {
   }
 
   navigateToDetail(BuildContext context, String id) {
-    Navigator.pushNamed(context, 'detail_event', arguments: id);
+    //Navigator.pushNamed(context, 'detail_event', arguments: id);
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return DetailEvent(
+          tag: "eventHighlight$id", url: event.image, event: event);
+    }));
   }
 }

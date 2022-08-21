@@ -49,7 +49,8 @@ class AddArtistController {
       print("Ingrese una foto");
       _progressDialog.hide();
     } else {
-      TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
+      TaskSnapshot snapshot =
+          await _storageProvider.uploadArtistImage(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
 
       ArtistImage artistImage =

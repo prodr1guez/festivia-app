@@ -4,6 +4,7 @@ import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/Club.dart';
+import '../../models/HostEvent.dart';
 
 class DetailClubController {
   Function refresh;
@@ -12,7 +13,7 @@ class DetailClubController {
 
   ClubProvider _clubProvider = new ClubProvider();
 
-  String idEvent;
+  String idClub;
   Club club;
   String dateParsed;
   String location;
@@ -20,15 +21,29 @@ class DetailClubController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-
-    idEvent = ModalRoute.of(context).settings.arguments as String;
-    print(idEvent + "-------");
-
+    idClub = ModalRoute.of(context).settings.arguments as String;
     getClubInfo();
   }
 
+  // CORREGIR
+  Future<List<HostEvent>> getMyEvents() async {
+    return await _clubProvider.EventsClub(idClub);
+  }
+
+  Future<List<HostEvent>> getEventsClub() async {
+    return await _clubProvider.EventsForClub(idClub);
+  }
+
   void getClubInfo() async {
-    club = await _clubProvider.getById(idEvent);
+    club = await _clubProvider.getById(idClub);
     refresh();
+  }
+
+  navigateToContactClub(BuildContext context) {
+    Navigator.pushNamed(context, 'contact_club_page');
+  }
+
+  navigateToMapPage(BuildContext context) {
+    Navigator.pushNamed(context, 'map_page');
   }
 }

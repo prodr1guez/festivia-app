@@ -15,7 +15,6 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('INIT STATE');
 
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       _controller.init(context);
@@ -56,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         controller: _controller.usernameController,
         decoration: InputDecoration(
-            hintText: 'Pepito Perez',
+            hintText: 'Nombre',
             labelText: 'Nombre',
             suffixIcon: Icon(
               Icons.person_outline,
@@ -71,7 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         controller: _controller.emailController,
         decoration: InputDecoration(
-            hintText: 'Pepito Perez',
+            hintText: 'Email',
             labelText: 'Email',
             suffixIcon: Icon(
               Icons.person_outline,

@@ -1,7 +1,10 @@
 import 'package:festivia/pages/add/add_page.dart';
 import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
+import 'package:festivia/pages/home_stats/home_stats_page.dart';
+import 'package:festivia/pages/myEvents/my_events_page.dart';
 import 'package:festivia/pages/myTickets/my_tickets_page.dart';
+import 'package:festivia/pages/myclubpage/my_club_page.dart';
 import 'package:festivia/pages/navigation/%20navigation_controller.dart';
 import 'package:festivia/pages/profile/profile_page.dart';
 import 'package:festivia/pages/search/search_page.dart';
@@ -46,7 +49,7 @@ class _NavigationPageState extends State<NavigationPage> {
         size: 30,
       ),
       Icon(
-        Icons.search,
+        Icons.search_rounded,
         size: 30,
       ),
       Icon(

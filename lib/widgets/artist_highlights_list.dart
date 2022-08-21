@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/models/Artist.dart';
 import 'package:festivia/models/HostEvent.dart';
+import 'package:festivia/pages/artistDetailPage/artist_page.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 
@@ -19,19 +21,30 @@ class ArtistList extends StatelessWidget {
               Artist artist = snapshot.data[index];
               return InkWell(
                 onTap: () {
-                  navigateToDetail(context, artist);
+                  //navigateToDetail(context, artist);
+
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return ArtistPage(
+                        tag: "artistHighlight$index",
+                        url: artist.image,
+                        artist: artist);
+                  }));
                 },
                 child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Column(
                       children: [
-                        Container(
-                            height: 170,
-                            width: 400,
-                            child: ParallaxImage(
-                                extent: 150,
-                                image: NetworkImage(artist.image))),
+                        Hero(
+                          tag: "artistHighlight$index",
+                          child: Container(
+                              height: 170,
+                              width: 400,
+                              child: ParallaxImage(
+                                  extent: 150,
+                                  image: CachedNetworkImageProvider(
+                                      artist.image))),
+                        ),
                         Container(
                           height: 40,
                           child: Center(

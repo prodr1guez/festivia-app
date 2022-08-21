@@ -1,8 +1,10 @@
+import 'package:festivia/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthProvider {
   FirebaseAuth _firebaseAuth;
+  SharedPref _sharedPref = new SharedPref();
 
   AuthProvider() {
     _firebaseAuth = FirebaseAuth.instance;
@@ -22,25 +24,15 @@ class AuthProvider {
     return true;
   }
 
-  void checkIfUserIsLogged(BuildContext context) {
-    FirebaseAuth.instance.authStateChanges().listen((User user) async {
-      if (user != null) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, 'navigation', (route) => false);
-
-        print('El usuario esta logeado1');
-      } else {
-        print('El usuario no esta logeado');
-      }
-    });
-  }
-
   Future<bool> login(String email, String password) async {
     String errorMessage;
 
     try {
+      print("paso 2.1");
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      print("paso 2.2");
     } catch (error) {
       print(error);
       // CORREO INVALIDO

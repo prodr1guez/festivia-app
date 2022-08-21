@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,22 @@ import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 
+import '../../models/Event.dart';
+import '../../utils/DateParsed.dart';
+import '../imageFullScreen/image_full_screen_page.dart';
+
 class DetailEvent extends StatefulWidget {
+  final String tag;
+  final String url;
+  final Event event;
+
+  DetailEvent(
+      {Key key, @required this.tag, @required this.url, @required this.event})
+      : assert(tag != null),
+        assert(url != null),
+        assert(event != null),
+        super(key: key);
+
   @override
   _DetailEventState createState() => _DetailEventState();
 }
@@ -19,7 +35,7 @@ class _DetailEventState extends State<DetailEvent> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.init(context, refresh);
+      _controller.init(context, refresh, widget.event.id);
     });
   }
 
@@ -65,14 +81,22 @@ class _DetailEventState extends State<DetailEvent> {
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.7,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: _controller.event?.image != null
-                        ? NetworkImage(_controller.event?.image)
-                        : NetworkImage(
-                            'https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png'),
-                    fit: BoxFit.cover,
+              child: Hero(
+                tag: widget.tag,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ImageFullScreen(
+                          tag: widget.tag, url: widget.event.image);
+                    }));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(widget.url),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -115,12 +139,13 @@ class _DetailEventState extends State<DetailEvent> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: hPadding),
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.28,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  _titleSection(),
+                  Container(
+                      margin: EdgeInsets.only(top: 20), child: _titleSection()),
                   _infoSection(),
                 ],
               ),
@@ -142,7 +167,7 @@ class _DetailEventState extends State<DetailEvent> {
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       child: Text(
-                        _controller.event?.description ?? "",
+                        widget.event?.description,
                         style: TextStyle(fontSize: 18),
                       )),
                 )
@@ -161,9 +186,8 @@ class _DetailEventState extends State<DetailEvent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _infoCell(title: 'Edad', value: _controller.event?.ageMin),
-        _infoCell(
-            title: 'Musica', value: _controller.event?.genders.toString()),
+        _infoCell(title: 'Edad', value: widget.event?.ageMin),
+        _infoCell(title: 'Musica', value: widget.event?.genders.toString()),
         _infoCell(title: 'Tipo', value: 'After party'),
       ],
     );
@@ -172,7 +196,7 @@ class _DetailEventState extends State<DetailEvent> {
   /// Info Cell
   _infoCell({String title, String value}) {
     return Container(
-      height: 100,
+      height: 80,
       width: 110,
       child: Card(
           color: utils.Colors.BackgroundGrey,
@@ -201,59 +225,72 @@ class _DetailEventState extends State<DetailEvent> {
   Column _titleSection() {
     return Column(
       children: <Widget>[
-        Text(
-          _controller.event?.tittle != null ? _controller.event?.tittle : "",
-          style: TextStyle(
-            fontFamily: 'NimbusSanL',
-            fontWeight: FontWeight.w700,
-            fontSize: 30,
-          ),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          'Desde: ' + (_controller.event?.dateStartParsed ?? " "),
-          style: TextStyle(
-            fontFamily: 'NimbusSanL',
-            fontStyle: FontStyle.italic,
-            fontSize: 16,
-          ),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          'Hasta: ' + (_controller.event?.dateEndParsed ?? " "),
-          style: TextStyle(
-            fontFamily: 'NimbusSanL',
-            fontStyle: FontStyle.italic,
-            fontSize: 16,
-          ),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on,
-              color: Colors.red,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.event?.tittle,
+            style: TextStyle(
+              fontFamily: 'NimbusSanL',
+              fontWeight: FontWeight.w700,
+              fontSize: 30,
             ),
-            Text(
-              _controller.event?.location != null
-                  ? _controller.event?.location
-                  : "",
-              style: TextStyle(
-                  fontFamily: 'NimbusSanL',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red),
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Desde: ' +
+                DateParse().DiaConHora(DateTime.parse(widget.event.dateStart)),
+            style: TextStyle(
+              fontFamily: 'NimbusSanL',
+              fontStyle: FontStyle.italic,
+              fontSize: 16,
             ),
-          ],
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Hasta: ' +
+                DateParse().DiaConHora(DateTime.parse(widget.event.dateStart)),
+            style: TextStyle(
+              fontFamily: 'NimbusSanL',
+              fontStyle: FontStyle.italic,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                color: Colors.red,
+              ),
+              Container(
+                width: 300,
+                child: Text(
+                  widget.event?.location,
+                  style: TextStyle(
+                      fontFamily: 'NimbusSanL',
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

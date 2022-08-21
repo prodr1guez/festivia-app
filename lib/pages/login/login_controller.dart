@@ -1,3 +1,5 @@
+import 'package:festivia/models/User.dart';
+import 'package:festivia/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:festivia/models/client.dart';
@@ -6,8 +8,11 @@ import 'package:festivia/providers/client_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
 
+import '../../utils/shared_pref.dart';
+
 class LoginController {
   BuildContext context;
+  Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
 
   TextEditingController emailController = new TextEditingController();
@@ -16,31 +21,26 @@ class LoginController {
   AuthProvider _authProvider;
   ProgressDialog _progressDialog;
   ClientProvider _clientProvider;
+  UserProvider _userProvider;
+  SharedPref _sharedPref;
 
   String _typeUser;
 
-  Future init(BuildContext context) async {
+  Future init(BuildContext context, Function refresh) async {
+    this.refresh = refresh;
     this.context = context;
     _authProvider = new AuthProvider();
     _clientProvider = new ClientProvider();
+    _userProvider = new UserProvider();
+    _sharedPref = new SharedPref();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
-  }
-
-  void goToRegisterPage() {
-    if (_typeUser == 'client') {
-      Navigator.pushNamed(context, 'client/register');
-    } else {
-      Navigator.pushNamed(context, 'driver/register');
-    }
   }
 
   void login() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-
-    print('Email: $email');
-    print('Password: $password');
+    _progressDialog.show();
 
     try {
       bool isLogin = await _authProvider.login(email, password);
@@ -48,20 +48,34 @@ class LoginController {
       if (isLogin) {
         print('El usuario esta logeado');
 
-        Client client =
-            await _clientProvider.getById(_authProvider.getUser().uid);
-        print('CLIENT: $client');
+        User client = await _userProvider.getById(_authProvider.getUser().uid);
 
         if (client != null) {
-          print('El cliente no es nulo');
-          Navigator.pushNamedAndRemoveUntil(
-              context, 'navigation', (route) => false);
+          if (client.type.contains("client")) {
+            _progressDialog.hide();
+            print("Client --");
+            await _sharedPref.save("typeUser", "client");
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'navigation', (route) => false);
+
+            print("paso 4");
+          } else {
+            _progressDialog.hide();
+            print("CLUB --");
+            await _sharedPref.save("typeUser", "club");
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'navigation_club', (route) => false);
+
+            print("paso 4");
+          }
         } else {
           print('El cliente si es nulo');
+          _progressDialog.hide();
           utils.Snackbar.showSnackbar(context, key, 'El usuario no es valido');
           await _authProvider.signOut();
         }
       } else {
+        _progressDialog.hide();
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario no se pudo autenticar');
         print('El usuario no se pudo autenticar');

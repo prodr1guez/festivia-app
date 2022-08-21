@@ -9,6 +9,15 @@ class DateParse {
     return DateString;
   }
 
+  String DiaConHora(DateTime date) {
+    initializeDateFormatting('es_ES', null);
+    final dateTime = DateTime.parse(date.toString());
+    final DateString = DateFormat.MMMMd('es_AR').format(dateTime);
+    final HourString = Hora(date);
+    String finalDATE = DateString + " " + HourString;
+    return finalDATE;
+  }
+
   String DiaConMesYAno(DateTime date) {
     initializeDateFormatting('es_ES', null);
     final dateTime = DateTime.parse(date.toString());
@@ -32,5 +41,15 @@ class DateParse {
       return "notAvailable";
     }
     return "available";
+  }
+
+  CompareDateBool(String date) {
+    DateTime valEnd = DateTime.parse(date);
+    DateTime dateNow = DateTime.now();
+    bool isFinished = valEnd.isBefore(dateNow);
+    if (isFinished) {
+      return false;
+    }
+    return true;
   }
 }

@@ -16,10 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('INIT STATE');
-
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _con.init(context);
+      _con.init(context, refresh);
     });
   }
 
@@ -58,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       child: TextField(
         controller: _con.emailController,
         decoration: InputDecoration(
-            hintText: 'Pepito Perez',
+            hintText: 'Email',
             labelText: 'Email',
             suffixIcon: Icon(
               Icons.person_outline,
@@ -94,5 +92,9 @@ class _LoginPageState extends State<LoginPage> {
         textColor: Colors.white,
       ),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }

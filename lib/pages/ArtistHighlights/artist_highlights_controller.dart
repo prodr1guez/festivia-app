@@ -9,6 +9,7 @@ class ArtistHighlightsController {
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   ArtistProvider _artistsProvider;
+  List artist;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -18,8 +19,10 @@ class ArtistHighlightsController {
   }
 
   Future<List<Artist>> getArtist() async {
-    var artist = await _artistsProvider.getArtists();
-
+    if (artist == null) {
+      artist = await _artistsProvider.getArtists();
+      artist.shuffle();
+    }
     return artist;
   }
 }

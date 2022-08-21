@@ -1,8 +1,10 @@
+import 'package:festivia/pages/start_controller.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -10,40 +12,56 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  StartController _controller = StartController();
   AuthProvider _authProvider = new AuthProvider();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('INIT STATE');
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller.init(context, refresh);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _authProvider.checkIfUserIsLogged(context);
-    return Scaffold(
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/backf.jpg"), fit: BoxFit.cover)),
-        child: Column(
-          children: [
-            Padding(
-              child: Image.asset(
-                'assets/logo.png',
-                width: 300.0,
-                height: 250.0,
+    return _controller.laoding == true
+        ? Scaffold(
+            body: Column(),
+          )
+        : Scaffold(
+            body: DecoratedBox(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/backf.jpg"),
+                      fit: BoxFit.cover)),
+              child: Column(
+                children: [
+                  Padding(
+                    child: Image.asset(
+                      'assets/logo.png',
+                      width: 300.0,
+                      height: 250.0,
+                    ),
+                    padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 50),
+                    child: Image.asset(
+                      'assets/noname.png',
+                      width: 270.0,
+                      height: 40.0,
+                    ),
+                  ),
+                  _buttonLogin(),
+                  _buttonRegister()
+                ],
               ),
-              padding: EdgeInsets.only(top: 100, left: 20, right: 20),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 50),
-              child: Image.asset(
-                'assets/noname.png',
-                width: 270.0,
-                height: 40.0,
-              ),
-            ),
-            _buttonLogin(),
-            _buttonRegister()
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget _buttonRegister() {
@@ -146,6 +164,10 @@ class _StartPageState extends State<StartPage> {
   }
 
   void toRegister() {
-    Navigator.pushNamed(context, 'register');
+    Navigator.pushNamed(context, 'select_type_user');
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }

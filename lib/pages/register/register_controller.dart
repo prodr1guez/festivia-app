@@ -1,3 +1,5 @@
+import 'package:festivia/models/User.dart';
+import 'package:festivia/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:festivia/models/client.dart';
@@ -5,6 +7,8 @@ import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/client_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
+
+import '../../providers/user_provider.dart';
 
 class RegisterController {
   BuildContext context;
@@ -17,12 +21,16 @@ class RegisterController {
 
   AuthProvider _authProvider;
   ClientProvider _clientProvider;
+  UserProvider _userProvider;
   ProgressDialog _progressDialog;
+  SharedPref _sharedPref;
 
-  Future init(BuildContext context) {
+  Future init(BuildContext context) async {
     this.context = context;
     _authProvider = new AuthProvider();
     _clientProvider = new ClientProvider();
+    _userProvider = new UserProvider();
+    _sharedPref = new SharedPref();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
   }
@@ -60,15 +68,18 @@ class RegisterController {
 
     try {
       bool isRegister = await _authProvider.register(email, password);
+      String userId = _authProvider.getUser().uid;
 
       if (isRegister) {
         Client client = new Client(
-            id: _authProvider.getUser().uid,
+            id: userId,
             email: _authProvider.getUser().email,
             username: username,
             password: password);
 
         await _clientProvider.create(client);
+        await _userProvider.create(User(id: userId, type: "client"));
+        await _sharedPref.save('typeUser', "client");
 
         _progressDialog.hide();
         Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);

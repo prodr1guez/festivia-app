@@ -77,8 +77,7 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
                     )),
               ),
             ),
-            panelBuilder: (ScrollController controller) =>
-                _panelBody(controller),
+            panelBuilder: (ScrollController controller) => listArtist(),
             onPanelSlide: (value) {
               if (value >= 0.2) {
                 if (!_isOpen) {
@@ -100,21 +99,12 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
   }
 
   FutureBuilder<List<Artist>> listArtist() {
+    print("entrando");
     return FutureBuilder(
         future: _con.getArtist(),
         builder: (context, AsyncSnapshot<List<Artist>> snapshot) {
           return ArtistList(snapshot: snapshot);
         });
-  }
-
-  SingleChildScrollView _panelBody(ScrollController controller) {
-    double hPadding = 20;
-
-    return SingleChildScrollView(
-      controller: controller,
-      physics: ClampingScrollPhysics(),
-      child: listArtist(),
-    );
   }
 
   void refresh() {

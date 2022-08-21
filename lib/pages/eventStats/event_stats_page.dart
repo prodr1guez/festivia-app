@@ -1,4 +1,6 @@
+import 'package:festivia/pages/eventStats/event_stats_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../widgets/button_app.dart';
 import 'package:festivia/utils/colors.dart' as utils;
@@ -9,6 +11,18 @@ class EventStatsPage extends StatefulWidget {
 }
 
 class _EventStatsPageState extends State<EventStatsPage> {
+  EventStatsController _controller = new EventStatsController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller.init(context, refresh);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +49,14 @@ class _EventStatsPageState extends State<EventStatsPage> {
               children: [
                 ItemStats(
                   "Asistiran",
-                  328,
+                  _controller.event.assistants,
                   "personas",
                   Color(0xFFE78EA9),
                 ),
                 Container(width: 10),
                 ItemStats(
                   "Vendidos",
-                  150,
+                  _controller.event.freeTicketsSold,
                   "free",
                   Color(0xFFFEB139),
                 ),
@@ -54,14 +68,14 @@ class _EventStatsPageState extends State<EventStatsPage> {
               children: [
                 ItemStats(
                   "Vendidos",
-                  20,
+                  _controller.event.generalTicketsSold,
                   "generales",
                   Color(0xFFFFD59E),
                 ),
                 Container(width: 10),
                 ItemStats(
                   "Vendidos",
-                  150,
+                  _controller.event.vipTicketsSold,
                   "vip",
                   Color(0xFFB9F8D3),
                 ),
@@ -107,7 +121,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
                   child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text(
-                        "3200\$",
+                        _controller.event == null
+                            ? "-"
+                            : _controller.event.revenue.toString(),
                         style: TextStyle(
                             fontSize: 50, fontWeight: FontWeight.bold),
                       )),
@@ -243,7 +259,7 @@ class _EventStatsPageState extends State<EventStatsPage> {
                   height: 50,
                   alignment: Alignment.center,
                   child: Text(
-                    "Administrar listas de asistentes",
+                    "Administrar listas de invitados",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   )),
             ),
@@ -258,5 +274,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       )),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }

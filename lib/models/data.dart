@@ -2,19 +2,13 @@ import 'package:festivia/models/MiniCard.dart';
 
 final List<MiniCard> miniCardList = [
   const MiniCard(
-    tittle: 'Fiestas',
-    imageUrl: 'assets/people.jpeg',
-  ),
+      tittle: 'Artistas',
+      imageUrl: 'assets/dj.png',
+      id: "artis_highlights_page"),
   const MiniCard(
-    tittle: 'Boliches',
-    imageUrl: 'assets/party.png',
-  ),
+      tittle: 'Fiestas',
+      imageUrl: 'assets/people.jpeg',
+      id: "event_highlights_page"),
   const MiniCard(
-    tittle: 'Bares',
-    imageUrl: 'assets/bartender.png',
-  ),
-  const MiniCard(
-    tittle: 'Artistas',
-    imageUrl: 'assets/dj.png',
-  )
+      tittle: 'Clubs', imageUrl: 'assets/party.png', id: "club_highlights_page")
 ];

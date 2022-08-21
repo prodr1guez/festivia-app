@@ -72,6 +72,6 @@ class DetailEventHostController {
       priceGeneral = double.parse(event.price);
     }
 
-    Navigator.pushNamed(context, 'event_stats');
+    Navigator.pushNamed(context, 'event_stats', arguments: idEvent);
   }
 }

@@ -40,6 +40,8 @@ class OrderController {
   String date = "";
   String nameEvent = "";
   String image = "";
+  String typeHost = "";
+  String idHost = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -48,13 +50,14 @@ class OrderController {
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
 
-    print(arguments);
     idEvent = arguments["idEvent"];
     priceGeneral = arguments["priceGeneral"];
     type = arguments["type"];
     date = arguments["date"];
     nameEvent = arguments["nameEvent"];
     image = arguments["image"];
+    typeHost = arguments["typeHost"];
+    idHost = arguments["idHost"];
 
     _myEventsProvider = new MyEventsProvider();
     _authProvider = new AuthProvider();
@@ -74,7 +77,7 @@ class OrderController {
     //     "327976969-f7642b8c-b895-4bd6-9aee-adea2d577883");
   }
 
-  Future<void> addTicket() async {
+  Future<void> addTicket(double revenue) async {
     _progressDialog.show();
     String id = MinId.getId('3{w}3{d}').toUpperCase();
 
@@ -88,7 +91,7 @@ class OrderController {
         image: image);
     print("ORDERPAGE:  " + id);
 
-    await _ticketProvider.create(ticket, idEvent);
+    await _ticketProvider.create(ticket, idEvent, revenue, typeHost, idHost);
 
     _progressDialog.hide();
 
@@ -110,10 +113,10 @@ class OrderController {
           type: type,
           date: date,
           image: image);
-      print("ORDERPAGE:  " + ticket.toString());
+
       //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
 
-      await _ticketProvider.create(ticket, idEvent);
+      await _ticketProvider.create(ticket, idEvent, 0, typeHost, idHost);
 
       _progressDialog.hide();
 

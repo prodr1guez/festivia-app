@@ -1,18 +1,28 @@
 import 'package:festivia/pages/ArtistHighlights/artist_highlights_page.dart';
+import 'package:festivia/pages/ContactClub/contact_club_page.dart';
 import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page.dart';
+import 'package:festivia/pages/clubHighlights/club_highlights_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:festivia/pages/detailEvent/detail_event_page.dart';
 import 'package:festivia/pages/detailEventHost/detail_event_host_page.dart';
+import 'package:festivia/pages/editClub/edit_club_page.dart';
+import 'package:festivia/pages/eventHighlights/event_highlights_page.dart';
 import 'package:festivia/pages/eventStats/event_stats_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
+import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
+import 'package:festivia/pages/liquidateRevenue/liquidate_revenue_page.dart';
 import 'package:festivia/pages/login/login_page.dart';
 import 'package:festivia/pages/map/map_page.dart';
 import 'package:festivia/pages/myEvents/my_events_page.dart';
 import 'package:festivia/pages/myTickets/my_tickets_page.dart';
 import 'package:festivia/pages/navigation/navigation_page.dart';
+import 'package:festivia/pages/navigationClub/navigation_club_controller.dart';
+import 'package:festivia/pages/navigationClub/navigation_club_page.dart';
 import 'package:festivia/pages/order/order_page.dart';
 import 'package:festivia/pages/register/register_page.dart';
+import 'package:festivia/pages/registerClub/register_club_page.dart';
+import 'package:festivia/pages/registerSelectTypeUser/select_type_user_page.dart';
 import 'package:festivia/pages/reserveTicket/reserve_ticket_page.dart';
 import 'package:festivia/pages/start_page.dart';
 import 'package:festivia/pages/ticketPage/ticket_page.dart';
@@ -32,7 +42,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  AuthProvider _authProvider = AuthProvider();
   @override
   void initState() {}
 
@@ -48,6 +57,7 @@ class _MyAppState extends State<MyApp> {
         'register': (BuildContext context) => RegisterPage(),
         'home': (BuildContext context) => HomePage(),
         'navigation': (BuildContext context) => NavigationPage(),
+        'navigation_club': (BuildContext context) => NavigationClubPage(),
         'add': (BuildContext context) => NavigationPage(),
         'my_tickets': (BuildContext context) => MyTickets(),
         'profile': (BuildContext context) => NavigationPage(),
@@ -63,6 +73,15 @@ class _MyAppState extends State<MyApp> {
         'detail_event_host': (BuildContext context) => DetailEventHost(),
         'event_stats': (BuildContext context) => EventStatsPage(),
         'map_page': (BuildContext context) => MapPage(),
+        'contact_club_page': (BuildContext context) => ContactClubPage(),
+        'edit_club_page': (BuildContext context) => EditClubPage(),
+        'select_type_user': (BuildContext context) => SelectTypeUser(),
+        'register_club': (BuildContext context) => RegisterClubPage(),
+        'liquidate_revenue': (BuildContext context) => LiquidateRevenuePage(),
+        'event_highlights_page': (BuildContext context) =>
+            EventHighlightsPage(),
+        'club_highlights_page': (BuildContext context) => ClubHighlightsPage(),
+        'image_full_screen': (BuildContext context) => ImageFullScreen(),
       },
     );
   }

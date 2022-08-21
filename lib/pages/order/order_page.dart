@@ -220,7 +220,7 @@ class _OrderPageState extends State<OrderPage> {
 
         if (response.result == "done") {
           print("PAGO REALIZADO");
-          _controller.addTicket();
+          _controller.addTicket(_controller.priceGeneral);
         } else {
           print("NO SE PUDO REALIZAR EL PAGO");
         }

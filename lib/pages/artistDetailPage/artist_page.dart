@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page_controller.dart';
+import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
@@ -7,7 +9,20 @@ import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 
+import '../../models/Artist.dart';
+
 class ArtistPage extends StatefulWidget {
+  final String tag;
+  final String url;
+  final Artist artist;
+
+  ArtistPage(
+      {Key key, @required this.tag, @required this.url, @required this.artist})
+      : assert(tag != null),
+        assert(url != null),
+        assert(artist != null),
+        super(key: key);
+
   @override
   State<ArtistPage> createState() => _ArtistPageState();
 }
@@ -48,13 +63,25 @@ class _ArtistPageState extends State<ArtistPage> {
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.45,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(_controller.artist.image == null
-                          ? ""
-                          : _controller.artist.image),
-                      fit: BoxFit.cover),
+              child: Hero(
+                tag: widget.tag,
+                child: GestureDetector(
+                  onTap: (() {
+                    //Navigator.pushNamed(context, 'image_full_screen',
+                    //  arguments: {"url": _controller.artist.image});
+
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ImageFullScreen(
+                          tag: widget.tag, url: widget.artist.image);
+                    }));
+                  }),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(widget.url),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -136,7 +163,7 @@ class _ArtistPageState extends State<ArtistPage> {
                   ),
                   Text(
                     " A " +
-                        _controller.artist.likes.toString() +
+                        widget.artist.likes.toString() +
                         " personas les gusta este artista",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -185,7 +212,7 @@ class _ArtistPageState extends State<ArtistPage> {
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
                       child: Text(
-                        _controller.artist.bio,
+                        widget.artist.bio,
                         style: TextStyle(
                           fontSize: 17,
                           fontFamily: "Montserrat",
@@ -206,7 +233,7 @@ class _ArtistPageState extends State<ArtistPage> {
   Container _infoSection() {
     return Container(
       child: Center(
-        child: Text(_controller.artist.genres[0],
+        child: Text(widget.artist.genres[0],
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'NimbusSanL',
@@ -226,7 +253,7 @@ class _ArtistPageState extends State<ArtistPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              _controller.artist.name,
+              widget.artist.name,
               style: TextStyle(
                 fontFamily: 'NimbusSanL',
                 fontWeight: FontWeight.w700,

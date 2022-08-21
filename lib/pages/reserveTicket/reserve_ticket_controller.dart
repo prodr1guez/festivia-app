@@ -17,7 +17,9 @@ class ReserveTicketController {
   String idEvent = "";
   double priceGeneral = 0;
   String infoFree = "";
+  String ticketsFree = "";
   String infoGeneral = "";
+  String ticketsGeneral = "";
   String dateFree = "";
   String dateGeneral = "";
   bool isFree = false;
@@ -28,6 +30,10 @@ class ReserveTicketController {
   String nameEvent = "";
   String date = "";
   String image = "";
+  String availableTicketsFreeText = "Quedan - tickets";
+  String availableTicketsGeneralText = "Quedan - tickets";
+  String typeHost = "";
+  String idHost = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -48,6 +54,12 @@ class ReserveTicketController {
     priceParced = oCcy.format(priceGeneral);
     infoFree = arguments["descriptionTicketFree"];
     infoGeneral = arguments["descriptionTicketGeneral"];
+    ticketsFree = arguments["maxTicketsFree"].toString();
+    ticketsGeneral = arguments["maxTicketsGeneral"].toString();
+    availableTicketsFreeText = "¡Quedan " + ticketsFree + " lugares!";
+    availableTicketsGeneralText = "¡Quedan " + ticketsGeneral + " lugares!";
+    typeHost = arguments["typeHost"];
+    idHost = arguments["idHost"];
     refresh();
   }
 
@@ -82,7 +94,9 @@ class ReserveTicketController {
       "date": date,
       "location": location,
       "nameEvent": nameEvent,
-      "image": image
+      "image": image,
+      "typeHost": typeHost,
+      "idHost": idHost
     });
   }
 
@@ -93,7 +107,9 @@ class ReserveTicketController {
       "date": date,
       "location": location,
       "nameEvent": nameEvent,
-      "image": image
+      "image": image,
+      "typeHost": typeHost,
+      "idHost": idHost
     });
   }
 

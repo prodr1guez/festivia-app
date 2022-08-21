@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "590512173631",
+    "project_id": "niceware-festivia",
+    "storage_bucket": "niceware-festivia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590512173631:android:e4e6189c61865930cd3e8a",
+        "android_client_info": {
+          "package_name": "com.niceware.festivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "590512173631-f106c5pc7v7s7hq3ljoa1isbi01vbm91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ3kSYweqJp6wNA7Pht-TyToirQdyemBY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "590512173631-f106c5pc7v7s7hq3ljoa1isbi01vbm91.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "590512173631-rgfqeois0qhje1tu79959s60gujonnim.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.niceware.festivia"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
