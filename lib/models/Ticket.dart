@@ -9,16 +9,16 @@ Ticket ticketFromJson(String str) => Ticket.fromJson(json.decode(str));
 String ticketToJson(Ticket data) => json.encode(data.toJson());
 
 class Ticket {
-  Ticket({
-    this.ticketId,
-    this.payId,
-    this.name,
-    this.type,
-    this.date,
-    this.nameEvent,
-    this.location,
-    this.image,
-  });
+  Ticket(
+      {this.ticketId,
+      this.payId,
+      this.name,
+      this.type,
+      this.date,
+      this.nameEvent,
+      this.location,
+      this.image,
+      this.checkedIn});
 
   String ticketId;
   String payId;
@@ -28,17 +28,18 @@ class Ticket {
   String nameEvent;
   String location;
   String image;
+  bool checkedIn;
 
   factory Ticket.fromJson(Map<String, dynamic> json) => Ticket(
-        ticketId: json["ticketId"],
-        payId: json["payId"],
-        name: json["name"],
-        type: json["type"],
-        date: json["date"],
-        nameEvent: json["nameEvent"],
-        location: json["location"],
-        image: json["image"],
-      );
+      ticketId: json["ticketId"],
+      payId: json["payId"],
+      name: json["name"],
+      type: json["type"],
+      date: json["date"],
+      nameEvent: json["nameEvent"],
+      location: json["location"],
+      image: json["image"],
+      checkedIn: json["checkedIn"]);
 
   Map<String, dynamic> toJson() => {
         "ticketId": ticketId,
@@ -49,5 +50,6 @@ class Ticket {
         "nameEvent": nameEvent,
         "location": location,
         "image": image,
+        "checkedIn": checkedIn
       };
 }

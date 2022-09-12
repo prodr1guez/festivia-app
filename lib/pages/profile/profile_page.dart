@@ -1,9 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/pages/profile/profile_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/material.dart';
-import 'package:festivia/utils/colors.dart' as utils;
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:festivia/utils/colors.dart' as utils;
+
+import '../../models/Event.dart';
+import '../../utils/DateParsed.dart';
+import '../imageFullScreen/image_full_screen_page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -11,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  ProfileController _con = new ProfileController();
+  ProfileController _controller = new ProfileController();
 
   @override
   void initState() {
@@ -19,232 +24,139 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _con.init(context, refresh);
+      _controller.init(context, refresh);
     });
   }
+
+  bool _isOpen = false;
+  PanelController _panelController = PanelController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: _buttonRegister(),
-      key: _con.key,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                _bannerApp(),
-                _rowButtons(),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "Tus datos",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
+      extendBody: true,
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          /// Sliding Panel
+          SlidingUpPanel(
+            parallaxEnabled: true,
+            parallaxOffset: 0.5,
+            controller: _panelController,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(32),
+              topLeft: Radius.circular(32),
+            ),
+            minHeight: MediaQuery.of(context).size.height * 0.40,
+            maxHeight: MediaQuery.of(context).size.height * 0.40,
+            body: FractionallySizedBox(
+              alignment: Alignment.topCenter,
+              heightFactor: 0.4,
+              child: GestureDetector(
+                onTap: () {
+                  /*Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return ImageFullScreen(
+                        tag: widget.tag, url: _controller.client.image);
+                  }));*/
+                },
+                child: Container(
+                  decoration: BoxDecoration(),
                 ),
-                RowEmail(),
-                RowPhone(),
-                RowCity(),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                      margin: EdgeInsets.only(left: 20, top: 15),
-                      child: Text(
-                        "Datos de facturación",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                ),
-                RowCbu(),
-                RowAlias(),
-                RowTitular(),
-              ],
+              ),
+            ),
+            panelBuilder: (ScrollController controller) =>
+                _panelBody(controller),
+            onPanelSlide: (value) {
+              if (value >= 0.2) {
+                if (!_isOpen) {
+                  setState(() {
+                    _isOpen = true;
+                  });
+                }
+              }
+            },
+            onPanelClosed: () {
+              setState(() {
+                _isOpen = false;
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// **********************************************
+  /// WIDGETS
+  /// **********************************************
+
+  /// Panel Body
+  SingleChildScrollView _panelBody(ScrollController controller) {
+    double hPadding = 20;
+
+    return SingleChildScrollView(
+      controller: controller,
+      physics: ClampingScrollPhysics(),
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: hPadding),
+              height: MediaQuery.of(context).size.height * 0.20,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(child: _titleSection()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(5),
+                          width: 150,
+                          height: 50,
+                          child: ButtonApp(
+                            color: utils.Colors.festiviaColor,
+                            onPressed: _controller.goToMyEvents,
+                            text: "Mis eventos",
+                          )),
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        width: 150,
+                        height: 50,
+                        child: ButtonApp(
+                          color: utils.Colors.festiviaColor,
+                          onPressed: _controller.logout,
+                          text: "Cerrar sesión",
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Title Section
+  Column _titleSection() {
+    return Column(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            _controller.client.username,
+            style: TextStyle(
+              fontFamily: 'NimbusSanL',
+              fontWeight: FontWeight.w700,
+              fontSize: 30,
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Container RowEmail() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "Email: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "pablo_rodr1guez@hotmail.com ",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container RowPhone() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "Teléfono: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "2612541365",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container RowCity() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "Ciudad: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "Mendoza",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container RowCbu() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "CBU: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "000012131241131212",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container RowAlias() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "Alias: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "prodriguez.bru.5668",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Container RowTitular() {
-    return Container(
-      margin: EdgeInsets.only(left: 20, top: 5),
-      child: Row(
-        children: [
-          Text(
-            "Nombre Titular: ",
-            style: TextStyle(fontSize: 16),
-          ),
-          Text(
-            "Pablo Agustin Rodriguez Diaz",
-            style: TextStyle(fontSize: 16),
-          )
-        ],
-      ),
-    );
-  }
-
-  Row _rowButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          height: 50,
-          child: ButtonApp(
-            onPressed: _con.goToMyEvents,
-            text: 'Tus eventos',
-            color: utils.Colors.festiviaColor,
-            textColor: Colors.white,
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          height: 50,
-          child: ButtonApp(
-            onPressed: _con.goToEditProfile,
-            text: 'Editar perfil',
-            color: utils.Colors.festiviaColor,
-            textColor: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buttonRegister() {
-    return Container(
-      height: 50,
-      margin: EdgeInsets.only(left: 30, right: 30, bottom: 100),
-      child: ButtonApp(
-        onPressed: _con.logout,
-        text: 'Cerrar sesión',
-        color: utils.Colors.festiviaColor,
-        textColor: Colors.white,
-      ),
-    );
-  }
-
-  Widget _bannerApp() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: _con.showAlertDialog,
-          child: CircleAvatar(
-            backgroundImage: _con.client.image != null
-                ? NetworkImage(_con.client?.image)
-                : AssetImage(
-                    _con.imageFile?.path ?? 'assets/holder_profile.jpeg'),
-            radius: 100,
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 10),
-          child: Text(
-            _con.client?.username ?? '',
-            style: TextStyle(
-                fontFamily: 'Pacifico',
-                fontSize: 30,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-          ),
-        )
       ],
     );
   }

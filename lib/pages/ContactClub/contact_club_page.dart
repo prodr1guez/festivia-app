@@ -65,15 +65,6 @@ class _ContactClubPageState extends State<ContactClubPage> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-                margin: EdgeInsets.only(left: 20, top: 60),
-                child: Text(
-                  "RRPP",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                )),
-          )
         ],
       ),
     );

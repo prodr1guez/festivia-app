@@ -256,7 +256,8 @@ class _AddPageState extends State<AddPage> {
         buttonText: Text("Seleccionar"),
         title: Text("Géneros"),
         listType: MultiSelectListType.CHIP,
-        selectedColor: Colors.grey,
+        selectedItemsTextStyle: TextStyle(color: Colors.white),
+        selectedColor: Colors.black,
         decoration: BoxDecoration(
           color: Colors.grey[100],
           borderRadius: BorderRadius.all(Radius.circular(10)),

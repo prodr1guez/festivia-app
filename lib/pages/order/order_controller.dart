@@ -88,7 +88,8 @@ class OrderController {
         nameEvent: nameEvent,
         type: type,
         date: date,
-        image: image);
+        image: image,
+        checkedIn: false);
     print("ORDERPAGE:  " + id);
 
     await _ticketProvider.create(ticket, idEvent, revenue, typeHost, idHost);
@@ -100,6 +101,7 @@ class OrderController {
   }
 
   Future<void> addTicketFree() async {
+    print("---" + idEvent);
     if (nameController.text.isEmpty || lastNameController.text.isEmpty) {
       utils.Snackbar.showSnackbar(context, key, 'Complete todo los datos');
     } else {
@@ -112,7 +114,8 @@ class OrderController {
           nameEvent: nameEvent,
           type: type,
           date: date,
-          image: image);
+          image: image,
+          checkedIn: false);
 
       //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
 

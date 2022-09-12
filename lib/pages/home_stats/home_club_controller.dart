@@ -46,6 +46,10 @@ class HomeClubController {
     Navigator.pushNamed(context, 'liquidate_revenue');
   }
 
+  navigateToContactUs(BuildContext context) {
+    Navigator.pushNamed(context, 'contact_us');
+  }
+
   Future<void> logout() async {
     await _authProvider.signOut();
     Navigator.pushNamed(context, 'start');

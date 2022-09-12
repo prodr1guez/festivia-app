@@ -15,6 +15,9 @@ class NavigationClubPage extends StatefulWidget {
 
 class _NavigationClubPageState extends State<NavigationClubPage> {
   NavigationClubController _controller = new NavigationClubController();
+  int index = 0;
+  final navigationKey = GlobalKey<CurvedNavigationBarState>();
+  final screens = [HomeStatsPage(), AddPage(), MyEvents(), MyClubPage()];
 
   @override
   void initState() {
@@ -26,9 +29,6 @@ class _NavigationClubPageState extends State<NavigationClubPage> {
     });
   }
 
-  int index = 0;
-  final navigationKey = GlobalKey<CurvedNavigationBarState>();
-  final screens = [HomeStatsPage(), AddPage(), MyEvents(), MyClubPage()];
   @override
   Widget build(BuildContext context) {
     final items = <Widget>[

@@ -26,7 +26,7 @@ class ProfileController {
   PickedFile pickedFile;
   File imageFile;
 
-  Client client = new Client();
+  Client client = new Client(username: "");
 
   Future init(BuildContext context, Function refresh) {
     this.context = context;

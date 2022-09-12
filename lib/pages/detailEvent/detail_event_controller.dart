@@ -20,6 +20,7 @@ class DetailEventController {
   Future init(BuildContext context, Function refresh, String idEvent) async {
     this.context = context;
     this.refresh = refresh;
+
     getEventInfo(idEvent);
   }
 
@@ -29,7 +30,8 @@ class DetailEventController {
     refresh();
   }
 
-  void goToReserve() {
+  goToReserve(String idEvent) {
+    print("---" + idEvent.toString());
     bool isFree = false;
     bool isPaidOff = false;
     double priceGeneral;

@@ -37,7 +37,7 @@ class _EventStatsPageState extends State<EventStatsPage> {
                 child: Container(
                     margin: EdgeInsets.only(left: 20, top: 20),
                     child: Text(
-                      "Estadisticas - Festivia Party",
+                      "Estadisticas de ${_controller.event.tittle}",
                       style:
                           TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                     )),

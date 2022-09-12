@@ -44,9 +44,9 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      height: 40,
+                      height: 30,
                       width: 120,
-                      margin: EdgeInsets.only(left: 20, top: 10),
+                      margin: EdgeInsets.only(left: 10, top: 10),
                       child: Image.asset("assets/festivia-cut.png")),
                 ),
                 FutureBuilder(

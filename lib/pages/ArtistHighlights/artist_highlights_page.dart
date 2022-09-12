@@ -99,7 +99,6 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
   }
 
   FutureBuilder<List<Artist>> listArtist() {
-    print("entrando");
     return FutureBuilder(
         future: _con.getArtist(),
         builder: (context, AsyncSnapshot<List<Artist>> snapshot) {

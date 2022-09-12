@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/pages/myclubpage/my_club_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 
@@ -47,17 +49,25 @@ class _MyClubPageState extends State<MyClubPage> {
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.7,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: _controller.club?.image != null
-                        ? NetworkImage(_controller.club?.image)
-                        : NetworkImage(
-                            'https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              child: _controller.club?.image != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              _controller.club?.image),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[300],
+                        highlightColor: Colors.white,
+                        child: Card(margin: EdgeInsets.all(10)),
+                      ),
+                    ),
             ),
             panelBuilder: (ScrollController controller) =>
                 _panelBody(controller),

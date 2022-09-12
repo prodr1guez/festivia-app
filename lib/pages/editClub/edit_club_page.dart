@@ -179,18 +179,6 @@ class _EditClubPageState extends State<EditClubPage> {
     );
   }
 
-  Widget _textPassFree() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
-      child: Text(
-        'Entrada Free',
-        style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
-      ),
-    );
-  }
-
   Widget _textFieldName() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),

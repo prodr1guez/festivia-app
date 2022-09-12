@@ -43,8 +43,12 @@ class EventProvider {
     try {
       _ref.doc(event.id).set(event.toJson());
 
-      HostEvent eventHost =
-          HostEvent(id: event.id, image: event.image, name: event.tittle);
+      HostEvent eventHost = HostEvent(
+          id: event.id,
+          image: event.image,
+          name: event.tittle,
+          location: event.location,
+          dateEnd: event.dateEnd);
 
       User user = await _userProvider.getById(_authProvider.getUser().uid);
 

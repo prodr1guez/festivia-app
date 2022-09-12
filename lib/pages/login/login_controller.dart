@@ -69,7 +69,7 @@ class LoginController {
             print("paso 4");
           }
         } else {
-          print('El cliente si es nulo');
+          print('El cliente es nulo');
           _progressDialog.hide();
           utils.Snackbar.showSnackbar(context, key, 'El usuario no es valido');
           await _authProvider.signOut();
@@ -85,5 +85,9 @@ class LoginController {
       _progressDialog.hide();
       print('Error: $error');
     }
+  }
+
+  navigateToForgotPass(BuildContext context) {
+    Navigator.pushNamed(context, 'forgot_pass');
   }
 }

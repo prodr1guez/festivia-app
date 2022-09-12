@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:festivia/models/Club.dart';
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/pages/detailClub/detail_club_controller.dart';
 import 'package:festivia/widgets/events_clubs.dart';
@@ -13,10 +15,21 @@ import '../../models/HostEvent.dart';
 import '../../models/data.dart';
 import '../../widgets/mini_card_home.dart';
 import '../../widgets/my_events_list.dart';
+import '../imageFullScreen/image_full_screen_page.dart';
 import '../map/map_controller.dart';
 import '../search/search_controller.dart';
 
 class DetailClubPage extends StatefulWidget {
+  final String tag;
+  final String url;
+  final Club club;
+
+  DetailClubPage(
+      {Key key, @required this.tag, @required this.url, @required this.club})
+      : assert(tag != null),
+        assert(url != null),
+        assert(club != null),
+        super(key: key);
   @override
   _DetailClubPageState createState() => _DetailClubPageState();
 }
@@ -31,7 +44,7 @@ class _DetailClubPageState extends State<DetailClubPage> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.init(context, refresh);
+      _controller.init(context, refresh, widget.club.id);
       _con.init(context, refresh);
     });
   }
@@ -60,14 +73,22 @@ class _DetailClubPageState extends State<DetailClubPage> {
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.7,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: _controller.club?.image != null
-                        ? NetworkImage(_controller.club?.image)
-                        : NetworkImage(
-                            'https://miro.medium.com/max/1372/1*-hfgomjwoby91XbKRwYZvw.png'),
-                    fit: BoxFit.cover,
+              child: Hero(
+                tag: widget.tag,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ImageFullScreen(
+                          tag: "club", url: _controller.club?.image);
+                    }));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(widget.url),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ),

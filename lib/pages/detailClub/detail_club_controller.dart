@@ -17,11 +17,12 @@ class DetailClubController {
   Club club;
   String dateParsed;
   String location;
+  List<HostEvent> listEvent;
 
-  Future init(BuildContext context, Function refresh) async {
+  Future init(BuildContext context, Function refresh, String id) async {
     this.context = context;
     this.refresh = refresh;
-    idClub = ModalRoute.of(context).settings.arguments as String;
+    idClub = id;
     getClubInfo();
   }
 
@@ -31,7 +32,10 @@ class DetailClubController {
   }
 
   Future<List<HostEvent>> getEventsClub() async {
-    return await _clubProvider.EventsForClub(idClub);
+    if (listEvent == null) {
+      return await _clubProvider.EventsForClub(idClub);
+    }
+    return listEvent;
   }
 
   void getClubInfo() async {

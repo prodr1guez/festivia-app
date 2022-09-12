@@ -1,3 +1,5 @@
+import 'package:festivia/pages/forgotPassword/forgot_pass_controller.dart';
+import 'package:festivia/responses/forgot_pass_response.dart';
 import 'package:festivia/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +69,16 @@ class AuthProvider {
     }
 
     return true;
+  }
+
+  Future<ForgotPassResponse> sendResetPasswordLink(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return ForgotPassResponse.ok;
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return stringtToForgotPassResponse(e.code);
+    }
   }
 
   Future<void> signOut() async {

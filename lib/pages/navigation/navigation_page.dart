@@ -36,8 +36,8 @@ class _NavigationPageState extends State<NavigationPage> {
   final screens = [
     HomePage(),
     SearchPage(),
-    AddPage(),
-    //AddArtist(),
+    //AddPage(),
+    AddArtist(),
     MyTickets(),
     ProfilePage()
   ];

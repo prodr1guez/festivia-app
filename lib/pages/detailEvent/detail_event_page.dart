@@ -76,7 +76,7 @@ class _DetailEventState extends State<DetailEvent> {
               topRight: Radius.circular(32),
               topLeft: Radius.circular(32),
             ),
-            minHeight: MediaQuery.of(context).size.height * 0.60,
+            minHeight: MediaQuery.of(context).size.height * 0.40,
             maxHeight: MediaQuery.of(context).size.height * 0.90,
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
@@ -188,7 +188,7 @@ class _DetailEventState extends State<DetailEvent> {
       children: <Widget>[
         _infoCell(title: 'Edad', value: widget.event?.ageMin),
         _infoCell(title: 'Musica', value: widget.event?.genders.toString()),
-        _infoCell(title: 'Tipo', value: 'After party'),
+        _infoCell(title: 'Estilo', value: 'After party'),
       ],
     );
   }
@@ -303,7 +303,7 @@ class _DetailEventState extends State<DetailEvent> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: _controller.goToReserve,
+          onPressed: () => {_controller.goToReserve(widget.event.id)},
           text: 'Reservar',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,

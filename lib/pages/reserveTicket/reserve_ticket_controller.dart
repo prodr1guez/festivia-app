@@ -2,6 +2,7 @@ import 'package:festivia/models/Event.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:festivia/utils/snackbar.dart' as utils;
 
 class ReserveTicketController {
   Function refresh;
@@ -56,10 +57,21 @@ class ReserveTicketController {
     infoGeneral = arguments["descriptionTicketGeneral"];
     ticketsFree = arguments["maxTicketsFree"].toString();
     ticketsGeneral = arguments["maxTicketsGeneral"].toString();
-    availableTicketsFreeText = "¡Quedan " + ticketsFree + " lugares!";
-    availableTicketsGeneralText = "¡Quedan " + ticketsGeneral + " lugares!";
     typeHost = arguments["typeHost"];
     idHost = arguments["idHost"];
+
+    if (int.parse(ticketsFree) <= 0) {
+      availableTicketsFreeText = "¡AGOTADO!";
+    } else {
+      availableTicketsFreeText = "¡Quedan " + ticketsFree + " lugares!";
+    }
+
+    if (int.parse(ticketsGeneral) <= 0) {
+      availableTicketsGeneralText = "¡AGOTADO!";
+    } else {
+      availableTicketsGeneralText = "¡Quedan " + ticketsGeneral + " lugares!";
+    }
+
     refresh();
   }
 
@@ -69,48 +81,40 @@ class ReserveTicketController {
     refresh();
   }
 
-  void goToReserve() {
-    bool isFree = false;
-    bool isPaidOff = false;
-    if (event?.isFree != null && event.isFree) {
-      isFree = true;
-    }
-
-    if (event?.isPaidOff != null && event.isPaidOff) {
-      isPaidOff = true;
-    }
-
-    Navigator.pushNamed(context, 'reserve_tickets', arguments: {
-      "isFree": isFree,
-      "isPaidOff": isPaidOff,
-    });
-  }
-
   void generalToOrderPage() {
-    Navigator.pushNamed(context, 'order', arguments: {
-      "type": "general",
-      "idEvent": idEvent,
-      "priceGeneral": priceGeneral,
-      "date": date,
-      "location": location,
-      "nameEvent": nameEvent,
-      "image": image,
-      "typeHost": typeHost,
-      "idHost": idHost
-    });
+    if (int.parse(ticketsGeneral) > 0) {
+      Navigator.pushNamed(context, 'order', arguments: {
+        "type": "general",
+        "idEvent": idEvent,
+        "priceGeneral": priceGeneral,
+        "date": date,
+        "location": location,
+        "nameEvent": nameEvent,
+        "image": image,
+        "typeHost": typeHost,
+        "idHost": idHost
+      });
+    } else {
+      utils.Snackbar.showSnackbar(context, key, 'Entradas agotadas');
+    }
   }
 
   void freeToOrderPage() {
-    Navigator.pushNamed(context, 'order', arguments: {
-      "type": "free",
-      "idEvent": idEvent,
-      "date": date,
-      "location": location,
-      "nameEvent": nameEvent,
-      "image": image,
-      "typeHost": typeHost,
-      "idHost": idHost
-    });
+    print("---" + idEvent);
+    if (int.parse(ticketsFree) > 0) {
+      Navigator.pushNamed(context, 'order', arguments: {
+        "type": "free",
+        "idEvent": idEvent,
+        "date": date,
+        "location": location,
+        "nameEvent": nameEvent,
+        "image": image,
+        "typeHost": typeHost,
+        "idHost": idHost
+      });
+    } else {
+      utils.Snackbar.showSnackbar(context, key, 'Entradas agotadas');
+    }
   }
 
   void vipToOrderPage() {

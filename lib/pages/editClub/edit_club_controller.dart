@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:festivia/api/env.dart';
 import 'package:festivia/models/Club.dart';
+import 'package:festivia/models/UpdateInfoClub.dart';
 import 'package:festivia/providers/club_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/event_provider.dart';
-import '../../providers/geofire_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -48,6 +47,7 @@ class EditClubController {
   Position _position;
   LatLng fromLatLng;
   String currentImage = "";
+  String idClub;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -66,7 +66,7 @@ class EditClubController {
     from = club.location;
     phoneController.text = club.phone;
     emailController.text = club.email;
-    print(club.toJson());
+    idClub = club.id;
     refresh();
   }
 
@@ -115,11 +115,10 @@ class EditClubController {
     var email = emailController.text;
 
     if (pickedFile != null) {
-      print("entandinf");
       TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
 
-      Club club = Club(
+      UpdateInfoClub club = UpdateInfoClub(
           name: tittle,
           description: description,
           email: email,
@@ -129,9 +128,9 @@ class EditClubController {
           long: fromLatLng.longitude,
           image: imageUrl);
 
-      await _clubProvider.update(club.toJson(), "GJmOjrJQCXCnhs3zhdNF");
+      await _clubProvider.update(club.toJson(), idClub);
     } else {
-      Club club = Club(
+      UpdateInfoClub club = UpdateInfoClub(
           name: tittle,
           description: description,
           email: email,
@@ -141,11 +140,16 @@ class EditClubController {
           long: fromLatLng.longitude,
           image: currentImage);
 
-      await _clubProvider.update(club.toJson(), "GJmOjrJQCXCnhs3zhdNF");
+      try {
+        await _clubProvider.update(club.toJson(), idClub);
+        await _progressDialog.hide();
+        utils.Snackbar.showSnackbar(context, key, 'Se actualizaron los datos');
+      } catch (e) {
+        await _progressDialog.hide();
+        utils.Snackbar.showSnackbar(
+            context, key, "Ocurrió un error, vuelve a intentarlo mas tarde");
+      }
     }
-
-    await _progressDialog.hide();
-    utils.Snackbar.showSnackbar(context, key, 'Se actualizaron los datos');
   }
 
   Future<Null> showGoogleAutoComplete(bool isFrom) async {

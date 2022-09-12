@@ -100,7 +100,7 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
                   child: Container(
                       margin: EdgeInsets.only(left: 10, top: 20),
                       child: Text(
-                        "Ganancias actuales",
+                        "Ganancias sin liquidiar",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       )),
@@ -282,7 +282,9 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Container(
           child: RaisedButton(
-        onPressed: () {},
+        onPressed: () {
+          _controller.navigateToContactUs(context);
+        },
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
         child: Stack(
@@ -317,7 +319,9 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Container(
           child: RaisedButton(
-        onPressed: () {},
+        onPressed: () {
+          _controller.navigateToContactUs(context);
+        },
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
         child: Stack(

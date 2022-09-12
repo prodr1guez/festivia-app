@@ -3,12 +3,15 @@ import 'package:festivia/pages/ContactClub/contact_club_page.dart';
 import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page.dart';
 import 'package:festivia/pages/clubHighlights/club_highlights_page.dart';
+import 'package:festivia/pages/congratsLiquidate/congrats_liquidate_page.dart';
+import 'package:festivia/pages/contactUs/contact_us_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:festivia/pages/detailEvent/detail_event_page.dart';
 import 'package:festivia/pages/detailEventHost/detail_event_host_page.dart';
 import 'package:festivia/pages/editClub/edit_club_page.dart';
 import 'package:festivia/pages/eventHighlights/event_highlights_page.dart';
 import 'package:festivia/pages/eventStats/event_stats_page.dart';
+import 'package:festivia/pages/forgotPassword/forgot_pass_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
 import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
 import 'package:festivia/pages/liquidateRevenue/liquidate_revenue_page.dart';
@@ -82,6 +85,9 @@ class _MyAppState extends State<MyApp> {
             EventHighlightsPage(),
         'club_highlights_page': (BuildContext context) => ClubHighlightsPage(),
         'image_full_screen': (BuildContext context) => ImageFullScreen(),
+        'forgot_pass': (BuildContext context) => ForgotPassPage(),
+        'congrats_liquidate': (BuildContext context) => CongratsLiquidate(),
+        'contact_us': (BuildContext context) => ContactUsPage(),
       },
     );
   }

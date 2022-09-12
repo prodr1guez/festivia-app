@@ -4,6 +4,7 @@ import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/client_provider.dart';
+import 'package:festivia/utils/DateParsed.dart';
 import 'package:min_id/min_id.dart';
 
 import '../models/Club.dart';
@@ -49,6 +50,12 @@ class ClubProvider {
   Future<void> increaseAssistans(String id) {
     return _ref.doc(id).update({
       "assistantsNextEvents": FieldValue.increment(1),
+    });
+  }
+
+  Future<void> liquidateRevenue(String id, double amount) {
+    return _ref.doc(id).update({
+      "currentRevenue": FieldValue.increment(-amount),
     });
   }
 
@@ -116,7 +123,9 @@ class ClubProvider {
     List<HostEvent> events = new List();
 
     for (Map<String, dynamic> data in allData) {
-      events.add(HostEvent.fromJson(data));
+      if (DateParse().CompareDateBool(HostEvent.fromJson(data).dateEnd)) {
+        events.add(HostEvent.fromJson(data));
+      }
     }
 
     return events;
@@ -139,7 +148,7 @@ class ClubProvider {
     return null;
   }
   */
-  Future<void> update(Map<String, dynamic> data, String id) {
-    return _ref.doc(id).update(data);
+  Future<void> update(Map<String, dynamic> data, String id) async {
+    return await _ref.doc(id).update(data);
   }
 }

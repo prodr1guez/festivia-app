@@ -160,7 +160,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
         _infoCell(title: 'Edad', value: _controller.event?.ageMin),
         _infoCell(
             title: 'Musica', value: _controller.event?.genders.toString()),
-        _infoCell(title: 'Tipo', value: 'After party'),
+        _infoCell(title: 'Estilo', value: 'After party'),
       ],
     );
   }

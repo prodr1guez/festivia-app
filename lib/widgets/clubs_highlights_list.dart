@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/HostEvent.dart';
+import 'package:festivia/pages/detailClub/detail_club_page.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
 
@@ -22,18 +24,28 @@ class clubsHighlistlist extends StatelessWidget {
               Club club = snapshot.data[index];
               return InkWell(
                 onTap: () {
-                  navigateToDetail(context, club.id);
+                  //navigateToDetail(context, club.id);
+
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return DetailClubPage(
+                        tag: "club$index", url: club.image, club: club);
+                  }));
                 },
                 child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Column(
                       children: [
-                        Container(
-                            height: 130,
-                            width: 400,
-                            child: ParallaxImage(
-                                extent: 150, image: NetworkImage(club.image))),
+                        Hero(
+                          tag: "club$index",
+                          child: Container(
+                              height: 130,
+                              width: 400,
+                              child: ParallaxImage(
+                                  extent: 150,
+                                  image:
+                                      CachedNetworkImageProvider(club.image))),
+                        ),
                         Container(
                           height: 40,
                           margin: EdgeInsets.only(left: 15),

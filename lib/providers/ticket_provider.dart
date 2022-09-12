@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:festivia/models/Event.dart';
-import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/client_provider.dart';

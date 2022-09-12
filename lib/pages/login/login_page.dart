@@ -31,7 +31,8 @@ class _LoginPageState extends State<LoginPage> {
             _textLogin(),
             _textFieldUsername(),
             _textFieldPassword(),
-            _buttonLogin()
+            _buttonLogin(),
+            _buttonForgotPass()
           ],
         ),
       ),
@@ -84,10 +85,22 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttonLogin() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+      margin: EdgeInsets.only(left: 30, right: 30, top: 40, bottom: 20),
       child: ButtonApp(
         onPressed: _con.login,
         text: 'Iniciar sesión',
+        color: utils.Colors.festiviaColor,
+        textColor: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buttonForgotPass() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: ButtonApp(
+        onPressed: () => {_con.navigateToForgotPass(context)},
+        text: 'Olvidaste tu contraseña?',
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
       ),
