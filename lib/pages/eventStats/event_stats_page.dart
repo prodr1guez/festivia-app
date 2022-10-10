@@ -2,7 +2,6 @@ import 'package:festivia/pages/eventStats/event_stats_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../../widgets/button_app.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 
 class EventStatsPage extends StatefulWidget {
@@ -27,66 +26,67 @@ class _EventStatsPageState extends State<EventStatsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                    margin: EdgeInsets.only(left: 20, top: 20),
-                    child: Text(
-                      "Estadisticas de ${_controller.event.tittle}",
-                      style:
-                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-                    )),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                  margin: EdgeInsets.only(left: 20, top: 20),
+                  child: Text(
+                    "Estadisticas de ${_controller.event.tittle}",
+                    style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Ubuntu"),
+                  )),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ItemStats(
+                "Asistiran",
+                _controller.event.assistants,
+                "personas",
+                Color(0xFFE78EA9),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ItemStats(
-                  "Asistiran",
-                  _controller.event.assistants,
-                  "personas",
-                  Color(0xFFE78EA9),
-                ),
-                Container(width: 10),
-                ItemStats(
-                  "Vendidos",
-                  _controller.event.freeTicketsSold,
-                  "free",
-                  Color(0xFFFEB139),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ItemStats(
-                  "Vendidos",
-                  _controller.event.generalTicketsSold,
-                  "generales",
-                  Color(0xFFFFD59E),
-                ),
-                Container(width: 10),
-                ItemStats(
-                  "Vendidos",
-                  _controller.event.vipTicketsSold,
-                  "vip",
-                  Color(0xFFB9F8D3),
-                ),
-              ],
-            ),
-            Gains(),
-            _buttonViewLists(),
-            _buttonOutMoney(),
-            _buttonPromotionate(),
-          ],
-        ),
+              Container(width: 10),
+              ItemStats(
+                "Vendidos",
+                _controller.event.freeTicketsSold,
+                "Free",
+                Color(0xFFFEB139),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ItemStats(
+                "Vendidos",
+                _controller.event.generalTicketsSold,
+                "Generales",
+                Color(0xFFFFD59E),
+              ),
+              Container(width: 10),
+              ItemStats(
+                "Vendidos",
+                _controller.event.vipTicketsSold,
+                "VIPs",
+                Color(0xFFB9F8D3),
+              ),
+            ],
+          ),
+          Gains(),
+          _buttonViewLists(),
+          Visibility(
+              visible: _controller.showLiquidate, child: _buttonLiquidate()),
+          _buttonUpdate(),
+        ],
       ),
     ));
   }
@@ -113,7 +113,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
                       child: Text(
                         "Ganancias",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Ubuntu"),
                       )),
                 ),
                 Align(
@@ -125,7 +127,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
                             ? "-"
                             : _controller.event.revenue.toString(),
                         style: TextStyle(
-                            fontSize: 50, fontWeight: FontWeight.bold),
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Ubuntu"),
                       )),
                 ),
               ],
@@ -153,17 +157,26 @@ class _EventStatsPageState extends State<EventStatsPage> {
             Container(
                 child: Text(
               tittle,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"),
             )),
             Container(
                 child: Text(
               number.toString(),
-              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"),
             )),
             Container(
                 child: Text(
               descrip,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"),
             ))
           ],
         ),
@@ -171,105 +184,80 @@ class _EventStatsPageState extends State<EventStatsPage> {
     );
   }
 
-  Widget _buttonOutMoney() {
+  Widget _buttonUpdate() {
     return Container(
-      height: 50,
-      width: 350,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      child: Container(
-          child: RaisedButton(
-        onPressed: () {},
-        color: utils.Colors.festiviaColor,
-        textColor: Colors.white,
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Liquidar ganancias",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  )),
+        height: 50,
+        width: 350,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        child: Container(
+          alignment: Alignment.center,
+          child: InkWell(
+            onTap: _controller.getEventInfo,
+            child: Text(
+              "Actualizar datos",
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                height: 50,
-              ),
-            )
-          ],
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      )),
-    );
-  }
-
-  Widget _buttonPromotionate() {
-    return Container(
-      height: 50,
-      width: 350,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      child: Container(
-          child: RaisedButton(
-        onPressed: () {},
-        color: utils.Colors.festiviaColor,
-        textColor: Colors.white,
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Promocionar evento",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  )),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                height: 50,
-              ),
-            )
-          ],
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      )),
-    );
+          ),
+        ));
   }
 
   Widget _buttonViewLists() {
     return Container(
       height: 50,
       width: 350,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      margin: EdgeInsets.only(right: 10, left: 10, top: 50, bottom: 10),
       child: Container(
           child: RaisedButton(
-        onPressed: () {},
+        onPressed: () {
+          _controller.navigateToGuests(context);
+        },
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
-        child: Stack(
-          children: [
-            Align(
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+              height: 50,
               alignment: Alignment.center,
-              child: Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Administrar listas de invitados",
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                  )),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                height: 50,
-              ),
-            )
-          ],
+              child: Text(
+                "Administrar listas de invitados",
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu"),
+              )),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      )),
+    );
+  }
+
+  Widget _buttonLiquidate() {
+    return Container(
+      height: 50,
+      width: 350,
+      margin: EdgeInsets.only(right: 10, left: 10, top: 5, bottom: 5),
+      child: Container(
+          child: RaisedButton(
+        onPressed: () {
+          _controller.navigateToLiquidateRevenue(context);
+        },
+        color: utils.Colors.festiviaColor,
+        textColor: Colors.white,
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: Text(
+                "Liquidar ganancias",
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu"),
+              )),
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       )),

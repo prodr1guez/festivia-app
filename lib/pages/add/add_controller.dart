@@ -5,6 +5,7 @@ import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:festivia/providers/storage_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
+import 'package:festivia/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,34 +31,28 @@ class AddController {
   EventProvider _eventProvider;
   StorageProvider _storageProvider;
   GeofireProvider _geofireProvider;
+  SharedPref _sharedPref;
   Position _position;
 
   places.GoogleMapsPlaces _places =
       places.GoogleMapsPlaces(apiKey: Env.GOOGLE_MAPS_API_KEY);
 
-  TextEditingController tittleEvent = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController confirmPasswordController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController tittleEvent = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController descriptionTicketFreeController =
-      new TextEditingController();
+      TextEditingController();
   TextEditingController descriptionTicketGeneralController =
-      new TextEditingController();
-  TextEditingController priceController = new TextEditingController();
+      TextEditingController();
+  TextEditingController priceController = TextEditingController();
   DropdownEditingController ageMinController =
-      new DropdownEditingController<String>();
+      DropdownEditingController<String>();
 
-  DropdownEditingController maxTicketsFreeOrderController =
-      new DropdownEditingController<String>();
+  DropdownEditingController typeEventController =
+      DropdownEditingController<String>();
 
-  DropdownEditingController maxTicketsFreeEventController =
-      new DropdownEditingController<String>();
+  TextEditingController maxTicketsFreeController = TextEditingController();
 
-  DropdownEditingController maxTicketsPaidOffController =
-      new DropdownEditingController<String>();
-
-  DropdownEditingController maxTicketsPaidOffEventController =
-      new DropdownEditingController<String>();
+  TextEditingController maxTicketsGeneralController = TextEditingController();
 
   List<String> selectedGenders = [];
 
@@ -79,15 +74,17 @@ class AddController {
   String maxFreeTicketsOrder;
   String maxTicketsPaidOff;
   int maxTicketsPaidOffEvent;
+  String typeEvent;
 
   bool isFree = false;
   bool istimeLimit = false;
 
-  bool isPaidOff = false;
+  bool isGeneral = false;
 
   String price;
 
   String from;
+  String typeUser;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -96,62 +93,90 @@ class AddController {
     _eventProvider = new EventProvider();
     _storageProvider = new StorageProvider();
     _geofireProvider = new GeofireProvider();
+    _sharedPref = new SharedPref();
+    typeUser = await _sharedPref.read("typeUser");
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
+
     refresh();
   }
 
   publish() async {
-    var maxTicketFree = maxTicketsFreeEventController.value.toString();
-    var maxTicketsPaid = maxTicketsPaidOffEventController.value.toString();
+    if (tittleEvent.text.isEmpty ||
+        from == null ||
+        dateStart == null ||
+        dateEnd == null ||
+        descriptionController.text.isEmpty ||
+        ageMinController.value == null) {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debes ingresar todos los campos');
+      return;
+    }
+
+    if (!isFree && !isGeneral) {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debes seleccionar al menos un tipo de entrada');
+      return;
+    }
+
+    if (isFree) {
+      if (maxTicketsFreeController.value.text.isEmpty) {
+        utils.Snackbar.showSnackbar(context, key,
+            'Debes seleccionar cantidad de entradas para el evento');
+        return;
+      }
+
+      if (descriptionTicketFreeController.value.text.isEmpty) {
+        utils.Snackbar.showSnackbar(
+            context, key, 'Debes completar una descripcion para las entradas');
+        return;
+      }
+    } else {
+      maxTicketsFreeController.text = "0";
+    }
+
+    if (isGeneral) {
+      if (priceController.text.isEmpty) {
+        utils.Snackbar.showSnackbar(
+            context, key, 'Debes seleccionar un precio para las entradas');
+        return;
+      }
+      if (maxTicketsGeneralController.value.text.isEmpty) {
+        utils.Snackbar.showSnackbar(context, key,
+            'Debes seleccionar cantidad de entradas para el evento');
+        return;
+      }
+
+      if (descriptionTicketGeneralController.value.text.isEmpty) {
+        utils.Snackbar.showSnackbar(
+            context, key, 'Debes completar una descripcion para las entradas');
+        return;
+      }
+    } else {
+      maxTicketsGeneralController.text = "0";
+    }
+    if (typeEventController.value == null) {
+      typeEventController.value = "Fiesta";
+    }
+
+    var maxTicketFree = maxTicketsFreeController.value.text.toString();
+    var maxTicketsPaid = maxTicketsGeneralController.value.text.toString();
 
     tittle = tittleEvent.text;
     description = descriptionController.text;
     ageMin = ageMinController.value.toString();
-    maxFreeTicketsOrder = maxTicketsFreeOrderController.value.toString();
+    maxFreeTicketsOrder = maxTicketsFreeController.value.toString();
     maxTicketsFreePass = int.parse(maxTicketFree);
-    maxTicketsPaidOff = maxTicketsPaidOffController.value.toString();
+    maxTicketsPaidOff = maxTicketsGeneralController.value.toString();
     maxTicketsPaidOffEvent = int.parse(maxTicketsPaid);
     price = priceController.text;
+    typeEvent = typeEventController.value.toString();
 
-    print(tittle);
-    print("Fecha inicio");
-    print(dateStart);
-    print(dateStartParsed);
-    print("fecha final");
-    print(dateEnd);
-    print(dateEndParsed);
-    print("-----------");
-    print(description);
-    print("-----------");
-    print(selectedGenders);
-    print("-----------");
-    print(ageMin);
-    print("-----------");
-    print(isFree);
-    print(istimeLimit);
-    print(dateEndFreePass);
-    print(dateEndFreePassParsed);
-    print(maxFreeTicketsOrder);
-    print(maxTicketsFreePass);
-    print("-----------");
-    print(isPaidOff);
-    print(price);
-    print(maxTicketsPaidOff);
-    print(maxTicketsPaidOffEvent);
-
-    if (tittle.isEmpty) {
-      print('debes ingresar todos los campos');
-      utils.Snackbar.showSnackbar(
-          context, key, 'Debes ingresar todos los campos');
-
-      return;
-    }
     await _progressDialog.show();
 
     if (pickedFile == null) {
-      print("Ingrese una foto");
-      _progressDialog.hide();
+      utils.Snackbar.showSnackbar(context, key, 'Debes seleccionar una foto');
+      return _progressDialog.hide();
     } else {
       TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
@@ -179,21 +204,31 @@ class AddController {
           generalTicketsSold: 0,
           revenue: 0,
           vipTicketsSold: 0,
-          isPaidOff: isPaidOff,
+          isPaidOff: isGeneral,
           price: price,
           maxTicketsPaidOffEvent: maxTicketsPaidOffEvent,
           idHost: idHost,
           location: from,
           descriptionTicketFree: descriptionTicketFreeController.text,
-          descriptionTicketGeneral: descriptionTicketGeneralController.text);
+          descriptionTicketGeneral: descriptionTicketGeneralController.text,
+          typeHost: typeUser,
+          typeEvent: typeEvent);
 
-      await _eventProvider.create(event);
-      saveLocation(id, dateEnd);
+      try {
+        await _eventProvider.create(event);
+        await saveLocation(id, dateEnd);
+      } catch (error) {
+        utils.Snackbar.showSnackbar(
+            context, key, 'No se pudo crear el evento, Error: $error');
+      }
     }
-
     await _progressDialog.hide();
 
-    utils.Snackbar.showSnackbar(context, key, 'Se publicó el evento');
+    if (typeUser == "club") {
+      navigateToCongratsClub(context);
+      return;
+    }
+    navigateToCongrats(context);
   }
 
   void showAlertDialog() {
@@ -203,15 +238,9 @@ class AddController {
         },
         child: Text('GALERIA'));
 
-    Widget cameraButton = FlatButton(
-        onPressed: () {
-          getImageFromGallery(ImageSource.camera);
-        },
-        child: Text('CAMARA'));
-
     AlertDialog alertDialog = AlertDialog(
       title: Text('Selecciona tu imagen'),
-      actions: [galleryButton, cameraButton],
+      actions: [galleryButton],
     );
 
     showDialog(
@@ -226,13 +255,13 @@ class AddController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
     } else {
-      print('No selecciono ninguna imagen');
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
     }
     Navigator.pop(context);
     refresh();
   }
 
-  void saveLocation(String id, String end) async {
+  saveLocation(String id, String end) async {
     await _geofireProvider.create(
         id, _position.latitude, _position.longitude, dateEnd);
     _progressDialog.hide();
@@ -251,7 +280,7 @@ class AddController {
           await _places.getDetailsByPlaceId(p.placeId, language: 'es');
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
-      print(p.description + "------");
+
       List<Address> address =
           await Geocoder.local.findAddressesFromQuery(p.description);
       if (address != null) {
@@ -263,7 +292,7 @@ class AddController {
 
             if (isFrom) {
               from = '$direction, $city, $department';
-              print(from + "-------");
+
               _position = Position(longitude: lng, latitude: lat);
 
               fromLatLng = new LatLng(lat, lng);
@@ -274,5 +303,15 @@ class AddController {
         }
       }
     }
+  }
+
+  navigateToCongrats(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, 'congrats_event', (route) => false);
+  }
+
+  navigateToCongratsClub(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, 'congrats_event_club', (route) => false);
   }
 }

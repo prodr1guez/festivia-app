@@ -37,7 +37,9 @@ class _MyTicketsState extends State<MyTickets> {
                       child: Text(
                         "Mis tickets",
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                            fontFamily: "Ubuntu",
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold),
                       )),
                 ),
                 FutureBuilder(

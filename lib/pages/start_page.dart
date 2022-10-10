@@ -1,26 +1,23 @@
 import 'package:festivia/pages/start_controller.dart';
-import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/widgets/button_app.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/utils/colors.dart' as utils;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 
 class StartPage extends StatefulWidget {
+  const StartPage({Key key}) : super(key: key);
+
   @override
   _StartPageState createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage> {
-  StartController _controller = StartController();
-  AuthProvider _authProvider = new AuthProvider();
+  final StartController _controller = StartController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print('INIT STATE');
-
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _controller.init(context, refresh);
     });
@@ -30,57 +27,113 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return _controller.laoding == true
         ? Scaffold(
+            backgroundColor: Colors.black,
             body: Column(),
           )
         : Scaffold(
             body: DecoratedBox(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/backf.jpg"),
+                      image: AssetImage("assets/backu.png"),
                       fit: BoxFit.cover)),
-              child: Column(
-                children: [
-                  Padding(
-                    child: Image.asset(
-                      'assets/logo.png',
-                      width: 300.0,
-                      height: 250.0,
+              child: Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      child: Image.asset(
+                        'assets/festivia_slogan_blanco.png',
+                        width: 270.0,
+                        height: 270.0,
+                      ),
+                      padding: EdgeInsets.only(top: 190, left: 20, right: 20),
                     ),
-                    padding: EdgeInsets.only(top: 100, left: 20, right: 20),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 50),
-                    child: Image.asset(
-                      'assets/noname.png',
-                      width: 270.0,
-                      height: 40.0,
-                    ),
-                  ),
-                  _buttonLogin(),
-                  _buttonRegister()
-                ],
+                    _buttonLogin(),
+                    _buttonRegisterText(),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 60),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _textTermsAndConditions(),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
   }
 
-  Widget _buttonRegister() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      child: ButtonApp(
-        text: 'Registrar ahora',
-        color: Colors.white,
-        textColor: utils.Colors.festiviaColor,
-        onPressed: toRegister,
-      ),
+  Widget _buttonRegisterText() {
+    return InkWell(
+      onTap: () => toRegister(),
+      child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: const Text(
+            "Registrar ahora",
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+          )),
     );
+  }
+
+  Widget _textTermsAndConditions() {
+    return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: const TextStyle(
+              fontSize: 13.0,
+              color: Colors.white,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                  text:
+                      'Al hacer clic en cualquiera de las opciones anteriores, estarás aceptando los',
+                  style:
+                      TextStyle(color: Colors.grey[400], fontFamily: "Ubuntu")),
+              TextSpan(
+                  text: ' Términos de uso',
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = (() {
+                      toTermsAndConditions();
+                    }),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontFamily: "Ubuntu")),
+              TextSpan(
+                  text: ' y la ',
+                  style: TextStyle(
+                    fontFamily: "Ubuntu",
+                    color: Colors.grey[400],
+                  )),
+              // ignore: unnecessary_new
+              new TextSpan(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = (() {
+                      toPrivacyPolicy();
+                    }),
+                  text: 'Política de privacidad ',
+                  style: const TextStyle(
+                      fontFamily: "Ubuntu", fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: 'de Festivia',
+                  style:
+                      TextStyle(fontFamily: "Ubuntu", color: Colors.grey[400])),
+            ],
+          ),
+        ));
   }
 
   Widget _buttonLogin() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
       child: ButtonApp(
-        text: 'Iniciar Sesion',
+        text: 'Iniciar Sesión',
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
         onPressed: toLogin,
@@ -88,79 +141,16 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  Widget _textFieldEmail() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30),
-      child: const TextField(
-        decoration: InputDecoration(
-            hintText: 'correo@gmail.com',
-            labelText: 'Correo electronico',
-            suffixIcon: Icon(
-              Icons.email_outlined,
-              color: utils.Colors.festiviaColor,
-            )),
-      ),
-    );
-  }
-
-  Widget _textFieldUsername() {
-    return const TextField(
-      decoration: InputDecoration(
-          hintText: 'Pepito Perez',
-          labelText: 'Nombre de usuario',
-          filled: true,
-          fillColor: Color(0xFFACE5EE),
-          suffixIcon: Icon(
-            Icons.person_outline,
-            color: utils.Colors.festiviaColor,
-          )),
-    );
-  }
-
-  Widget _textFieldPassword() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: const TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-            labelText: 'Contraseña',
-            suffixIcon: Icon(
-              Icons.lock_open_outlined,
-              color: utils.Colors.festiviaColor,
-            )),
-      ),
-    );
-  }
-
-  Widget _textFieldConfirmPassword() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: const TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-            labelText: 'Confirmar Contraseña',
-            suffixIcon: Icon(
-              Icons.lock_open_outlined,
-              color: utils.Colors.festiviaColor,
-            )),
-      ),
-    );
-  }
-
-  Widget _textLogin() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: const Text(
-        'REGISTRO',
-        style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
-      ),
-    );
-  }
-
   void toLogin() {
     Navigator.pushNamed(context, 'login');
+  }
+
+  void toTermsAndConditions() {
+    Navigator.pushNamed(context, 'terms_and_conditions');
+  }
+
+  void toPrivacyPolicy() {
+    Navigator.pushNamed(context, 'privacy_policy');
   }
 
   void toRegister() {

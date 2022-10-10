@@ -36,17 +36,13 @@ class MapController {
   }
 
   void checkGPS() async {
-    print("haja");
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
-      print('GPS ACTIVADO');
       updateLocation();
     } else {
-      print('GPS DESACTIVADO');
       bool locationGPS = await location.Location().requestService();
       if (locationGPS) {
         updateLocation();
-        print('ACTIVO EL GPS');
       }
     }
   }
@@ -54,11 +50,12 @@ class MapController {
   void updateLocation() async {
     try {
       await _determinePosition();
-// UNA VEZ
+
       centerPosition();
       await getNearbyDrivers();
     } catch (error) {
-      print('Error en la localizacion: $error');
+      utils.Snackbar.showSnackbar(
+          context, key, 'Error en la localizacion: $error');
     }
   }
 

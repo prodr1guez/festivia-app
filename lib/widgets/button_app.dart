@@ -32,7 +32,11 @@ class ButtonApp extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   text,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu",
+                  ),
                 )),
           ),
           Align(

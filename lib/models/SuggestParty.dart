@@ -10,19 +10,15 @@ SuggestParty suggestPartyFromJson(String str) =>
 String suggestPartyToJson(SuggestParty data) => json.encode(data.toJson());
 
 class SuggestParty {
-  SuggestParty({
-    this.id,
-    this.image,
-    this.name,
-    this.type,
-    this.location,
-  });
+  SuggestParty(
+      {this.id, this.image, this.name, this.type, this.location, this.date});
 
   String id;
   String image;
   String name;
   String type;
   String location;
+  String date;
 
   factory SuggestParty.fromJson(Map<String, dynamic> json) => SuggestParty(
         id: json["id"],
@@ -30,6 +26,7 @@ class SuggestParty {
         name: json["name"],
         type: json["type"],
         location: json["location"],
+        date: json["date"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,5 +35,6 @@ class SuggestParty {
         "name": name,
         "type": type,
         "location": location,
+        "date": date,
       };
 }

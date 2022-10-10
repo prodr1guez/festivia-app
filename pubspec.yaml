@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -52,7 +52,7 @@ dependencies:
   flutter_carousel_slider: ^1.0.8
   shimmer: ^2.0.0
   curved_navigation_bar: ^1.0.3
-  carousel_slider: ^3.0.0
+  carousel_slider: ^4.0.0
   progress_dialog: ^1.2.0
   image_picker: ^0.8.4+1
   flutter_datetime_picker: ^1.5.1
@@ -66,7 +66,7 @@ dependencies:
   url_launcher: ^6.0.10
   custom_info_window: ^1.0.1
   qr_flutter: ^4.0.0
-  cached_network_image: ^3.1.0+1
+  cached_network_image: ^3.2.0
   flutter_cache_manager: ^3.0.0
   flutter_meedu: ^7.0.0
 
@@ -99,7 +99,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -113,10 +112,17 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: MontserratRegular
+    - family: Ubuntu
       fonts:
-        - asset: assets/fonts/MontserratRegular/Montserrat-italic-VariableFont_wght.ttf
-        - asset: assets/fonts/MontserratRegular/Montserrat-VariableFont_wght.ttf
+        - asset: assets/fonts/Ubuntu-B.ttf
+        - asset: assets/fonts/Ubuntu-BI.ttf
+        - asset: assets/fonts/Ubuntu-C.ttf
+        - asset: assets/fonts/Ubuntu-L.ttf
+        - asset: assets/fonts/Ubuntu-LI.ttf
+        - asset: assets/fonts/Ubuntu-M.ttf
+        - asset: assets/fonts/Ubuntu-MI.ttf
+        - asset: assets/fonts/Ubuntu-R.ttf
+        - asset: assets/fonts/Ubuntu-RI.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

@@ -2,12 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page_controller.dart';
 import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
 import 'package:flutter/material.dart';
-import 'package:festivia/pages/detailEvent/detail_event_controller.dart';
-import 'package:festivia/widgets/button_app.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:festivia/utils/colors.dart' as utils;
 
 import '../../models/Artist.dart';
 
@@ -35,7 +31,8 @@ class _ArtistPageState extends State<ArtistPage> {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.init(context, refresh);
+      _controller.init(context, refresh, widget.artist.id, widget.artist.likes,
+          widget.artist);
     });
   }
 
@@ -123,7 +120,7 @@ class _ArtistPageState extends State<ArtistPage> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: hPadding),
-              height: MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).size.height * 0.12,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -140,16 +137,29 @@ class _ArtistPageState extends State<ArtistPage> {
                 children: [
                   IconButton(
                     icon: Image.asset('assets/facebook.png'),
+                    onPressed: () {
+                      _controller.navigateToUrl(
+                          context, widget.artist.facebook);
+                    },
                   ),
                   IconButton(
-                    icon: Image.asset('assets/instagram.png'),
-                  ),
+                      icon: Image.asset('assets/instagram.png'),
+                      onPressed: () {
+                        _controller.navigateToUrl(
+                            context, widget.artist.instagram);
+                      }),
                   IconButton(
-                    icon: Image.asset('assets/soundcloud.png'),
-                  ),
+                      icon: Image.asset('assets/soundcloud.png'),
+                      onPressed: () {
+                        _controller.navigateToUrl(
+                            context, widget.artist.soundcloud);
+                      }),
                   IconButton(
-                    icon: Image.asset('assets/youtube.png'),
-                  )
+                      icon: Image.asset('assets/youtube.png'),
+                      onPressed: () {
+                        _controller.navigateToUrl(
+                            context, widget.artist.youtube);
+                      })
                 ],
               ),
             ),
@@ -163,10 +173,11 @@ class _ArtistPageState extends State<ArtistPage> {
                   ),
                   Text(
                     " A " +
-                        widget.artist.likes.toString() +
+                        _controller.numLikes.toString() +
                         " personas les gusta este artista",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
+                      fontFamily: "Ubuntu",
                       fontSize: 15,
                       color: Colors.red,
                     ),
@@ -187,7 +198,7 @@ class _ArtistPageState extends State<ArtistPage> {
                               "Bio",
                               style: TextStyle(
                                   fontSize: 30,
-                                  fontFamily: "Montserrat",
+                                  fontFamily: "Ubuntu",
                                   fontWeight: FontWeight.bold),
                             )),
                       ),
@@ -195,14 +206,24 @@ class _ArtistPageState extends State<ArtistPage> {
                     Container(
                         margin: EdgeInsets.only(right: 20),
                         child: FloatingActionButton.extended(
-                          label: Text('Me gusta'), // <-- Text
+                          label: Text(
+                            'Me gusta',
+                            style: TextStyle(
+                              color: _controller.colorLike,
+                              fontFamily: "Ubuntu",
+                            ),
+                          ),
                           backgroundColor: Colors.black,
                           icon: Icon(
                             // <-- Icon
-                            Icons.favorite_border,
+                            Icons.favorite,
+                            color: _controller.colorLike,
                             size: 24.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            _controller.setLike(
+                                widget.artist.id, widget.artist.likes);
+                          },
                         ))
                   ],
                 ),
@@ -215,7 +236,7 @@ class _ArtistPageState extends State<ArtistPage> {
                         widget.artist.bio,
                         style: TextStyle(
                           fontSize: 17,
-                          fontFamily: "Montserrat",
+                          fontFamily: "Ubuntu",
                         ),
                       )),
                 )
@@ -230,17 +251,25 @@ class _ArtistPageState extends State<ArtistPage> {
   /// Action Section
 
   /// Info Section
-  Container _infoSection() {
+  Widget _infoSection() {
     return Container(
-      child: Center(
-        child: Text(widget.artist.genres[0],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'NimbusSanL',
-                fontStyle: FontStyle.italic,
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          for (var item in widget.artist.genres)
+            Expanded(
+              child: Text(item,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "Ubuntu",
+                      fontStyle: FontStyle.italic,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey)),
+            ),
+        ],
       ),
     );
   }
@@ -255,7 +284,7 @@ class _ArtistPageState extends State<ArtistPage> {
             Text(
               widget.artist.name,
               style: TextStyle(
-                fontFamily: 'NimbusSanL',
+                fontFamily: "Ubuntu",
                 fontWeight: FontWeight.w700,
                 fontSize: 30,
               ),
@@ -279,6 +308,7 @@ class _ArtistPageState extends State<ArtistPage> {
               'ARTISTA DESTACADO',
               style: TextStyle(
                   fontSize: 16,
+                  fontFamily: "Ubuntu",
                   fontWeight: FontWeight.bold,
                   color: Colors.blue),
             ),

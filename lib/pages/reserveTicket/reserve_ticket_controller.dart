@@ -1,5 +1,7 @@
 import 'package:festivia/models/Event.dart';
+import 'package:festivia/models/GlobalData.dart';
 import 'package:festivia/providers/event_provider.dart';
+import 'package:festivia/providers/global_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
@@ -7,16 +9,20 @@ import 'package:festivia/utils/snackbar.dart' as utils;
 class ReserveTicketController {
   Function refresh;
   BuildContext context;
-  GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
-  final oCcy = new NumberFormat("#,##0.00", "es");
+  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  final oCcy = NumberFormat("#,##0.00", "es");
 
-  EventProvider _eventProvider = new EventProvider();
+  final EventProvider _eventProvider = EventProvider();
+  final GlobalDataProvider _globalDataProvider = GlobalDataProvider();
+
+  GlobalData globalData;
 
   var arguments;
   Event event;
   String dateParsed = "";
   String idEvent = "";
   double priceGeneral = 0;
+  double revenue = 0;
   String infoFree = "";
   String ticketsFree = "";
   String infoGeneral = "";
@@ -25,7 +31,7 @@ class ReserveTicketController {
   String dateGeneral = "";
   bool isFree = false;
   bool isGeneral = false;
-  double priceService = 0.15;
+  double priceService;
   String priceParced = "";
   String location = "";
   String nameEvent = "";
@@ -39,19 +45,21 @@ class ReserveTicketController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
+    globalData = await _globalDataProvider.getDataCommissions();
 
     arguments = ModalRoute.of(context).settings.arguments as Map;
-
+    priceService = globalData.ticketCommission;
     isFree = arguments["isFree"];
     dateParsed = arguments["EndFreePass"];
     isGeneral = arguments["isGeneral"];
     priceGeneral = arguments["priceGeneral"];
+    revenue = priceGeneral;
     nameEvent = arguments["nameEvent"];
     date = arguments["date"];
     image = arguments["image"];
     idEvent = arguments["idEvent"];
     location = arguments["location"];
-    priceGeneral = priceGeneral + (priceGeneral * priceService);
+    priceGeneral = priceGeneral + (priceGeneral * (priceService / 100));
     priceParced = oCcy.format(priceGeneral);
     infoFree = arguments["descriptionTicketFree"];
     infoGeneral = arguments["descriptionTicketGeneral"];
@@ -77,7 +85,7 @@ class ReserveTicketController {
 
   void getEventInfo() async {
     event = await _eventProvider.getById("idEvent");
-    print(event.image);
+
     refresh();
   }
 
@@ -87,6 +95,7 @@ class ReserveTicketController {
         "type": "general",
         "idEvent": idEvent,
         "priceGeneral": priceGeneral,
+        "revenue": revenue,
         "date": date,
         "location": location,
         "nameEvent": nameEvent,
@@ -100,7 +109,6 @@ class ReserveTicketController {
   }
 
   void freeToOrderPage() {
-    print("---" + idEvent);
     if (int.parse(ticketsFree) > 0) {
       Navigator.pushNamed(context, 'order', arguments: {
         "type": "free",

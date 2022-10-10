@@ -97,7 +97,7 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
 
       if (response == ForgotPassResponse.ok) {
         _con.progressDialog.hide();
-        print("Codigo enviado");
+        utils.Snackbar.showSnackbar(context, _con.key, '"Codigo enviado"');
       } else {
         _con.progressDialog.hide();
         String errorMesage = "";
@@ -122,7 +122,6 @@ class _ForgotPassPageState extends State<ForgotPassPage> {
             errorMesage = "Error Desconocido";
         }
 
-        print(errorMesage);
         utils.Snackbar.showSnackbar(
             context, _con.key, 'El usuario no es valido');
       }

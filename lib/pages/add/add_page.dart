@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:festivia/utils/colors.dart' as utils;
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:dropdown_plus/dropdown_plus.dart';
 
@@ -41,24 +39,10 @@ class _AddPageState extends State<AddPage> {
     "Trap"
   ];
 
-  static List<String> _ages = [
-    "14+",
-    "16+",
-    "18+",
-    "19+",
-    "20+",
-    "21+",
-    "22+",
-    "23+",
-    "24+",
-    "25+"
-  ];
   final _items = _gendres
       .map((gender) => MultiSelectItem<String>(gender, gender))
       .toList();
 
-  final _itemsAges =
-      _ages.map((age) => MultiSelectItem<String>(age, age)).toList();
   @override
   void initState() {
     // TODO: implement initState
@@ -88,6 +72,8 @@ class _AddPageState extends State<AddPage> {
             _textFieldDescription(),
             _textDropGenders(),
             _dropGenders(),
+            _textTypeEvent(),
+            _dropTypeEvent(),
             _textDropAge(),
             _dropAge(),
             _rowPassFree(),
@@ -115,7 +101,12 @@ class _AddPageState extends State<AddPage> {
             children: [
               Row(
                 children: [
-                  Text("Con limite de hora"),
+                  Text(
+                    "Con limite de hora",
+                    style: TextStyle(
+                      fontFamily: "Ubuntu",
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.only(left: 20),
                     child: CupertinoSwitch(
@@ -133,7 +124,13 @@ class _AddPageState extends State<AddPage> {
               Visibility(
                 visible: _switchFreePassLimitTime,
                 child: Align(
-                    alignment: Alignment.centerLeft, child: Text("Hasta")),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Hasta",
+                      style: TextStyle(
+                        fontFamily: "Ubuntu",
+                      ),
+                    )),
               ),
               Visibility(
                 child: Column(
@@ -147,7 +144,12 @@ class _AddPageState extends State<AddPage> {
                     margin: EdgeInsets.only(top: 10, right: 20),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("Tickets maximos \n para el evento")),
+                        child: Text(
+                          "Tickets maximos \n para el evento",
+                          style: TextStyle(
+                            fontFamily: "Ubuntu",
+                          ),
+                        )),
                   ),
                   _dropMaxEventTicketsFree()
                 ],
@@ -175,7 +177,10 @@ class _AddPageState extends State<AddPage> {
                 children: [
                   Text(
                     "Precio",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: "Ubuntu",
+                    ),
                   ),
                   Container(
                     width: 80,
@@ -193,7 +198,11 @@ class _AddPageState extends State<AddPage> {
                       ),
                     ),
                   ),
-                  Text("\$", style: TextStyle(fontSize: 18))
+                  Text("\$",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Ubuntu",
+                      ))
                 ],
               ),
               Row(
@@ -240,7 +249,7 @@ class _AddPageState extends State<AddPage> {
           onChanged: (value) {
             setState(() {
               _switchPassPaidOff = value;
-              _controller.isPaidOff = value;
+              _controller.isGeneral = value;
             });
           },
         ),
@@ -273,6 +282,22 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+  _dropTypeEvent() {
+    return Container(
+      height: 55,
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      child: TextDropdownFormField(
+        controller: _controller.typeEventController,
+        options: ["Fiesta", "After", "Previa", "Pool Party", "Sunset"],
+        decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            labelText: "Tipo de evento"),
+        dropdownHeight: 180,
+      ),
+    );
+  }
+
   _dropAge() {
     return Container(
       height: 55,
@@ -300,136 +325,28 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-  _dropMaxOrderTicketsFree() {
-    return Container(
-      height: 55,
-      width: 120,
-      margin: EdgeInsets.only(top: 20),
-      child: TextDropdownFormField(
-        controller: _controller.maxTicketsFreeOrderController,
-        options: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down),
-            labelText: "Max Tickets"),
-        dropdownHeight: 180,
-      ),
-    );
-  }
-
   _dropMaxEventTicketsFree() {
     return Container(
-      height: 55,
-      width: 120,
-      margin: EdgeInsets.only(top: 20),
-      child: TextDropdownFormField(
-        controller: _controller.maxTicketsFreeEventController,
-        options: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down),
-            labelText: "Max Tickets"),
-        dropdownHeight: 180,
-      ),
-    );
+        height: 55,
+        width: 70,
+        margin: EdgeInsets.only(top: 20),
+        child: TextField(
+          style: TextStyle(fontSize: 20),
+          keyboardType: TextInputType.number,
+          controller: _controller.maxTicketsFreeController,
+        ));
   }
 
   _dropMaxEventTicketsPaidOff() {
     return Container(
-      height: 55,
-      width: 120,
-      margin: EdgeInsets.only(top: 20),
-      child: TextDropdownFormField(
-        controller: _controller.maxTicketsPaidOffEventController,
-        options: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down),
-            labelText: "Max Tickets"),
-        dropdownHeight: 180,
-      ),
-    );
-  }
-
-  _dropMaxOrderTicketsPaidOff() {
-    return Container(
-      height: 55,
-      width: 120,
-      margin: EdgeInsets.only(top: 10),
-      child: TextDropdownFormField(
-        controller: _controller.maxTicketsPaidOffController,
-        options: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
-        decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            suffixIcon: Icon(Icons.arrow_drop_down),
-            labelText: "Max Tickets"),
-        dropdownHeight: 180,
-      ),
-    );
+        height: 55,
+        width: 70,
+        margin: EdgeInsets.only(top: 20),
+        child: TextField(
+          style: TextStyle(fontSize: 20),
+          keyboardType: TextInputType.number,
+          controller: _controller.maxTicketsGeneralController,
+        ));
   }
 
   ElevatedButton DatePickerStart(BuildContext context) {
@@ -549,7 +466,11 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Crear evento',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 25,
+          fontFamily: "Ubuntu",
+        ),
       ),
     );
   }
@@ -561,7 +482,10 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Desde',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -573,7 +497,10 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Hasta',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -585,7 +512,10 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Descripcion',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -609,7 +539,25 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Géneros musicales',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
+      ),
+    );
+  }
+
+  Widget _textTypeEvent() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+      child: Text(
+        'Tipo de evento',
+        style: TextStyle(
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -621,7 +569,10 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Edad minima',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -633,7 +584,10 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         'Entrada Free',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -641,11 +595,14 @@ class _AddPageState extends State<AddPage> {
   Widget _textPassPaid() {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+      margin: EdgeInsets.only(left: 20, right: 15, bottom: 10, top: 10),
       child: Text(
         'Entrada Paga',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.normal, fontSize: 20),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
       ),
     );
   }
@@ -699,21 +656,6 @@ class _AddPageState extends State<AddPage> {
           hintText: "Detalles sobre esta entrada",
           filled: true,
         ),
-      ),
-    );
-  }
-
-  Widget _textFieldPassword() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: TextField(
-        controller: _controller.passwordController,
-        obscureText: true,
-        decoration: InputDecoration(
-            labelText: 'Contraseña',
-            suffixIcon: Icon(
-              Icons.lock_open_outlined,
-            )),
       ),
     );
   }

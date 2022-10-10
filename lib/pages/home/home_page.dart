@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:festivia/models/BannerMainHome.dart';
 import 'package:festivia/models/SuggestClub.dart';
 import 'package:festivia/models/SuggestParty.dart';
@@ -9,10 +8,8 @@ import 'package:festivia/widgets/card_party_home.dart';
 import 'package:festivia/widgets/mini_card_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../models/HostEvent.dart';
-import '../../widgets/my_events_list.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,17 +41,30 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      height: 30,
+                      height: 50,
                       width: 120,
                       margin: EdgeInsets.only(left: 10, top: 10),
-                      child: Image.asset("assets/festivia-cut.png")),
+                      child: Image.asset("assets/festivia_negro.png")),
                 ),
                 FutureBuilder(
                     future: _con.getBannerMain(),
                     builder: (context,
                         AsyncSnapshot<List<BannerMainHome>> snapshot) {
                       return (snapshot.hasData)
-                          ? BannerHome(snapshot: snapshot)
+                          ? CarouselSlider.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index, realindex) {
+                                final item = snapshot.data[index];
+                                return BannerHome(snapshot: item);
+                              },
+                              options: CarouselOptions(
+                                  viewportFraction: 0.8,
+                                  disableCenter: true,
+                                  height: 200,
+                                  autoPlay: false,
+                                  scrollDirection: Axis.horizontal,
+                                  autoPlayInterval: Duration(seconds: 7)),
+                            )
                           : Container(
                               width: double.infinity,
                               height: 200.0,
@@ -64,7 +74,6 @@ class _HomePageState extends State<HomePage> {
                                 child: Card(margin: EdgeInsets.all(10)),
                               ),
                             );
-                      ;
                     }),
                 Container(
                   child: MiniCardHome(
@@ -78,7 +87,10 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "Fiestas Recomendadas",
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Ubuntu",
+                        ),
                       )),
                 ),
                 FutureBuilder(
@@ -86,7 +98,24 @@ class _HomePageState extends State<HomePage> {
                     builder:
                         (context, AsyncSnapshot<List<SuggestParty>> snapshot) {
                       return (snapshot.hasData)
-                          ? CardPartyHome(snapshot: snapshot)
+                          ? CarouselSlider.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index, realindex) {
+                                final item = snapshot.data[index];
+                                return CardPartyHome(snapshot: item);
+                              },
+                              options: CarouselOptions(
+                                  padEnds: false,
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.scale,
+                                  enlargeCenterPage: true,
+                                  disableCenter: true,
+                                  viewportFraction: 0.8,
+                                  height: 220,
+                                  autoPlay: true,
+                                  scrollDirection: Axis.horizontal,
+                                  autoPlayInterval: Duration(seconds: 4)),
+                            )
                           : Container(
                               width: double.infinity,
                               height: 200.0,
@@ -100,31 +129,52 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, top: 20),
+                      child: const Text(
                         "Clubs Recomendados",
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Ubuntu",
+                        ),
                       )),
                 ),
-                FutureBuilder(
-                    future: _con.getSuggestsClubs(),
-                    builder:
-                        (context, AsyncSnapshot<List<SuggestClub>> snapshot) {
-                      return (snapshot.hasData)
-                          ? Container(
-                              margin: EdgeInsets.only(bottom: 80),
-                              child: CardClubHome(snapshot: snapshot))
-                          : Container(
-                              width: double.infinity,
-                              height: 200.0,
-                              child: Shimmer.fromColors(
-                                baseColor: Colors.grey[300],
-                                highlightColor: Colors.white,
-                                child: Card(margin: EdgeInsets.all(10)),
-                              ),
-                            );
-                    }),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 70),
+                  child: FutureBuilder(
+                      future: _con.getSuggestsClubs(),
+                      builder:
+                          (context, AsyncSnapshot<List<SuggestClub>> snapshot) {
+                        return (snapshot.hasData)
+                            ? CarouselSlider.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index, realindex) {
+                                  final item = snapshot.data[index];
+                                  return CardClubHome(snapshot: item);
+                                },
+                                options: CarouselOptions(
+                                    padEnds: false,
+                                    enlargeStrategy:
+                                        CenterPageEnlargeStrategy.scale,
+                                    enlargeCenterPage: true,
+                                    disableCenter: true,
+                                    viewportFraction: 0.8,
+                                    height: 200,
+                                    autoPlay: true,
+                                    scrollDirection: Axis.horizontal,
+                                    autoPlayInterval: Duration(seconds: 5)),
+                              )
+                            : Container(
+                                width: double.infinity,
+                                height: 200.0,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey[300],
+                                  highlightColor: Colors.white,
+                                  child: Card(margin: EdgeInsets.all(10)),
+                                ),
+                              );
+                      }),
+                ),
               ],
             ),
           ),

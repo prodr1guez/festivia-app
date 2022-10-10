@@ -100,7 +100,7 @@ class EditClubController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
     } else {
-      print('No selecciono ninguna imagen');
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
     }
     Navigator.pop(context);
     refresh();
@@ -165,7 +165,6 @@ class EditClubController {
           await _places.getDetailsByPlaceId(p.placeId, language: 'es');
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
-      print(p.description + "------");
 
       List<Address> address =
           await Geocoder.local.findAddressesFromQuery(p.description);
@@ -178,7 +177,6 @@ class EditClubController {
 
             if (isFrom) {
               from = '$direction, $city, $department';
-              print(from + "-------");
               _position = Position(longitude: lng, latitude: lat);
 
               fromLatLng = new LatLng(lat, lng);

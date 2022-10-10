@@ -115,6 +115,22 @@ class ClubProvider {
     return events;
   }
 
+  Future<List<HostEvent>> getNextEventsClub(String id) async {
+    QuerySnapshot querySnapshot = await _ref.doc(id).collection("events").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<HostEvent> events = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      if (DateParse().CompareDateBool(HostEvent.fromJson(data).dateEnd)) {
+        events.add(HostEvent.fromJson(data));
+      }
+    }
+
+    return events;
+  }
+
   Future<List<HostEvent>> EventsForClub(String id) async {
     QuerySnapshot querySnapshot = await _ref.doc(id).collection("events").get();
 

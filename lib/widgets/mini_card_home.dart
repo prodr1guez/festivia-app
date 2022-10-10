@@ -25,6 +25,7 @@ class MiniCardHome extends StatelessWidget {
                   navigateToDetail(context, miniCardList[index].id);
                 },
                 child: Card(
+                    color: Colors.grey[100],
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Column(
@@ -37,11 +38,15 @@ class MiniCardHome extends StatelessWidget {
                         ),
                         Container(
                           height: 30,
-                          child: Center(
+                          width: 150,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
                             child: Text(
                               miniCardList[index].tittle,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
+                                  fontFamily: "Ubuntu",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18),
                             ),
                           ),
                         )

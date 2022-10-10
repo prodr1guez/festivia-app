@@ -1,4 +1,6 @@
+import 'package:festivia/pages/ContactClub/contact_club_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class ContactClubPage extends StatefulWidget {
   @override
@@ -6,6 +8,18 @@ class ContactClubPage extends StatefulWidget {
 }
 
 class _ContactClubPageState extends State<ContactClubPage> {
+  ContactClubController _controller = new ContactClubController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller.init(context, refresh);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +42,7 @@ class _ContactClubPageState extends State<ContactClubPage> {
                 Container(
                   margin: EdgeInsets.only(left: 5),
                   child: Text(
-                    "pablo@gmail.com",
+                    _controller.email,
                     style: TextStyle(fontSize: 18),
                   ),
                 )
@@ -43,7 +57,7 @@ class _ContactClubPageState extends State<ContactClubPage> {
                 Container(
                   margin: EdgeInsets.only(left: 5),
                   child: Text(
-                    "2612541365",
+                    _controller.phone,
                     style: TextStyle(fontSize: 18),
                   ),
                 )
@@ -58,7 +72,7 @@ class _ContactClubPageState extends State<ContactClubPage> {
                 Container(
                   margin: EdgeInsets.only(left: 5),
                   child: Text(
-                    "San Martin 300",
+                    _controller.location,
                     style: TextStyle(fontSize: 18),
                   ),
                 )
@@ -68,5 +82,9 @@ class _ContactClubPageState extends State<ContactClubPage> {
         ],
       ),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }

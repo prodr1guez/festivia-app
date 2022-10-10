@@ -39,7 +39,9 @@ class _ClubHighlightsPage extends State<ClubHighlightsPage> {
                       child: Text(
                         "Clubs",
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                            fontFamily: "Ubuntu",
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold),
                       )),
                 ),
                 FutureBuilder(

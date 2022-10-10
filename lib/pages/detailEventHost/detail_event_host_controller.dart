@@ -17,16 +17,12 @@ class DetailEventHostController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-
     idEvent = ModalRoute.of(context).settings.arguments as String;
-    print(idEvent + "-------");
-
     getEventInfo();
   }
 
   void getEventInfo() async {
     event = await _eventProvider.getById(idEvent);
-
     refresh();
   }
 
@@ -57,6 +53,10 @@ class DetailEventHostController {
       "descriptionTicketGeneral": event.descriptionTicketGeneral,
       "location": event.location
     });
+  }
+
+  navigateToContactUs(BuildContext context) {
+    Navigator.pushNamed(context, 'contact_us');
   }
 
   void goToEventStats() {

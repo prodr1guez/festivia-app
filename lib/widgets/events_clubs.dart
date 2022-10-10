@@ -53,10 +53,14 @@ class EventsClubs extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                event.name,
-                                style:
-                                    TextStyle(fontSize: 15, color: Colors.red),
+                              Container(
+                                width: 140,
+                                child: Text(
+                                  event.location,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.red),
+                                ),
                               )
                             ],
                           ),

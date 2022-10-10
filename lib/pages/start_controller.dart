@@ -14,19 +14,17 @@ class StartController {
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
-    _sharedPref = new SharedPref();
-    _authProvider = new AuthProvider();
+    _sharedPref = SharedPref();
+    _authProvider = AuthProvider();
     _typeUser = await _sharedPref.read('typeUser');
     this.refresh = refresh;
     checkIfUserIsAuth();
   }
 
   void checkIfUserIsAuth() {
-    print("start page");
     bool isSigned = _authProvider.isSignedIn();
     if (isSigned) {
       laoding = false;
-      print("Verdadero");
 
       if (_typeUser == 'client') {
         Navigator.pushNamedAndRemoveUntil(
@@ -36,7 +34,6 @@ class StartController {
             context, 'navigation_club', (route) => false);
       }
     } else {
-      print("FALSO");
       laoding = false;
       refresh();
     }

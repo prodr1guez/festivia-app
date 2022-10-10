@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/models/HostEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:parallax_image/parallax_image.dart';
@@ -18,13 +19,42 @@ class MyEventslist extends StatelessWidget {
               HostEvent event = snapshot.data[index];
               return InkWell(
                 onTap: () {
+                  //navigateToDetail(context, event.id);
+
                   navigateToDetail(context, event.id);
                 },
                 child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: ParallaxImage(
-                        extent: 150, image: NetworkImage(event.image)),
+                    child: Column(
+                      children: [
+                        Hero(
+                          tag: "eventH$index",
+                          child: Container(
+                              height: 130,
+                              width: 400,
+                              child: ParallaxImage(
+                                  extent: 150,
+                                  image:
+                                      CachedNetworkImageProvider(event.image))),
+                        ),
+                        Container(
+                          height: 40,
+                          margin: EdgeInsets.only(left: 15),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              event.name,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Ubuntu",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),

@@ -12,7 +12,6 @@ class MyTicketsProvider {
   }
 
   Future<List<Ticket>> getMyTickets(String id) async {
-    print("paso 2");
     QuerySnapshot querySnapshot =
         await _ref.doc(id).collection("tickets").get();
 

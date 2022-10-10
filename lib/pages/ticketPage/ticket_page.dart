@@ -4,16 +4,17 @@ import 'package:flutter/scheduler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketPage extends StatefulWidget {
+  const TicketPage({Key key}) : super(key: key);
+
   @override
   State<TicketPage> createState() => _TicketPageState();
 }
 
 class _TicketPageState extends State<TicketPage> {
-  TicketPageController _controller = new TicketPageController();
+  final TicketPageController _controller = TicketPageController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -34,31 +35,45 @@ class _TicketPageState extends State<TicketPage> {
               child: Container(
                   height: 45,
                   width: 150,
-                  margin: EdgeInsets.only(left: 10, top: 10),
-                  child: Image.asset("assets/festivia-cut.png")),
+                  margin: const EdgeInsets.only(left: 10, top: 10),
+                  child: Image.asset("assets/festivia_negro.png")),
             ),
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 10, top: 20),
+              margin: const EdgeInsets.only(bottom: 10, top: 20),
               child: Text(
                 _controller.nameEvent,
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu",
+                ),
               ),
             ),
             Container(
+              width: 300,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: Text(
-                "San Martin 300, Tunuyan-Mendoza",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                _controller.location,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontFamily: "Ubuntu",
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis),
               ),
             ),
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: Text(
                 _controller.date,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu",
+                ),
               ),
             ),
             QrImage(
@@ -69,7 +84,22 @@ class _TicketPageState extends State<TicketPage> {
               margin: EdgeInsets.only(top: 15),
               child: Text(
                 _controller.ticketId,
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu",
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 30),
+              child: Text(
+                _controller.type.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu",
+                ),
               ),
             )
           ],

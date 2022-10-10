@@ -58,7 +58,11 @@ class _DetailEventState extends State<DetailEvent> {
               children: [
                 Text(
                   "Estas interesado?",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu",
+                  ),
                 ),
                 _buttonReserve(),
               ],
@@ -158,7 +162,10 @@ class _DetailEventState extends State<DetailEvent> {
                       margin: EdgeInsets.only(left: 20),
                       child: Text(
                         "Info",
-                        style: TextStyle(fontSize: 30),
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: "Ubuntu",
+                        ),
                       )),
                 ),
                 Align(
@@ -168,7 +175,10 @@ class _DetailEventState extends State<DetailEvent> {
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                       child: Text(
                         widget.event?.description,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Ubuntu",
+                        ),
                       )),
                 )
               ],
@@ -188,7 +198,7 @@ class _DetailEventState extends State<DetailEvent> {
       children: <Widget>[
         _infoCell(title: 'Edad', value: widget.event?.ageMin),
         _infoCell(title: 'Musica', value: widget.event?.genders.toString()),
-        _infoCell(title: 'Estilo', value: 'After party'),
+        _infoCell(title: 'Estilo', value: widget.event?.typeEvent),
       ],
     );
   }
@@ -207,13 +217,23 @@ class _DetailEventState extends State<DetailEvent> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title),
+              Text(
+                title,
+                style: TextStyle(
+                  fontFamily: "Ubuntu",
+                ),
+              ),
               Container(
                 margin: EdgeInsets.only(top: 3),
                 child: Text(
                   value ?? "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu",
+                  ),
                 ),
               )
             ],
@@ -230,7 +250,7 @@ class _DetailEventState extends State<DetailEvent> {
           child: Text(
             widget.event?.tittle,
             style: TextStyle(
-              fontFamily: 'NimbusSanL',
+              fontFamily: "Ubuntu",
               fontWeight: FontWeight.w700,
               fontSize: 30,
             ),
@@ -245,8 +265,7 @@ class _DetailEventState extends State<DetailEvent> {
             'Desde: ' +
                 DateParse().DiaConHora(DateTime.parse(widget.event.dateStart)),
             style: TextStyle(
-              fontFamily: 'NimbusSanL',
-              fontStyle: FontStyle.italic,
+              fontFamily: "Ubuntu",
               fontSize: 16,
             ),
           ),
@@ -258,10 +277,9 @@ class _DetailEventState extends State<DetailEvent> {
           alignment: Alignment.centerLeft,
           child: Text(
             'Hasta: ' +
-                DateParse().DiaConHora(DateTime.parse(widget.event.dateStart)),
+                DateParse().DiaConHora(DateTime.parse(widget.event.dateEnd)),
             style: TextStyle(
-              fontFamily: 'NimbusSanL',
-              fontStyle: FontStyle.italic,
+              fontFamily: "Ubuntu",
               fontSize: 16,
             ),
           ),
@@ -282,7 +300,7 @@ class _DetailEventState extends State<DetailEvent> {
                 child: Text(
                   widget.event?.location,
                   style: TextStyle(
-                      fontFamily: 'NimbusSanL',
+                      fontFamily: "Ubuntu",
                       fontStyle: FontStyle.italic,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -304,7 +322,7 @@ class _DetailEventState extends State<DetailEvent> {
       child: Container(
         child: ButtonApp(
           onPressed: () => {_controller.goToReserve(widget.event.id)},
-          text: 'Reservar',
+          text: 'Reservar ya!',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
         ),

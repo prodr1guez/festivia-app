@@ -47,6 +47,6 @@ class MyClubController {
 
   Future<void> logout() async {
     await _authProvider.signOut();
-    Navigator.pushNamed(context, 'start');
+    Navigator.pushNamedAndRemoveUntil(context, 'start', (route) => false);
   }
 }

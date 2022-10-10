@@ -40,36 +40,35 @@ class LoginController {
   void login() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debe completar todos los campos');
+      return;
+    }
+
     _progressDialog.show();
 
     try {
       bool isLogin = await _authProvider.login(email, password);
 
       if (isLogin) {
-        print('El usuario esta logeado');
-
         User client = await _userProvider.getById(_authProvider.getUser().uid);
 
         if (client != null) {
           if (client.type.contains("client")) {
             _progressDialog.hide();
-            print("Client --");
             await _sharedPref.save("typeUser", "client");
             Navigator.pushNamedAndRemoveUntil(
                 context, 'navigation', (route) => false);
-
-            print("paso 4");
           } else {
             _progressDialog.hide();
-            print("CLUB --");
+
             await _sharedPref.save("typeUser", "club");
             Navigator.pushNamedAndRemoveUntil(
                 context, 'navigation_club', (route) => false);
-
-            print("paso 4");
           }
         } else {
-          print('El cliente es nulo');
           _progressDialog.hide();
           utils.Snackbar.showSnackbar(context, key, 'El usuario no es valido');
           await _authProvider.signOut();
@@ -78,12 +77,12 @@ class LoginController {
         _progressDialog.hide();
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario no se pudo autenticar');
-        print('El usuario no se pudo autenticar');
       }
     } catch (error) {
       utils.Snackbar.showSnackbar(context, key, 'Error: $error');
       _progressDialog.hide();
-      print('Error: $error');
+
+      utils.Snackbar.showSnackbar(context, key, 'Error: $error');
     }
   }
 

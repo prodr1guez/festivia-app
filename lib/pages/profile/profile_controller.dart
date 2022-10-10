@@ -74,7 +74,6 @@ class ProfileController {
     String username = usernameController.text;
 
     if (username.isEmpty) {
-      print('debes ingresar todos los campos');
       utils.Snackbar.showSnackbar(
           context, key, 'Debes ingresar todos los campos');
       return;
@@ -111,7 +110,7 @@ class ProfileController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
     } else {
-      print('No selecciono ninguna imagen');
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
     }
     Navigator.pop(context);
     refresh();
@@ -125,6 +124,6 @@ class ProfileController {
 
   Future<void> logout() async {
     await _authProvider.signOut();
-    Navigator.pushNamed(context, 'start');
+    Navigator.pushNamedAndRemoveUntil(context, 'start', (route) => false);
   }
 }

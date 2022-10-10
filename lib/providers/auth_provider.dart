@@ -30,13 +30,9 @@ class AuthProvider {
     String errorMessage;
 
     try {
-      print("paso 2.1");
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-
-      print("paso 2.2");
     } catch (error) {
-      print(error);
       // CORREO INVALIDO
       // PASSWORD INCORRECTO
       // NO HAY CONEXION A INTERNET
@@ -57,7 +53,6 @@ class AuthProvider {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
     } catch (error) {
-      print(error);
       // CORREO INVALIDO
       // PASSWORD INCORRECTO
       // NO HAY CONEXION A INTERNET
@@ -76,7 +71,6 @@ class AuthProvider {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return ForgotPassResponse.ok;
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       return stringtToForgotPassResponse(e.code);
     }
   }

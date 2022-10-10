@@ -29,7 +29,7 @@ class Club {
   String image;
   String name;
   String description;
-  String location;
+  String location = "";
   double lat;
   double long;
   String phone;

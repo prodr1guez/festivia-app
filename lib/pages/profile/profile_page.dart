@@ -151,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Text(
             _controller.client.username,
             style: TextStyle(
-              fontFamily: 'NimbusSanL',
+              fontFamily: "Ubuntu",
               fontWeight: FontWeight.w700,
               fontSize: 30,
             ),

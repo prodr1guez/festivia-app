@@ -1,11 +1,8 @@
-import 'package:festivia/pages/myTickets/my_tickets_controller.dart';
 import 'package:festivia/widgets/events_highlights_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../models/Event.dart';
-import '../../models/Ticket.dart';
-import '../../widgets/my_tickets_list.dart';
 import 'event_highlights_controller.dart';
 
 class EventHighlightsPage extends StatefulWidget {
@@ -39,7 +36,10 @@ class _EventHighlightsPage extends State<EventHighlightsPage> {
                       child: Text(
                         "Proximas fiestas",
                         style: TextStyle(
-                            fontSize: 23, fontWeight: FontWeight.bold),
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Ubuntu",
+                        ),
                       )),
                 ),
                 FutureBuilder(

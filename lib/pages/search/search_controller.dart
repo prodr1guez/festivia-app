@@ -42,14 +42,11 @@ class SearchController {
   void checkGPS() async {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
-      print('GPS ACTIVADO');
       updateLocation();
     } else {
-      print('GPS DESACTIVADO');
       bool locationGPS = await location.Location().requestService();
       if (locationGPS) {
         updateLocation();
-        print('ACTIVO EL GPS');
       }
     }
   }
@@ -61,7 +58,8 @@ class SearchController {
       centerPosition();
       await getNearbyDrivers();
     } catch (error) {
-      print('Error en la localizacion: $error');
+      utils.Snackbar.showSnackbar(
+          context, key, 'Error en la localizacion: $error');
     }
   }
 
@@ -122,14 +120,7 @@ class SearchController {
     Stream<List<DocumentSnapshot>> stream = await _geofireProvider
         .getNearbyDrivers(_position.latitude, _position.longitude, 50);
 
-    print("entrando");
-
     stream.listen((List<DocumentSnapshot> documentList) {
-      print(documentList);
-      for (DocumentSnapshot d in documentList) {
-        print('DOCUMENT: $d');
-      }
-
       for (MarkerId m in markers.keys) {
         bool remove = true;
 
@@ -149,8 +140,6 @@ class SearchController {
         GeoPoint point = d.get("position")["geopoint"];
 
         String available = d.get("expired");
-
-        print(DateParse().CompareDate(available));
 
         if (DateParse().CompareDate(available) == "available") {
           addMarker(d.id, point.latitude, point.longitude, 'Fiesta disponible',
@@ -230,7 +219,10 @@ class SearchController {
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
                           event.tittle,
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontFamily: "Ubuntu",
+                          ),
                         ),
                       ),
                     ),
@@ -240,7 +232,10 @@ class SearchController {
                         margin: EdgeInsets.only(left: 10),
                         child: Text(
                           event.dateStartParsed,
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Ubuntu",
+                          ),
                         ),
                       ),
                     ),
@@ -259,8 +254,11 @@ class SearchController {
                               width: 190,
                               child: Text(
                                 event.location,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.red),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.red,
+                                  fontFamily: "Ubuntu",
+                                ),
                               )),
                         ),
                       ],
@@ -300,7 +298,11 @@ class SearchController {
 
   Widget button() {
     return ElevatedButton(
-      child: Text("Detalles".toUpperCase(), style: TextStyle(fontSize: 14)),
+      child: Text("Detalles".toUpperCase(),
+          style: TextStyle(
+            fontSize: 14,
+            fontFamily: "Ubuntu",
+          )),
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

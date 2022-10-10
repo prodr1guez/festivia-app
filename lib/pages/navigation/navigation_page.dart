@@ -1,17 +1,14 @@
 import 'package:festivia/pages/add/add_page.dart';
-import 'package:festivia/pages/addArtist/add_artist_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
-import 'package:festivia/pages/home_stats/home_stats_page.dart';
-import 'package:festivia/pages/myEvents/my_events_page.dart';
 import 'package:festivia/pages/myTickets/my_tickets_page.dart';
-import 'package:festivia/pages/myclubpage/my_club_page.dart';
 import 'package:festivia/pages/navigation/%20navigation_controller.dart';
 import 'package:festivia/pages/profile/profile_page.dart';
 import 'package:festivia/pages/search/search_page.dart';
-import 'package:festivia/pages/ticketPage/ticket_page.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/scheduler.dart';
+
+import '../addArtist/add_artist_page.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -23,7 +20,6 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -36,8 +32,8 @@ class _NavigationPageState extends State<NavigationPage> {
   final screens = [
     HomePage(),
     SearchPage(),
-    //AddPage(),
-    AddArtist(),
+    AddPage(),
+    //AddArtist(),
     MyTickets(),
     ProfilePage()
   ];

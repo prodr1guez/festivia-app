@@ -41,7 +41,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
             elevation: 5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [_buttonEditEvent(), _buttonReserve()],
+              children: [_buttonToContact(), _buttonReserve()],
             )),
       ),
       body: Stack(
@@ -111,7 +111,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: hPadding),
-              height: MediaQuery.of(context).size.height * 0.35,
+              height: MediaQuery.of(context).size.height * 0.30,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -160,7 +160,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
         _infoCell(title: 'Edad', value: _controller.event?.ageMin),
         _infoCell(
             title: 'Musica', value: _controller.event?.genders.toString()),
-        _infoCell(title: 'Estilo', value: 'After party'),
+        _infoCell(title: 'Estilo', value: _controller.event?.typeEvent),
       ],
     );
   }
@@ -210,7 +210,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
         ),
         Text(
           'Desde: ' + (_controller.event?.dateStartParsed ?? " "),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'NimbusSanL',
             fontStyle: FontStyle.italic,
             fontSize: 16,
@@ -221,7 +221,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
         ),
         Text(
           'Hasta: ' + (_controller.event?.dateEndParsed ?? " "),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'NimbusSanL',
             fontStyle: FontStyle.italic,
             fontSize: 16,
@@ -230,29 +230,30 @@ class _DetailEventHostState extends State<DetailEventHost> {
         SizedBox(
           height: 8,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on,
-              color: Colors.red,
-            ),
-            Container(
-              width: 300,
-              child: Text(
-                _controller.event?.location != null
-                    ? _controller.event?.location
-                    : "",
-                style: TextStyle(
-                    fontFamily: 'NimbusSanL',
-                    fontStyle: FontStyle.italic,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.location_on,
+                color: Colors.red,
               ),
-            ),
-          ],
+              Container(
+                width: 250,
+                child: Text(
+                  _controller.event?.location ?? "",
+                  style: const TextStyle(
+                      fontFamily: 'NimbusSanL',
+                      overflow: TextOverflow.ellipsis,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -274,15 +275,15 @@ class _DetailEventHostState extends State<DetailEventHost> {
     );
   }
 
-  Widget _buttonEditEvent() {
+  Widget _buttonToContact() {
     return Container(
       height: 50,
       width: 150,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: _controller.goToReserve,
-          text: 'Editar',
+          onPressed: () => {_controller.navigateToContactUs(context)},
+          text: 'Promocionar',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
         ),

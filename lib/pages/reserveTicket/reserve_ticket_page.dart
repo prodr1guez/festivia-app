@@ -9,11 +9,10 @@ class ReserveTickets extends StatefulWidget {
 }
 
 class _ReserveTicketsState extends State<ReserveTickets> {
-  ReserveTicketController _controller = new ReserveTicketController();
+  final ReserveTicketController _controller = ReserveTicketController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -39,7 +38,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
   Visibility freeTicket() {
     return Visibility(
         child: Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       width: 350,
       child: InkWell(
         onTap: _controller.freeToOrderPage,
@@ -49,13 +48,13 @@ class _ReserveTicketsState extends State<ReserveTickets> {
           ),
           elevation: 5.0,
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "Entrada Free",
@@ -64,15 +63,15 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Align(
+                      margin: const EdgeInsets.only(top: 10, bottom: 2),
+                      child: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text("Info",
                               style: TextStyle(fontWeight: FontWeight.bold))),
                     ),
                     Container(
                       width: 250,
-                      margin: EdgeInsets.only(top: 3, bottom: 2),
+                      margin: const EdgeInsets.only(top: 3, bottom: 2),
                       child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -80,8 +79,8 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                           )),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10, bottom: 2),
-                      child: Align(
+                      margin: const EdgeInsets.only(top: 10, bottom: 2),
+                      child: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text("Entrada valida hasta: ",
                               style: TextStyle(fontWeight: FontWeight.bold))),
@@ -94,15 +93,15 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        decoration: BoxDecoration(
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: const BoxDecoration(
                             color: utils.Colors.sky,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         child: Text(
                           _controller.availableTicketsFreeText,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 13, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -113,8 +112,8 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 10),
-                      child: Text(
-                        "\ Free",
+                      child: const Text(
+                        "Free",
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -135,7 +134,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
     return Visibility(
         visible: _controller.isGeneral,
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           width: 350,
           child: InkWell(
             onTap: _controller.generalToOrderPage,
@@ -145,13 +144,13 @@ class _ReserveTicketsState extends State<ReserveTickets> {
               ),
               elevation: 5.0,
               child: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "Entrada general",
@@ -160,8 +159,8 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 2),
-                          child: Align(
+                          margin: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: const Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Info",
                                   style:
@@ -169,7 +168,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         ),
                         Container(
                           width: 210,
-                          margin: EdgeInsets.only(top: 3, bottom: 2),
+                          margin: const EdgeInsets.only(top: 3, bottom: 2),
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -179,16 +178,16 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: const BoxDecoration(
                                 color: utils.Colors.sky,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 5),
                             child: Text(
                               _controller.availableTicketsGeneralText,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                           ),
@@ -200,7 +199,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         Container(
                           child: Text(
                             _controller.priceParced + " \$",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic),
@@ -208,7 +207,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         ),
                         Container(
                             width: 90,
-                            child: Text(
+                            child: const Text(
                               "* IVA + costo de servicio incluido",
                               style: TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.bold),
@@ -227,7 +226,7 @@ class _ReserveTicketsState extends State<ReserveTickets> {
     return Visibility(
         visible: false,
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           width: 350,
           child: InkWell(
             onTap: _controller.vipToOrderPage,
@@ -237,13 +236,13 @@ class _ReserveTicketsState extends State<ReserveTickets> {
               ),
               elevation: 5.0,
               child: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "Entrada VIP",
@@ -252,8 +251,8 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10, bottom: 2),
-                          child: Align(
+                          margin: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: const Align(
                               alignment: Alignment.centerLeft,
                               child: Text("Info",
                                   style:
@@ -261,8 +260,8 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         ),
                         Container(
                           width: 250,
-                          margin: EdgeInsets.only(top: 3, bottom: 2),
-                          child: Align(
+                          margin: const EdgeInsets.only(top: 3, bottom: 2),
+                          child: const Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 "Entrada individual, no reembolsable. El crédito es en consumo (comida y bebida) ",
@@ -271,14 +270,14 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: const BoxDecoration(
                                 color: utils.Colors.sky,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 5),
-                            child: Text(
+                            child: const Text(
                               "¡Quedan 12 Lugares!",
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold),
@@ -289,14 +288,12 @@ class _ReserveTicketsState extends State<ReserveTickets> {
                     ),
                     Column(
                       children: [
-                        Container(
-                          child: Text(
-                            "\$3500",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic),
-                          ),
+                        const Text(
+                          "\$3500",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic),
                         )
                       ],
                     )

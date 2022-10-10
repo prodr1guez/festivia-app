@@ -31,7 +31,6 @@ class DetailEventController {
   }
 
   goToReserve(String idEvent) {
-    print("---" + idEvent.toString());
     bool isFree = false;
     bool isPaidOff = false;
     double priceGeneral;

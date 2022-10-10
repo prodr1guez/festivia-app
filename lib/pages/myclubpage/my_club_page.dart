@@ -213,29 +213,30 @@ class _MyClubPageState extends State<MyClubPage> {
             fontSize: 30,
           ),
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on,
-              color: Colors.red,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text(
-                _controller.club?.location != null
-                    ? _controller.club?.location
-                    : "",
-                style: TextStyle(
-                  color: Colors.red,
-                  fontFamily: 'NimbusSanL',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+        Container(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.location_on,
+                color: Colors.red,
+              ),
+              Container(
+                width: 250,
+                child: Text(
+                  _controller.club?.location ?? "",
+                  style: const TextStyle(
+                      fontFamily: 'NimbusSanL',
+                      overflow: TextOverflow.ellipsis,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         _rowButtons(),
         /*

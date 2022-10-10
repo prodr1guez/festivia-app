@@ -54,7 +54,10 @@ class EventsHighlistlist extends StatelessWidget {
                             child: Text(
                               event.tittle,
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Ubuntu",
+                              ),
                             ),
                           ),
                         ),

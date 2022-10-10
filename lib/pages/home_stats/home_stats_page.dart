@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:festivia/utils/colors.dart' as utils;
 import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
 
 class HomeStatsPage extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
                   height: 40,
                   width: 120,
                   margin: EdgeInsets.only(left: 20, top: 10, bottom: 20),
-                  child: Image.asset("assets/festivia-cut.png")),
+                  child: Image.asset("assets/festivia_negro.png")),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +44,8 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
               children: [
                 ItemStatsRevenueYear(
                   "Ganancias 2022",
-                  _controller.club.revenueYear,
+                  NumberFormat.compactSimpleCurrency(locale: "en-US")
+                      .format(_controller.club.revenueYear),
                   Color(0xFFE78EA9),
                 ),
                 Container(width: 10),
@@ -66,7 +68,7 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
                 Container(width: 10),
                 ItemStatsNextEvents(
                   "Proximos eventos",
-                  _controller.club.nextEvents,
+                  _controller.nextEvents,
                   Color(0xFFB9F8D3),
                 ),
               ],
@@ -110,9 +112,12 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
                   child: Container(
                       margin: EdgeInsets.only(left: 10),
                       child: Text(
-                        "\$" + _controller.club.currentRevenue.toString(),
+                        "\$ " +
+                            NumberFormat.simpleCurrency(
+                                    name: "", locale: "es_AR", decimalDigits: 2)
+                                .format(_controller.club.currentRevenue),
                         style: TextStyle(
-                            fontSize: 50, fontWeight: FontWeight.bold),
+                            fontSize: 40, fontWeight: FontWeight.bold),
                       )),
                 ),
               ],
@@ -214,7 +219,7 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
     );
   }
 
-  Card ItemStatsRevenueYear(String tittle, double number, Color color) {
+  Card ItemStatsRevenueYear(String tittle, String number, Color color) {
     return Card(
       color: color,
       elevation: 10,
@@ -235,8 +240,8 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
             )),
             Container(
                 child: Text(
-              number.toString() + "K",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+              number,
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ))
           ],
         ),

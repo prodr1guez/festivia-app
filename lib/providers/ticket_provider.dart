@@ -18,10 +18,6 @@ class TicketProvider {
       String typeHost, String idClub) async {
     String errorMessage;
 
-    print("TEST 1     " + _authProvider.getUser().uid);
-    print("TEST IDEVENT    " + idEvent);
-    print(ticket.toJson().toString());
-
     try {
       await _clientProvider.addTicket(
           ticket.toJson(), _authProvider.getUser().uid, ticket.ticketId);
@@ -39,7 +35,6 @@ class TicketProvider {
         await _eventProvider.increaseRevenue(idEvent, revenue);
 
         if (typeHost == "club") {
-          print("club type ------");
           await _clubProvider.increaseRevenue(idClub, revenue);
         }
       }

@@ -46,7 +46,10 @@ class _LoginPageState extends State<LoginPage> {
       child: Text(
         'Iniciar sesión',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 25),
       ),
     );
   }
@@ -96,14 +99,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buttonForgotPass() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30),
-      child: ButtonApp(
-        onPressed: () => {_con.navigateToForgotPass(context)},
-        text: 'Olvidaste tu contraseña?',
-        color: utils.Colors.festiviaColor,
-        textColor: Colors.white,
-      ),
+    return InkWell(
+      onTap: () => _con.navigateToForgotPass(context),
+      child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          child: Text(
+            "¿Olvidaste tu contraseña?",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Ubuntu"),
+          )),
     );
   }
 

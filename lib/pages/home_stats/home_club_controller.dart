@@ -24,17 +24,22 @@ class HomeClubController {
       currentRevenue: 0);
   String dateParsed;
   String location;
+  int nextEvents = 0;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     _authProvider = new AuthProvider();
 
+    getMyEvents();
     getClubInfo();
   }
 
   Future<List<HostEvent>> getMyEvents() async {
-    return await _clubProvider.EventsClub(_authProvider.getUser().uid);
+    List<HostEvent> events =
+        await _clubProvider.getNextEventsClub(_authProvider.getUser().uid);
+
+    nextEvents = events.length;
   }
 
   void getClubInfo() async {

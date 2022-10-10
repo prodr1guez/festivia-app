@@ -41,6 +41,13 @@ class ClientProvider {
     return _ref.doc(id).update(data);
   }
 
+  Future<bool> getLikeById(String idClient, String idArtist) async {
+    DocumentSnapshot document =
+        await _ref.doc(idClient).collection("likes").doc(idArtist).get();
+
+    return document.exists;
+  }
+
   Future<void> addEvent(
       Map<String, dynamic> data, String idClient, String idEvent) {
     return _ref.doc(idClient).collection("events").doc(idEvent).set(data);
@@ -49,5 +56,17 @@ class ClientProvider {
   Future<void> addTicket(
       Map<String, dynamic> data, String idClient, String idEvent) {
     return _ref.doc(idClient).collection("tickets").doc(idEvent).set(data);
+  }
+
+  Future<void> addLikeArtist(String idClient, String idArtist) {
+    return _ref
+        .doc(idClient)
+        .collection("likes")
+        .doc(idArtist)
+        .set({"idArtist": idArtist});
+  }
+
+  Future<void> removeLikeArtist(String idClient, String idArtist) {
+    return _ref.doc(idClient).collection("likes").doc(idArtist).delete();
   }
 }

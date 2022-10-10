@@ -1,11 +1,9 @@
 import 'package:festivia/models/Artist.dart';
 import 'package:festivia/pages/ArtistHighlights/artist_highlights_controller.dart';
-import 'package:festivia/utils/colors.dart';
 import 'package:festivia/widgets/artist_highlights_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter/material.dart';
 
 class ArtistHighlights extends StatefulWidget {
   @override
@@ -58,8 +56,9 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
                           child: Text(
                             "Artistas destacados 🔥",
                             style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 23,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: "Ubuntu",
                                 color: Color.fromARGB(255, 255, 255, 255)),
                           ),
                         ),
@@ -68,7 +67,8 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
                           child: Text(
                             "Los dj's mas reconocidos de la escena",
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
+                                fontFamily: "Ubuntu",
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 255, 255, 255)),
                           ),

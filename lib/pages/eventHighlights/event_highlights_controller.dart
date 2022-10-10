@@ -1,5 +1,4 @@
 import 'package:festivia/models/BannerMainHome.dart';
-import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/event_provider.dart';
 

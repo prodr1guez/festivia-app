@@ -54,7 +54,9 @@ class clubsHighlistlist extends StatelessWidget {
                             child: Text(
                               club.name,
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontFamily: "Ubuntu",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

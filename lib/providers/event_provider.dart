@@ -3,6 +3,7 @@ import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/models/User.dart';
+import 'package:festivia/pages/addGuest/add_guest.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/client_provider.dart';
 import 'package:festivia/providers/club_provider.dart';
@@ -35,6 +36,10 @@ class EventProvider {
     }
 
     return artists;
+  }
+
+  getGuestSnapshot(String id) {
+    return _ref.doc(id).collection("guests").snapshots();
   }
 
   Future<void> create(Event event) async {
@@ -79,12 +84,35 @@ class EventProvider {
     return null;
   }
 
+  Future<void> liquidateRevenue(String id, double amount) {
+    return _ref.doc(id).update({
+      "revenue": FieldValue.increment(-amount),
+    });
+  }
+
   Future<void> addTicketInEvent(Ticket ticket, String idEvent) async {
     String errorMessage;
     try {
       _ref
           .doc(idEvent)
           .collection("tickets")
+          .doc(ticket.ticketId)
+          .set(ticket.toJson());
+    } catch (error) {
+      errorMessage = error.toString();
+    }
+
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+  }
+
+  Future<void> addGuest(Ticket ticket, String idEvent) async {
+    String errorMessage;
+    try {
+      _ref
+          .doc(idEvent)
+          .collection("guests")
           .doc(ticket.ticketId)
           .set(ticket.toJson());
     } catch (error) {

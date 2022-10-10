@@ -51,7 +51,9 @@ class ArtistList extends StatelessWidget {
                             child: Text(
                               artist.name,
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontFamily: "Ubuntu",
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         )

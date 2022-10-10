@@ -1,8 +1,11 @@
 import 'package:festivia/pages/ArtistHighlights/artist_highlights_page.dart';
 import 'package:festivia/pages/ContactClub/contact_club_page.dart';
 import 'package:festivia/pages/addArtist/add_artist_page.dart';
+import 'package:festivia/pages/addGuest/add_guest.dart';
 import 'package:festivia/pages/artistDetailPage/artist_page.dart';
 import 'package:festivia/pages/clubHighlights/club_highlights_page.dart';
+import 'package:festivia/pages/congratsEvent/congrats_events_page.dart';
+import 'package:festivia/pages/congratsEventClub/congrats_events_club_page.dart';
 import 'package:festivia/pages/congratsLiquidate/congrats_liquidate_page.dart';
 import 'package:festivia/pages/contactUs/contact_us_page.dart';
 import 'package:festivia/pages/detailClub/detail_club_page.dart';
@@ -12,6 +15,7 @@ import 'package:festivia/pages/editClub/edit_club_page.dart';
 import 'package:festivia/pages/eventHighlights/event_highlights_page.dart';
 import 'package:festivia/pages/eventStats/event_stats_page.dart';
 import 'package:festivia/pages/forgotPassword/forgot_pass_page.dart';
+import 'package:festivia/pages/guests/guests_page.dart';
 import 'package:festivia/pages/home/home_page.dart';
 import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
 import 'package:festivia/pages/liquidateRevenue/liquidate_revenue_page.dart';
@@ -20,21 +24,26 @@ import 'package:festivia/pages/map/map_page.dart';
 import 'package:festivia/pages/myEvents/my_events_page.dart';
 import 'package:festivia/pages/myTickets/my_tickets_page.dart';
 import 'package:festivia/pages/navigation/navigation_page.dart';
-import 'package:festivia/pages/navigationClub/navigation_club_controller.dart';
 import 'package:festivia/pages/navigationClub/navigation_club_page.dart';
 import 'package:festivia/pages/order/order_page.dart';
+import 'package:festivia/pages/privacyPolicy/privacy_policy.dart';
 import 'package:festivia/pages/register/register_page.dart';
 import 'package:festivia/pages/registerClub/register_club_page.dart';
 import 'package:festivia/pages/registerSelectTypeUser/select_type_user_page.dart';
 import 'package:festivia/pages/reserveTicket/reserve_ticket_page.dart';
 import 'package:festivia/pages/start_page.dart';
+import 'package:festivia/pages/termsAndConditions/terms_and_conditions_page.dart';
 import 'package:festivia/pages/ticketPage/ticket_page.dart';
-import 'package:festivia/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -88,6 +97,12 @@ class _MyAppState extends State<MyApp> {
         'forgot_pass': (BuildContext context) => ForgotPassPage(),
         'congrats_liquidate': (BuildContext context) => CongratsLiquidate(),
         'contact_us': (BuildContext context) => ContactUsPage(),
+        'congrats_event': (BuildContext context) => CongratsEvent(),
+        'congrats_event_club': (BuildContext context) => CongratsEventClub(),
+        'guests': (BuildContext context) => GuestsPage(),
+        'add_guest': (BuildContext context) => AddGuest(),
+        'terms_and_conditions': (BuildContext context) => TermsAndConditions(),
+        'privacy_policy': (BuildContext context) => PrivacyPolicy(),
       },
     );
   }

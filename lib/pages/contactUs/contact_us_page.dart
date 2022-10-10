@@ -26,6 +26,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
               style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu",
                   color: Colors.blueAccent),
             ),
             Container(
@@ -35,6 +36,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu",
                     color: Colors.grey[700]),
                 textAlign: TextAlign.center,
               ),
@@ -53,6 +55,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     "2612541365",
                     style: TextStyle(
                         fontSize: 18,
+                        fontFamily: "Ubuntu",
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[700]),
                     textAlign: TextAlign.center,
@@ -71,8 +74,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                 Container(
                   margin: EdgeInsets.only(left: 5),
                   child: Text(
-                    "pablo@festivia.app",
+                    "info@festivia.app",
                     style: TextStyle(
+                        fontFamily: "Ubuntu",
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[700]),

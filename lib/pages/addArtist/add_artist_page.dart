@@ -1,16 +1,10 @@
 import 'package:festivia/pages/addArtist/add_artist_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:festivia/pages/add/add_controller.dart';
+
 import 'package:festivia/widgets/button_app.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/scheduler.dart';
 import 'package:festivia/utils/colors.dart' as utils;
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:dropdown_plus/dropdown_plus.dart';
 
 class AddArtist extends StatefulWidget {
   @override

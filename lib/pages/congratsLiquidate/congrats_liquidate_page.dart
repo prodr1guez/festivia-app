@@ -27,17 +27,17 @@ class _CongratsLiquidateState extends State<CongratsLiquidate> {
               child: Text(
                 "Se realizó la petición para liquidar tus ganancias",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Ubuntu"),
                 textAlign: TextAlign.center,
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
               child: Text(
-                "Recuerda que podemos demorar hasta 3 dias habiles en realizar la transferencia, en caso de cualquier puede contactar al equipo de FESTIVIA",
-                style: TextStyle(fontSize: 16),
+                "Nos pondremos en contacto al numero de telefono que ingresaste. Recuerda que podemos demorar hasta 3 dias habiles en realizar la transferencia, en caso de cualquier inconveniente puede contactar al equipo de FESTIVIA al mail info@festivia.app",
+                style: TextStyle(fontSize: 16, fontFamily: "Ubuntu"),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -62,7 +62,16 @@ class _CongratsLiquidateState extends State<CongratsLiquidate> {
   }
 
   navigateToCongrats(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, 'navigation_club', (route) => false);
+    var arguments = ModalRoute.of(context).settings.arguments as Map;
+
+    String type = arguments["type"];
+
+    if (type == "client") {
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'navigation', (route) => false);
+    } else if (type == "club") {
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'navigation_club', (route) => false);
+    }
   }
 }

@@ -1,20 +1,18 @@
 import 'package:festivia/pages/registerSelectTypeUser/select_type_user_controler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:festivia/utils/colors.dart' as utils;
-
-import '../../widgets/button_app.dart';
 
 class SelectTypeUser extends StatefulWidget {
+  const SelectTypeUser({Key key}) : super(key: key);
+
   @override
   State<SelectTypeUser> createState() => _SelectTypeUserState();
 }
 
 class _SelectTypeUserState extends State<SelectTypeUser> {
-  SelectTypeUserController _controller = SelectTypeUserController();
+  final SelectTypeUserController _controller = SelectTypeUserController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -31,7 +29,8 @@ class _SelectTypeUserState extends State<SelectTypeUser> {
         children: [
           _textRegister(),
           _userOption(),
-          Container(margin: EdgeInsets.only(top: 50), child: _clubOption()),
+          Container(
+              margin: const EdgeInsets.only(top: 50), child: _clubOption()),
         ],
       )),
     );
@@ -44,7 +43,10 @@ class _SelectTypeUserState extends State<SelectTypeUser> {
       child: Text(
         'Seleccione un tipo de usuario',
         style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 25),
       ),
     );
   }
@@ -70,7 +72,8 @@ class _SelectTypeUserState extends State<SelectTypeUser> {
         ),
         Text(
           "Persona",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: "Ubuntu", fontSize: 22, fontWeight: FontWeight.bold),
         )
       ],
     );
@@ -97,7 +100,8 @@ class _SelectTypeUserState extends State<SelectTypeUser> {
         ),
         Text(
           "Club",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: "Ubuntu", fontSize: 22, fontWeight: FontWeight.bold),
         )
       ],
     );

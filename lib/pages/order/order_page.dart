@@ -1,17 +1,13 @@
-import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/pages/order/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:festivia/utils/colors.dart' as utils;
-import 'package:parallax_image/parallax_image.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:festivia/utils/globals.dart' as globals;
 import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
 
-import '../../models/Order.dart';
 import '../../providers/MP.dart';
 
 class OrderPage extends StatefulWidget {
@@ -104,7 +100,7 @@ class _OrderPageState extends State<OrderPage> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: () => {createOrder()},
+          onPressed: () => {openDialog()},
           text: 'ir al Checkout',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
@@ -196,7 +192,6 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   createOrder() async {
-    print("-----" + _controller.lastNameController.text + "-----");
     if (_controller.nameController.text.isEmpty ||
         _controller.lastNameController.text.isEmpty) {
       utils.Snackbar.showSnackbar(
@@ -205,6 +200,28 @@ class _OrderPageState extends State<OrderPage> {
       startMp();
     }
   }
+
+  openDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Aviso",
+                style: TextStyle(fontSize: 23, fontFamily: "Ubuntu")),
+            content: Text(
+              "Cualquier cambio que se realice a un evento tras la compra de una entrada, como un cambio de fecha, de hora, de lugar, de programa, de artista o cancelación del evento, será responsabilidad del organizador de dicho evento y no de Festivia",
+              style: TextStyle(fontSize: 17, fontFamily: "Ubuntu"),
+            ),
+            actions: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                child: ButtonApp(
+                  onPressed: () => {createOrder()},
+                  text: 'Continuar',
+                  color: utils.Colors.festiviaColor,
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
+          ));
 
   void startMp() {
     armarPreferencia().then((result) async {
@@ -215,14 +232,14 @@ class _OrderPageState extends State<OrderPage> {
         var response = await MercadoPagoMobileCheckout.startCheckout(
             globals.mpPublicKey, preferenceId);
 
-        print(response);
-        print(response.result);
-
         if (response.result == "done") {
-          print("PAGO REALIZADO");
-          _controller.addTicket(_controller.priceGeneral);
+          Navigator.pop(context);
+          _controller.addTicket(_controller.revenue);
         } else {
-          print("NO SE PUDO REALIZAR EL PAGO");
+          Navigator.pop(context);
+
+          utils.Snackbar.showSnackbar(
+              context, _controller.key, 'NO SE PUDO REALIZAR EL PAGO');
         }
       }
     });
@@ -230,12 +247,6 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<Map<String, dynamic>> armarPreferencia() async {
     var mp = MP(globals.mpClientID, globals.mpClientSecret);
-
-    print(_controller.priceGeneral);
-    print(_controller.description);
-    print(_controller.nameController.text);
-    print(_controller.lastNameController.text);
-    print(_controller.emailController.text);
     var preference = {
       "items": [
         {

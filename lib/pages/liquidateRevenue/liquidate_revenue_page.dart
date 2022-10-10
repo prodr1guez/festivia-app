@@ -59,7 +59,10 @@ class _LiquidateRevenuePageState extends State<LiquidateRevenuePage> {
                             "Costo servicio de Festivia",
                             style: TextStyle(fontSize: 16),
                           )),
-                          Text("- \$ " + _controller.totalCommission.toString(),
+                          Text(
+                              "- \$ " +
+                                  _controller.totalCommissionDoubleFixed
+                                      .toString(),
                               style: TextStyle(fontSize: 20))
                         ],
                       ),
@@ -171,7 +174,7 @@ class _LiquidateRevenuePageState extends State<LiquidateRevenuePage> {
         text: 'Liquidar ganancias',
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
-        onPressed: _controller.register,
+        onPressed: _controller.liquidate,
       ),
     );
   }

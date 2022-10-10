@@ -11,8 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../providers/auth_provider.dart';
-import '../../providers/event_provider.dart';
-import '../../providers/geofire_provider.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -98,7 +97,7 @@ class RegisterClubController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
     } else {
-      print('No selecciono ninguna imagen');
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
     }
     Navigator.pop(context);
     refresh();
@@ -110,10 +109,27 @@ class RegisterClubController {
     var phone = phoneController.text;
     var email = emailController.text;
     var pass = passController.text;
+    var confirmPass = confirmPassController.text;
+
+    if (tittle.isEmpty ||
+        description.isEmpty ||
+        phone.isEmpty ||
+        email.isEmpty ||
+        pass.isEmpty ||
+        confirmPass.isEmpty) {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debe completar todos los campos');
+
+      return;
+    }
+
+    if (pass != confirmPassController) {
+      utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
+      return;
+    }
 
     if (pickedFile != null) {
       await _progressDialog.show();
-      print("entandinf");
       TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
 
@@ -130,7 +146,12 @@ class RegisterClubController {
           location: from,
           lat: fromLatLng.latitude,
           long: fromLatLng.longitude,
-          image: imageUrl);
+          image: imageUrl,
+          currentRevenue: 0,
+          nextEvents: 0,
+          revenueYear: 0,
+          ticketsNextEvents: 0,
+          ticketsYear: 0);
 
       if (isRegister) {
         await _clubProvider.create(club);
@@ -140,10 +161,12 @@ class RegisterClubController {
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario se registro correctamente');
 
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'navigation_club', (route) => false);
       } else {
         _progressDialog.hide();
-        print('El usuario no se pudo registrar');
+        utils.Snackbar.showSnackbar(
+            context, key, 'El usuario no se pudo registrar');
       }
     } else {
       utils.Snackbar.showSnackbar(context, key, 'Seleccione una foto');
@@ -163,7 +186,6 @@ class RegisterClubController {
           await _places.getDetailsByPlaceId(p.placeId, language: 'es');
       double lat = detail.result.geometry.location.lat;
       double lng = detail.result.geometry.location.lng;
-      print(p.description + "------");
 
       List<Address> address =
           await Geocoder.local.findAddressesFromQuery(p.description);
@@ -176,9 +198,7 @@ class RegisterClubController {
 
             if (isFrom) {
               from = '$direction, $city, $department';
-              print(from + "-------");
               _position = Position(longitude: lng, latitude: lat);
-
               fromLatLng = new LatLng(lat, lng);
             }
 

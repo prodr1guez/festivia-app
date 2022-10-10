@@ -27,10 +27,10 @@ class RegisterController {
 
   Future init(BuildContext context) async {
     this.context = context;
-    _authProvider = new AuthProvider();
-    _clientProvider = new ClientProvider();
-    _userProvider = new UserProvider();
-    _sharedPref = new SharedPref();
+    _authProvider = AuthProvider();
+    _clientProvider = ClientProvider();
+    _userProvider = UserProvider();
+    _sharedPref = SharedPref();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
   }
@@ -41,24 +41,13 @@ class RegisterController {
     String confirmPassword = confirmPasswordController.text.trim();
     String password = passwordController.text.trim();
 
-    print('Email: $email');
-    print('Password: $password');
-
-    if (username.isEmpty && email.isEmpty && password.isEmpty) {
-      print('debes ingresar todos los campos');
+    if (username.isEmpty || email.isEmpty || password.isEmpty) {
       utils.Snackbar.showSnackbar(
           context, key, 'Debes ingresar todos los campos');
       return;
     }
 
-    /*if (confirmPassword != password) {
-      print('Las contraseñas no coinciden');
-      utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
-      return;
-    }*/
-
     if (password.length < 6) {
-      print('el password debe tener al menos 6 caracteres');
       utils.Snackbar.showSnackbar(
           context, key, 'el password debe tener al menos 6 caracteres');
       return;
@@ -82,19 +71,20 @@ class RegisterController {
         await _sharedPref.save('typeUser', "client");
 
         _progressDialog.hide();
-        Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'navigation', (route) => false);
 
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario se registro correctamente');
-        print('El usuario se registro correctamente');
       } else {
         _progressDialog.hide();
-        print('El usuario no se pudo registrar');
+
+        utils.Snackbar.showSnackbar(
+            context, key, 'El usuario no se pudo registrar');
       }
     } catch (error) {
       _progressDialog.hide();
       utils.Snackbar.showSnackbar(context, key, 'Error: $error');
-      print('Error: $error');
     }
   }
 }

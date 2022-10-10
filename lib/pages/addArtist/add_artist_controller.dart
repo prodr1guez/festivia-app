@@ -46,7 +46,7 @@ class AddArtistController {
 
   publish() async {
     if (pickedFile == null) {
-      print("Ingrese una foto");
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
       _progressDialog.hide();
     } else {
       TaskSnapshot snapshot =
@@ -93,7 +93,7 @@ class AddArtistController {
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
     } else {
-      print('No selecciono ninguna imagen');
+      utils.Snackbar.showSnackbar(context, key, 'No selecciono ninguna imagen');
     }
     Navigator.pop(context);
     refresh();

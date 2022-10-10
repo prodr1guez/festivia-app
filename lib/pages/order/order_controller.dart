@@ -32,6 +32,7 @@ class OrderController {
 
   String type = "";
   double priceGeneral;
+  double revenue;
 
   String email = "";
   String name = "";
@@ -42,6 +43,7 @@ class OrderController {
   String image = "";
   String typeHost = "";
   String idHost = "";
+  String location = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -52,12 +54,14 @@ class OrderController {
 
     idEvent = arguments["idEvent"];
     priceGeneral = arguments["priceGeneral"];
+    revenue = arguments["revenue"];
     type = arguments["type"];
     date = arguments["date"];
     nameEvent = arguments["nameEvent"];
     image = arguments["image"];
     typeHost = arguments["typeHost"];
     idHost = arguments["idHost"];
+    location = arguments["location"];
 
     _myEventsProvider = new MyEventsProvider();
     _authProvider = new AuthProvider();
@@ -90,7 +94,6 @@ class OrderController {
         date: date,
         image: image,
         checkedIn: false);
-    print("ORDERPAGE:  " + id);
 
     await _ticketProvider.create(ticket, idEvent, revenue, typeHost, idHost);
 
@@ -101,7 +104,6 @@ class OrderController {
   }
 
   Future<void> addTicketFree() async {
-    print("---" + idEvent);
     if (nameController.text.isEmpty || lastNameController.text.isEmpty) {
       utils.Snackbar.showSnackbar(context, key, 'Complete todo los datos');
     } else {
@@ -112,12 +114,11 @@ class OrderController {
           payId: _authProvider.getUser().uid,
           name: nameController.text,
           nameEvent: nameEvent,
+          location: location,
           type: type,
           date: date,
           image: image,
           checkedIn: false);
-
-      //Navigator.pushNamed(context, 'ticket_page', arguments: {"idTicket": id});
 
       await _ticketProvider.create(ticket, idEvent, 0, typeHost, idHost);
 
@@ -125,7 +126,6 @@ class OrderController {
 
       utils.Snackbar.showSnackbar(
           context, key, 'El usuario se registro correctamente');
-      print('El usuario se registro correctamente');
 
       Navigator.pushNamedAndRemoveUntil(context, 'navigation', (route) => false,
           arguments: {"index": 3});

@@ -36,24 +36,13 @@ class SelectTypeUserController {
     String confirmPassword = confirmPasswordController.text.trim();
     String password = passwordController.text.trim();
 
-    print('Email: $email');
-    print('Password: $password');
-
     if (username.isEmpty && email.isEmpty && password.isEmpty) {
-      print('debes ingresar todos los campos');
       utils.Snackbar.showSnackbar(
           context, key, 'Debes ingresar todos los campos');
       return;
     }
 
-    /*if (confirmPassword != password) {
-      print('Las contraseñas no coinciden');
-      utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
-      return;
-    }*/
-
     if (password.length < 6) {
-      print('el password debe tener al menos 6 caracteres');
       utils.Snackbar.showSnackbar(
           context, key, 'el password debe tener al menos 6 caracteres');
       return;
@@ -78,15 +67,15 @@ class SelectTypeUserController {
 
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario se registro correctamente');
-        print('El usuario se registro correctamente');
       } else {
         _progressDialog.hide();
-        print('El usuario no se pudo registrar');
+
+        utils.Snackbar.showSnackbar(
+            context, key, 'El usuario no se pudo registrar');
       }
     } catch (error) {
       _progressDialog.hide();
       utils.Snackbar.showSnackbar(context, key, 'Error: $error');
-      print('Error: $error');
     }
   }
 

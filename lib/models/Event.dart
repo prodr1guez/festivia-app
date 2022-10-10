@@ -33,7 +33,8 @@ class Event {
       this.generalTicketsSold,
       this.freeTicketsSold,
       this.vipTicketsSold,
-      this.typeHost});
+      this.typeHost,
+      this.typeEvent});
 
   String id;
   String image;
@@ -43,7 +44,7 @@ class Event {
   String dateEnd;
   String dateEndParsed;
   String description;
-  List<String> genders;
+  List<String> genders = List.empty();
   String ageMin;
   bool isFree;
   bool isTimeLimit;
@@ -63,6 +64,7 @@ class Event {
   int freeTicketsSold;
   int vipTicketsSold;
   String typeHost;
+  String typeEvent;
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
       id: json["id"],
@@ -94,7 +96,8 @@ class Event {
       generalTicketsSold: json["generalTicketsSold"],
       freeTicketsSold: json["freeTicketsSold"],
       vipTicketsSold: json["vipTicketsSold"],
-      typeHost: json["typeHost"]);
+      typeHost: json["typeHost"],
+      typeEvent: json["typeEvent"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -124,6 +127,7 @@ class Event {
         "generalTicketsSold": generalTicketsSold,
         "freeTicketsSold": freeTicketsSold,
         "vipTicketsSold": vipTicketsSold,
-        "typeHost": typeHost
+        "typeHost": typeHost,
+        "typeEvent": typeEvent
       };
 }

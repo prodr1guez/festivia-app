@@ -1,43 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:festivia/models/BannerMainHome.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 class BannerHome extends StatelessWidget {
-  AsyncSnapshot<List<BannerMainHome>> snapshot;
+  BannerMainHome snapshot;
 
   BannerHome({this.snapshot});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200,
-        child: CarouselSlider.builder(
-          unlimitedMode: true,
-          slideBuilder: (index) {
-            BannerMainHome sliderImage = snapshot.data[index];
-            return InkWell(
-              onTap: () {
-                navigateToDetail(context, sliderImage.type, sliderImage.id);
-              },
-              child: Card(
-                  semanticContainer: true,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Image.network(
-                    sliderImage.image,
-                    fit: BoxFit.fill,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
-                  margin: EdgeInsets.all(10)),
-            );
-          },
-          itemCount: snapshot.data == null ? 0 : snapshot.data.length,
-          slideTransform: CubeTransform(rotationAngle: 0),
-          enableAutoSlider: false,
-        ));
+        child: InkWell(
+      onTap: () {
+        //navigateToDetail(context, snapshot.type, snapshot.id);
+      },
+      child: Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: CachedNetworkImage(
+            imageUrl: snapshot.image,
+            fit: BoxFit.fill,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 5,
+          margin: EdgeInsets.all(10)),
+    ));
   }
 
   navigateToDetail(BuildContext context, String type, String id) {
