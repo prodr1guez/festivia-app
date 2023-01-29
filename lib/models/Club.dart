@@ -23,7 +23,8 @@ class Club {
       this.ticketsYear,
       this.ticketsNextEvents,
       this.nextEvents,
-      this.currentRevenue});
+      this.currentRevenue,
+      this.promoted});
 
   String id;
   String image;
@@ -39,6 +40,7 @@ class Club {
   int ticketsNextEvents;
   int nextEvents;
   double currentRevenue;
+  bool promoted;
 
   factory Club.fromJson(Map<String, dynamic> json) => Club(
       id: json["id"],
@@ -58,7 +60,8 @@ class Club {
       nextEvents: json["nextEvents"],
       currentRevenue: json["currentRevenue"] is int
           ? (json['currentRevenue'] as int).toDouble()
-          : json['currentRevenue']);
+          : json['currentRevenue'],
+      promoted: json["promoted"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -74,6 +77,7 @@ class Club {
         "ticketsYear": ticketsYear,
         "ticketsNextEvents": ticketsNextEvents,
         "nextEvents": nextEvents,
-        "currentRevenue": currentRevenue
+        "currentRevenue": currentRevenue,
+        "promoted": promoted
       };
 }

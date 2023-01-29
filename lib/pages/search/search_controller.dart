@@ -33,10 +33,10 @@ class SearchController {
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    checkGPS();
-    _geofireProvider = new GeofireProvider();
-    _position = await Geolocator.getLastKnownPosition();
     markerDriver = await createMarkerImageFromAsset('assets/ubicacion.png');
+    checkGPS();
+    _geofireProvider = await GeofireProvider();
+    _position = await Geolocator.getLastKnownPosition();
   }
 
   void checkGPS() async {

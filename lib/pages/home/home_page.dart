@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../models/Club.dart';
+import '../../models/Event.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -95,8 +97,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 FutureBuilder(
                     future: _con.getSuggestsParty(),
-                    builder:
-                        (context, AsyncSnapshot<List<SuggestParty>> snapshot) {
+                    builder: (context, AsyncSnapshot<List<Event>> snapshot) {
                       return (snapshot.hasData)
                           ? CarouselSlider.builder(
                               itemCount: snapshot.data.length,
@@ -143,8 +144,7 @@ class _HomePageState extends State<HomePage> {
                   margin: const EdgeInsets.only(bottom: 70),
                   child: FutureBuilder(
                       future: _con.getSuggestsClubs(),
-                      builder:
-                          (context, AsyncSnapshot<List<SuggestClub>> snapshot) {
+                      builder: (context, AsyncSnapshot<List<Club>> snapshot) {
                         return (snapshot.hasData)
                             ? CarouselSlider.builder(
                                 itemCount: snapshot.data.length,

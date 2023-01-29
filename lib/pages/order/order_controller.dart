@@ -81,6 +81,14 @@ class OrderController {
     //     "327976969-f7642b8c-b895-4bd6-9aee-adea2d577883");
   }
 
+  void showDialog() {
+    _progressDialog.show();
+  }
+
+  void hideDialog() {
+    _progressDialog.hide();
+  }
+
   Future<void> addTicket(double revenue) async {
     _progressDialog.show();
     String id = MinId.getId('3{w}3{d}').toUpperCase();

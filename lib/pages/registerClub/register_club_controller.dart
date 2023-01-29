@@ -123,7 +123,7 @@ class RegisterClubController {
       return;
     }
 
-    if (pass != confirmPassController) {
+    if (pass != confirmPass) {
       utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
       return;
     }
@@ -151,7 +151,8 @@ class RegisterClubController {
           nextEvents: 0,
           revenueYear: 0,
           ticketsNextEvents: 0,
-          ticketsYear: 0);
+          ticketsYear: 0,
+          promoted: false);
 
       if (isRegister) {
         await _clubProvider.create(club);

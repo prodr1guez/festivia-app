@@ -45,10 +45,12 @@ class _StartPageState extends State<StartPage> {
                         width: 270.0,
                         height: 270.0,
                       ),
-                      padding: EdgeInsets.only(top: 190, left: 20, right: 20),
+                      padding: EdgeInsets.only(top: 160, left: 20, right: 20),
                     ),
                     _buttonLogin(),
                     _buttonRegisterText(),
+                    _buttonGamesText(),
+                    _buttonGames(),
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(bottom: 60),
@@ -79,6 +81,20 @@ class _StartPageState extends State<StartPage> {
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
           )),
     );
+  }
+
+  Widget _buttonGamesText() {
+    return Container(
+        margin: const EdgeInsets.only(left: 70, right: 70, top: 80),
+        child: const Text(
+          "[NUEVO!] ¿Queres activar la noche? probá nuestros juegos!",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              fontFamily: "Ubuntu"),
+        ));
   }
 
   Widget _textTermsAndConditions() {
@@ -141,6 +157,43 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
+  Widget _buttonGames() {
+    return Container(
+      height: 40.0,
+      width: 120,
+      margin: EdgeInsets.only(top: 10),
+      child: RaisedButton(
+        onPressed: () {
+          toGames();
+        },
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+        padding: EdgeInsets.all(0.0),
+        child: Ink(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff3e2b57), Colors.indigo[900]],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+            alignment: Alignment.center,
+            child: Text(
+              "JUGAR",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Ubuntu"),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void toLogin() {
     Navigator.pushNamed(context, 'login');
   }
@@ -155,6 +208,10 @@ class _StartPageState extends State<StartPage> {
 
   void toRegister() {
     Navigator.pushNamed(context, 'select_type_user');
+  }
+
+  void toGames() {
+    Navigator.pushNamed(context, 'games_page');
   }
 
   void refresh() {

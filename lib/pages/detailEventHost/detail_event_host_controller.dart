@@ -55,8 +55,8 @@ class DetailEventHostController {
     });
   }
 
-  navigateToContactUs(BuildContext context) {
-    Navigator.pushNamed(context, 'contact_us');
+  navigateToEditEvent(BuildContext context) {
+    Navigator.pushNamed(context, 'edit_event', arguments: idEvent);
   }
 
   void goToEventStats() {

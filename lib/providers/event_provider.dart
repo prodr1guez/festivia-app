@@ -84,6 +84,21 @@ class EventProvider {
     return null;
   }
 
+  Future<List<Ticket>> getTicketsEvents(String idEvent) async {
+    QuerySnapshot querySnapshot =
+        await _ref.doc(idEvent).collection("tickets").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<Ticket> tickets = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      tickets.add(Ticket.fromJson(data));
+    }
+
+    return tickets;
+  }
+
   Future<void> liquidateRevenue(String id, double amount) {
     return _ref.doc(id).update({
       "revenue": FieldValue.increment(-amount),

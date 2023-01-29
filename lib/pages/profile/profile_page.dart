@@ -35,6 +35,28 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      bottomSheet: Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 80),
+              child: InkWell(
+                onTap: (() {
+                  _controller.openDialog();
+                }),
+                child: Text(
+                  "ELIMINAR CUENTA",
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -47,8 +69,8 @@ class _ProfilePageState extends State<ProfilePage> {
               topRight: Radius.circular(32),
               topLeft: Radius.circular(32),
             ),
-            minHeight: MediaQuery.of(context).size.height * 0.40,
-            maxHeight: MediaQuery.of(context).size.height * 0.40,
+            minHeight: MediaQuery.of(context).size.height * 0.50,
+            maxHeight: MediaQuery.of(context).size.height * 0.50,
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.4,

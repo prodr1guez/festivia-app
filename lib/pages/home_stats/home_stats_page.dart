@@ -43,14 +43,14 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ItemStatsRevenueYear(
-                  "Ganancias 2022",
+                  "Ganancias 2023",
                   NumberFormat.compactSimpleCurrency(locale: "en-US")
                       .format(_controller.club.revenueYear),
                   Color(0xFFE78EA9),
                 ),
                 Container(width: 10),
                 ItemStatsTickerYear(
-                  "Total tickets vendidos en 2022",
+                  "Total tickets vendidos en 2023",
                   _controller.club.ticketsYear,
                   Color(0xFFFEB139),
                 ),

@@ -45,14 +45,24 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _googleMapsWidget() {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _con.initialPosition,
-      onMapCreated: _con.onMapCreated,
-      myLocationEnabled: false,
-      myLocationButtonEnabled: false,
-      markers: Set<Marker>.of(_con.markers.values),
-    );
+    if (_con.markers.isEmpty) {
+      return GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _con.initialPosition,
+        onMapCreated: _con.onMapCreated,
+        myLocationEnabled: false,
+        myLocationButtonEnabled: false,
+      );
+    } else {
+      return GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _con.initialPosition,
+        onMapCreated: _con.onMapCreated,
+        myLocationEnabled: false,
+        myLocationButtonEnabled: false,
+        markers: Set<Marker>.of(_con.markers.values),
+      );
+    }
   }
 
   void refresh() {

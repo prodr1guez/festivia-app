@@ -28,7 +28,6 @@ class DetailClubController {
     getClubInfo();
   }
 
-  // CORREGIR
   Future<List<HostEvent>> getMyEvents() async {
     return await _clubProvider.EventsClub(idClub);
   }

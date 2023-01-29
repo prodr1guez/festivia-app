@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:festivia/models/BannerMainHome.dart';
+import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/SuggestClub.dart';
 import 'package:festivia/models/SuggestParty.dart';
 import 'package:festivia/models/client.dart';
+
+import '../models/Club.dart';
 
 class BannersProvider {
   CollectionReference _ref;
@@ -11,8 +14,8 @@ class BannersProvider {
 
   BannersProvider() {
     _ref = FirebaseFirestore.instance.collection('MainBanner');
-    _refParties = FirebaseFirestore.instance.collection('SuggestsParties');
-    _refClubs = FirebaseFirestore.instance.collection('SuggestsClubs');
+    _refParties = FirebaseFirestore.instance.collection('Events');
+    _refClubs = FirebaseFirestore.instance.collection('Clubs');
   }
 
   Future<void> create(Client client) {
@@ -62,29 +65,31 @@ class BannersProvider {
     return dataBanners;
   }
 
-  Future<List<SuggestParty>> getSuggestPartiesData() async {
+  Future<List<Event>> getSuggestPartiesData() async {
     QuerySnapshot querySnapshot = await _refParties.get();
 
     List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-    List<SuggestParty> dataBanners = new List();
-
+    List<Event> dataBanners = new List();
     for (Map<String, dynamic> data in allData) {
-      dataBanners.add(SuggestParty.fromJson(data));
+      Event event = Event.fromJson(data);
+      if (event.promoted) {
+        dataBanners.add(event);
+      }
     }
 
     return dataBanners;
   }
 
-  Future<List<SuggestClub>> getSuggestClubsData() async {
+  Future<List<Club>> getSuggestClubsData() async {
     QuerySnapshot querySnapshot = await _refClubs.get();
-
     List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-
-    List<SuggestClub> dataBanners = new List();
-
+    List<Club> dataBanners = new List();
     for (Map<String, dynamic> data in allData) {
-      dataBanners.add(SuggestClub.fromJson(data));
+      Club club = Club.fromJson(data);
+      if (club.promoted) {
+        dataBanners.add(club);
+      }
     }
 
     return dataBanners;

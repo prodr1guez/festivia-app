@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:festivia/models/SuggestParty.dart';
+import 'package:festivia/models/Event.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
+
+import '../pages/detailEvent/detail_event_page.dart';
 
 class CardPartyHome extends StatelessWidget {
-  SuggestParty snapshot;
+  Event snapshot;
 
   CardPartyHome({this.snapshot});
 
@@ -14,7 +14,7 @@ class CardPartyHome extends StatelessWidget {
     return Container(
         child: InkWell(
       onTap: () {
-        navigateToDetail(context, snapshot.type, snapshot.id);
+        navigateToDetail(context, snapshot.id);
       },
       child: Container(
         child: Card(
@@ -27,7 +27,7 @@ class CardPartyHome extends StatelessWidget {
                   width: 350,
                   child: CachedNetworkImage(
                     imageUrl: snapshot.image,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Container(
@@ -41,7 +41,7 @@ class CardPartyHome extends StatelessWidget {
                             child: Container(
                                 margin: EdgeInsets.only(left: 20),
                                 child: Text(
-                                  "Festivia",
+                                  snapshot.tittle,
                                   style: TextStyle(
                                     fontFamily: "Ubuntu",
                                     fontSize: 20,
@@ -63,11 +63,13 @@ class CardPartyHome extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
+                                    width: 250,
                                     margin: EdgeInsets.only(left: 2),
                                     child: Text(
                                       snapshot.location,
                                       style: TextStyle(
                                           fontFamily: "Ubuntu",
+                                          overflow: TextOverflow.ellipsis,
                                           fontSize: 16,
                                           color: Colors.red),
                                     )),
@@ -79,7 +81,7 @@ class CardPartyHome extends StatelessWidget {
                             child: Container(
                                 margin: EdgeInsets.only(left: 20),
                                 child: Text(
-                                  snapshot.date,
+                                  snapshot.dateStartParsed,
                                   style: TextStyle(
                                     fontFamily: "Ubuntu",
                                     fontSize: 16,
@@ -102,7 +104,12 @@ class CardPartyHome extends StatelessWidget {
     ));
   }
 
-  navigateToDetail(BuildContext context, String type, String id) {
-    Navigator.pushNamed(context, 'detail_event', arguments: id);
+  navigateToDetail(BuildContext context, String id) {
+    //Navigator.pushNamed(context, 'detail_event', arguments: id);
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return DetailEvent(
+          tag: "eventH$id", url: snapshot.image, event: snapshot);
+    }));
   }
 }

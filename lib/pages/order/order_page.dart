@@ -197,6 +197,7 @@ class _OrderPageState extends State<OrderPage> {
       utils.Snackbar.showSnackbar(
           context, _controller.key, 'Complete todo los datos');
     } else {
+      _controller.showDialog();
       startMp();
     }
   }
@@ -233,11 +234,12 @@ class _OrderPageState extends State<OrderPage> {
             globals.mpPublicKey, preferenceId);
 
         if (response.result == "done") {
+          _controller.hideDialog();
           Navigator.pop(context);
           _controller.addTicket(_controller.revenue);
         } else {
+          _controller.hideDialog();
           Navigator.pop(context);
-
           utils.Snackbar.showSnackbar(
               context, _controller.key, 'NO SE PUDO REALIZAR EL PAGO');
         }
@@ -267,7 +269,9 @@ class _OrderPageState extends State<OrderPage> {
       },
       "payment_methods": {
         "excluded_payment_types": [
-          {"id": "credit_card"}
+          {"id": "credit_card"},
+          {"id": "ticket"},
+          {"id": "atm"},
         ]
       }
     };

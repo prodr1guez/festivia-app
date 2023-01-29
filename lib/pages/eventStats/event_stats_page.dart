@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:festivia/utils/colors.dart' as utils;
+import 'package:intl/intl.dart';
 
 class EventStatsPage extends StatefulWidget {
   @override
@@ -74,9 +75,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
               ),
               Container(width: 10),
               ItemStats(
-                "Vendidos",
-                _controller.event.vipTicketsSold,
-                "VIPs",
+                "Entradas",
+                _controller.checksIn,
+                "Registradas",
                 Color(0xFFB9F8D3),
               ),
             ],
@@ -125,7 +126,9 @@ class _EventStatsPageState extends State<EventStatsPage> {
                       child: Text(
                         _controller.event == null
                             ? "-"
-                            : _controller.event.revenue.toString(),
+                            : NumberFormat.compactSimpleCurrency(
+                                    locale: "en-US")
+                                .format(_controller.event.revenue),
                         style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold,

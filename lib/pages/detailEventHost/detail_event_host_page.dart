@@ -41,7 +41,7 @@ class _DetailEventHostState extends State<DetailEventHost> {
             elevation: 5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [_buttonToContact(), _buttonReserve()],
+              children: [_buttonToEdit(), _buttonReserve()],
             )),
       ),
       body: Stack(
@@ -275,15 +275,15 @@ class _DetailEventHostState extends State<DetailEventHost> {
     );
   }
 
-  Widget _buttonToContact() {
+  Widget _buttonToEdit() {
     return Container(
       height: 50,
       width: 150,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 25),
       child: Container(
         child: ButtonApp(
-          onPressed: () => {_controller.navigateToContactUs(context)},
-          text: 'Promocionar',
+          onPressed: () => {_controller.navigateToEditEvent(context)},
+          text: 'Editar',
           color: utils.Colors.festiviaColor,
           textColor: Colors.white,
         ),

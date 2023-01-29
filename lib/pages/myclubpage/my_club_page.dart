@@ -44,8 +44,8 @@ class _MyClubPageState extends State<MyClubPage> {
               topRight: Radius.circular(32),
               topLeft: Radius.circular(32),
             ),
-            minHeight: MediaQuery.of(context).size.height * 0.60,
-            maxHeight: MediaQuery.of(context).size.height * 0.90,
+            minHeight: MediaQuery.of(context).size.height * 0.45,
+            maxHeight: MediaQuery.of(context).size.height * 0.45,
             body: FractionallySizedBox(
               alignment: Alignment.topCenter,
               heightFactor: 0.7,
@@ -256,11 +256,6 @@ class _MyClubPageState extends State<MyClubPage> {
         //_buttonReserve()
       ],
     );
-  }
-
-  Widget _googleMapsWidget() {
-    return Image.network(
-        "https://developer.augmentedlogic.com/image/style/tcard/osm-og.jpg");
   }
 
   Row _rowButtons() {

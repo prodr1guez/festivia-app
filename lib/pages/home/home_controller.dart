@@ -1,4 +1,5 @@
 import 'package:festivia/models/BannerMainHome.dart';
+import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/SuggestClub.dart';
 import 'package:festivia/models/SuggestParty.dart';
 import 'package:festivia/providers/auth_provider.dart';
@@ -6,6 +7,7 @@ import 'package:festivia/providers/banners_providers.dart';
 import 'package:festivia/widgets/mini_card_home.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/Club.dart';
 import '../../models/HostEvent.dart';
 import '../../providers/my_events_provider.dart';
 
@@ -29,11 +31,11 @@ class HomeController {
     return await _bannersProvider.getBannersData();
   }
 
-  Future<List<SuggestParty>> getSuggestsParty() async {
+  Future<List<Event>> getSuggestsParty() async {
     return await _bannersProvider.getSuggestPartiesData();
   }
 
-  Future<List<SuggestClub>> getSuggestsClubs() async {
+  Future<List<Club>> getSuggestsClubs() async {
     return await _bannersProvider.getSuggestClubsData();
   }
 }

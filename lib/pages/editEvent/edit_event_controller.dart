@@ -19,7 +19,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import '../../providers/storage_provider.dart';
 import '../../utils/my_progress_dialog.dart';
 
-class EditClubController {
+class EditEventController {
   Function refresh;
   BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -39,6 +39,16 @@ class EditClubController {
   TextEditingController descriptionController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
+  TextEditingController maxTicketsFreeController = TextEditingController();
+  TextEditingController descriptionTicketFreeController =
+      TextEditingController();
+
+  TextEditingController descriptionTicketGeneralController =
+      TextEditingController();
+
+  TextEditingController maxTicketsGeneralController = TextEditingController();
+
+  TextEditingController priceController = TextEditingController();
   List<String> selectedGenders = [];
   String idEvent;
   File imageFile;
@@ -48,6 +58,12 @@ class EditClubController {
   LatLng fromLatLng;
   String currentImage = "";
   String idClub;
+
+  bool isFree = false;
+  bool istimeLimit = false;
+  String dateEndFreePass;
+  String dateEndFreePassParsed;
+  bool isGeneral = false;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;

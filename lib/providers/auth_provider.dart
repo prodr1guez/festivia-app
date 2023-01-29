@@ -78,4 +78,8 @@ class AuthProvider {
   Future<void> signOut() async {
     return Future.wait([_firebaseAuth.signOut()]);
   }
+
+  Future<void> deleteAccount() async {
+    await FirebaseAuth.instance.currentUser.delete();
+  }
 }

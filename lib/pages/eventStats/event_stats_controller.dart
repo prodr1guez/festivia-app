@@ -8,6 +8,7 @@ import 'package:festivia/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+import '../../models/Ticket.dart';
 import '../../models/client.dart';
 import '../../utils/my_progress_dialog.dart';
 
@@ -33,6 +34,7 @@ class EventStatsController {
   String location;
   User user;
   bool showLiquidate = false;
+  int checksIn = 0;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -53,7 +55,17 @@ class EventStatsController {
   void getEventInfo() async {
     await _progressDialog.show();
     event = await _eventProvider.getById(idEvent);
+
+    List<Ticket> tickets = await _eventProvider.getTicketsEvents(idEvent);
+    var checksin = 0;
+
+    for (var ticket in tickets) {
+      if (ticket.checkedIn) {
+        checksin++;
+      }
+    }
     await _progressDialog.hide();
+    checksIn = checksin;
     refresh();
   }
 

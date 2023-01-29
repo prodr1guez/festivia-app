@@ -212,7 +212,8 @@ class AddController {
           descriptionTicketFree: descriptionTicketFreeController.text,
           descriptionTicketGeneral: descriptionTicketGeneralController.text,
           typeHost: typeUser,
-          typeEvent: typeEvent);
+          typeEvent: typeEvent,
+          promoted: false);
 
       try {
         await _eventProvider.create(event);

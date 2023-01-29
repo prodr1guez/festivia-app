@@ -10,6 +10,9 @@ import 'package:festivia/providers/client_provider.dart';
 import 'package:festivia/providers/storage_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
+import 'package:festivia/utils/colors.dart' as utils;
+
+import '../../widgets/button_app.dart';
 
 class ProfileController {
   BuildContext context;
@@ -122,8 +125,39 @@ class ProfileController {
 
   void goToEditProfile() {}
 
+  openDialog() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Aviso",
+                style: TextStyle(fontSize: 23, fontFamily: "Ubuntu")),
+            content: Text(
+              "Se eliminará la cuenta permanentemente, desea continuar?",
+              style: TextStyle(fontSize: 17, fontFamily: "Ubuntu"),
+            ),
+            actions: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                child: ButtonApp(
+                  onPressed: () => {
+                    _progressDialog.show(),
+                    deleteAccount(),
+                    _progressDialog.hide()
+                  },
+                  text: 'Continuar',
+                  color: utils.Colors.festiviaColor,
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
+          ));
+
   Future<void> logout() async {
     await _authProvider.signOut();
+    Navigator.pushNamedAndRemoveUntil(context, 'start', (route) => false);
+  }
+
+  Future<void> deleteAccount() async {
+    await _authProvider.deleteAccount();
     Navigator.pushNamedAndRemoveUntil(context, 'start', (route) => false);
   }
 }

@@ -37,97 +37,101 @@ class _ReserveTicketsState extends State<ReserveTickets> {
 
   Visibility freeTicket() {
     return Visibility(
+        visible: _controller.isFree,
         child: Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      width: 350,
-      child: InkWell(
-        onTap: _controller.freeToOrderPage,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          elevation: 5.0,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          width: 350,
+          child: InkWell(
+            onTap: _controller.freeToOrderPage,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              elevation: 5.0,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
                   children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Entrada Free",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10, bottom: 2),
-                      child: const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Info",
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                    ),
-                    Container(
-                      width: 250,
-                      margin: const EdgeInsets.only(top: 3, bottom: 2),
-                      child: Align(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            _controller.infoFree,
-                          )),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10, bottom: 2),
-                      child: const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Entrada valida hasta: ",
-                              style: TextStyle(fontWeight: FontWeight.bold))),
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(_controller.dateParsed == null
-                            ? "2 de febrero"
-                            : _controller.dateParsed)),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        decoration: const BoxDecoration(
-                            color: utils.Colors.sky,
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        child: Text(
-                          _controller.availableTicketsFreeText,
-                          style: const TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
+                            "Entrada Free",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Info",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                        ),
+                        Container(
+                          width: 250,
+                          margin: const EdgeInsets.only(top: 3, bottom: 2),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _controller.infoFree,
+                              )),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, bottom: 2),
+                          child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text("Entrada valida hasta: ",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                        ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(_controller.dateParsed == null
+                                ? ""
+                                : _controller.dateParsed)),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: const BoxDecoration(
+                                color: utils.Colors.sky,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 5),
+                            child: Text(
+                              _controller.availableTicketsFreeText,
+                              style: const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: const Text(
+                            "Free",
+                            style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),
-                Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 10),
-                      child: const Text(
-                        "Free",
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic),
-                      ),
-                    )
-                  ],
-                )
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   Visibility paidTicket() {

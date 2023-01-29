@@ -143,7 +143,7 @@ class _DetailEventState extends State<DetailEvent> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: hPadding),
-              height: MediaQuery.of(context).size.height * 0.28,
+              height: MediaQuery.of(context).size.height * 0.30,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

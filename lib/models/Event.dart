@@ -34,7 +34,8 @@ class Event {
       this.freeTicketsSold,
       this.vipTicketsSold,
       this.typeHost,
-      this.typeEvent});
+      this.typeEvent,
+      this.promoted});
 
   String id;
   String image;
@@ -65,6 +66,7 @@ class Event {
   int vipTicketsSold;
   String typeHost;
   String typeEvent;
+  bool promoted;
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
       id: json["id"],
@@ -97,7 +99,8 @@ class Event {
       freeTicketsSold: json["freeTicketsSold"],
       vipTicketsSold: json["vipTicketsSold"],
       typeHost: json["typeHost"],
-      typeEvent: json["typeEvent"]);
+      typeEvent: json["typeEvent"],
+      promoted: json["promoted"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -128,6 +131,7 @@ class Event {
         "freeTicketsSold": freeTicketsSold,
         "vipTicketsSold": vipTicketsSold,
         "typeHost": typeHost,
-        "typeEvent": typeEvent
+        "typeEvent": typeEvent,
+        "promoted": promoted
       };
 }
