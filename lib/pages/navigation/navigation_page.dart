@@ -7,6 +7,7 @@ import 'package:festivia/pages/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:festivia/utils/colors.dart' as utils;
 
 import '../addArtist/add_artist_page.dart';
 
@@ -42,22 +43,27 @@ class _NavigationPageState extends State<NavigationPage> {
     final items = <Widget>[
       Icon(
         Icons.home,
+        color: Colors.white,
         size: 30,
       ),
       Icon(
         Icons.search_rounded,
+        color: Colors.white,
         size: 30,
       ),
       Icon(
         Icons.add,
+        color: Colors.white,
         size: 30,
       ),
       Icon(
         Icons.event_available_rounded,
+        color: Colors.white,
         size: 30,
       ),
       Icon(
         Icons.person,
+        color: Colors.white,
         size: 30,
       ),
     ];
@@ -65,6 +71,7 @@ class _NavigationPageState extends State<NavigationPage> {
       extendBody: true,
       body: Container(child: SafeArea(child: screens[index], bottom: false)),
       bottomNavigationBar: CurvedNavigationBar(
+        color: Colors.black,
         key: navigationKey,
         items: items,
         height: 60,

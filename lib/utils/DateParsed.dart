@@ -21,7 +21,7 @@ class DateParse {
   String DiaConMesYAno(DateTime date) {
     initializeDateFormatting('es_ES', null);
     final dateTime = DateTime.parse(date.toString());
-    final DateString = DateFormat.yMMMMd('es_AR').format(dateTime);
+    final DateString = DateFormat.MMMMd('es_AR').format(dateTime);
     return DateString;
   }
 
@@ -41,6 +41,18 @@ class DateParse {
       return "notAvailable";
     }
     return "available";
+  }
+
+  bool isStarted(String date) {
+    DateTime valStart = DateTime.parse(date);
+    DateTime dateNow = DateTime.now();
+    return dateNow.isAfter(valStart);
+  }
+
+  bool isFinished(String date) {
+    DateTime valEnd = DateTime.parse(date);
+    DateTime dateNow = DateTime.now();
+    return valEnd.isBefore(dateNow);
   }
 
   CompareDateBool(String date) {

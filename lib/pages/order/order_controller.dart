@@ -10,6 +10,7 @@ import 'package:min_id/min_id.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:festivia/utils/snackbar.dart' as utils;
 
+import '../../models/PreSaleTicket.dart';
 import '../../utils/my_progress_dialog.dart';
 //import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 
@@ -44,6 +45,9 @@ class OrderController {
   String typeHost = "";
   String idHost = "";
   String location = "";
+  String tittleTicket = "";
+  double priceTicket;
+  String ticketId = "";
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -53,15 +57,17 @@ class OrderController {
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
 
     idEvent = arguments["idEvent"];
-    priceGeneral = arguments["priceGeneral"];
+    priceTicket = arguments["priceTicket"];
     revenue = arguments["revenue"];
     type = arguments["type"];
     date = arguments["date"];
     nameEvent = arguments["nameEvent"];
+    tittleTicket = arguments["tittleTicket"];
     image = arguments["image"];
     typeHost = arguments["typeHost"];
     idHost = arguments["idHost"];
     location = arguments["location"];
+    ticketId = arguments["ticketId"];
 
     _myEventsProvider = new MyEventsProvider();
     _authProvider = new AuthProvider();
@@ -98,12 +104,14 @@ class OrderController {
         payId: _authProvider.getUser().uid,
         name: nameController.text,
         nameEvent: nameEvent,
+        location: location,
         type: type,
         date: date,
         image: image,
         checkedIn: false);
 
-    await _ticketProvider.create(ticket, idEvent, revenue, typeHost, idHost);
+    await _ticketProvider.create(
+        ticket, idEvent, revenue, typeHost, idHost, ticketId);
 
     _progressDialog.hide();
 
@@ -128,7 +136,8 @@ class OrderController {
           image: image,
           checkedIn: false);
 
-      await _ticketProvider.create(ticket, idEvent, 0, typeHost, idHost);
+      await _ticketProvider.create(
+          ticket, idEvent, 0, typeHost, idHost, ticketId);
 
       _progressDialog.hide();
 

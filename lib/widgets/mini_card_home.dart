@@ -14,9 +14,8 @@ class MiniCardHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 190,
+        height: 120,
         child: ListView.builder(
-            padding: const EdgeInsets.all(8),
             scrollDirection: Axis.horizontal,
             itemCount: miniCardList.length,
             itemBuilder: (BuildContext context, int index) {
@@ -28,35 +27,36 @@ class MiniCardHome extends StatelessWidget {
                     color: Colors.grey[100],
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Column(
+                    child: Stack(
                       children: [
                         Container(
-                          height: 120,
+                          height: double.infinity,
                           child: ParallaxImage(
-                              extent: 180,
+                              extent: 150,
                               image: AssetImage(miniCardList[index].imageUrl)),
                         ),
-                        Container(
-                          height: 30,
-                          width: 150,
+                        Positioned(
                           child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              miniCardList[index].tittle,
-                              style: TextStyle(
-                                  fontFamily: "Ubuntu",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18),
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 5, bottom: 5),
+                              child: Text(
+                                miniCardList[index].tittle,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900),
+                              ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     elevation: 5,
-                    margin: EdgeInsets.all(10)),
+                    margin: EdgeInsets.all(5)),
               );
             }));
   }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:festivia/models/PreSaleTicket.dart';
+
 Event eventFromJson(String str) => Event.fromJson(json.decode(str));
 
 String eventToJson(Event data) => json.encode(data.toJson());
@@ -17,6 +19,7 @@ class Event {
       this.genders,
       this.ageMin,
       this.isFree,
+      this.isInformative,
       this.isTimeLimit,
       this.dateEndFreePass,
       this.dateEndFreePassParsed,
@@ -26,11 +29,13 @@ class Event {
       this.maxTicketsPaidOffEvent,
       this.idHost,
       this.location,
+      this.lat,
+      this.long,
       this.descriptionTicketFree,
       this.descriptionTicketGeneral,
       this.assistants,
       this.revenue,
-      this.generalTicketsSold,
+      this.ticketsSold,
       this.freeTicketsSold,
       this.vipTicketsSold,
       this.typeHost,
@@ -48,6 +53,7 @@ class Event {
   List<String> genders = List.empty();
   String ageMin;
   bool isFree;
+  bool isInformative;
   bool isTimeLimit;
   String dateEndFreePass;
   String dateEndFreePassParsed;
@@ -57,11 +63,13 @@ class Event {
   int maxTicketsPaidOffEvent;
   String idHost;
   String location;
+  double lat;
+  double long;
   String descriptionTicketFree;
   String descriptionTicketGeneral;
   int assistants;
   double revenue;
-  int generalTicketsSold;
+  int ticketsSold;
   int freeTicketsSold;
   int vipTicketsSold;
   String typeHost;
@@ -80,6 +88,7 @@ class Event {
       genders: List<String>.from(json["genders"].map((x) => x)),
       ageMin: json["ageMin"],
       isFree: json["isFree"],
+      isInformative: json["isInformative"],
       isTimeLimit: json["isTimeLimit"],
       dateEndFreePass: json["dateEndFreePass"],
       dateEndFreePassParsed: json["dateEndFreePassParsed"],
@@ -89,13 +98,15 @@ class Event {
       maxTicketsPaidOffEvent: json["maxTicketsPaidOffEvent"],
       idHost: json["idHost"],
       location: json["location"],
+      lat: json["lat"],
+      long: json["long"],
       descriptionTicketFree: json["descriptionTicketFree"],
       descriptionTicketGeneral: json["descriptionTicketGeneral"],
       assistants: json["assistants"],
       revenue: json["revenue"] is int
           ? (json['revenue'] as int).toDouble()
           : json['revenue'],
-      generalTicketsSold: json["generalTicketsSold"],
+      ticketsSold: json["ticketsSold"],
       freeTicketsSold: json["freeTicketsSold"],
       vipTicketsSold: json["vipTicketsSold"],
       typeHost: json["typeHost"],
@@ -114,6 +125,7 @@ class Event {
         "genders": List<dynamic>.from(genders.map((x) => x)),
         "ageMin": ageMin,
         "isFree": isFree,
+        "isInformative": isInformative,
         "isTimeLimit": isTimeLimit,
         "dateEndFreePass": dateEndFreePass,
         "dateEndFreePassParsed": dateEndFreePassParsed,
@@ -123,11 +135,13 @@ class Event {
         "maxTicketsPaidOffEvent": maxTicketsPaidOffEvent,
         "idHost": idHost,
         "location": location,
+        "lat": lat,
+        "long": long,
         "descriptionTicketFree": descriptionTicketFree,
         "descriptionTicketGeneral": descriptionTicketGeneral,
         "assistants": assistants,
         "revenue": revenue,
-        "generalTicketsSold": generalTicketsSold,
+        "ticketsSold": ticketsSold,
         "freeTicketsSold": freeTicketsSold,
         "vipTicketsSold": vipTicketsSold,
         "typeHost": typeHost,

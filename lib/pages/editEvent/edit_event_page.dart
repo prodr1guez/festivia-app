@@ -48,12 +48,12 @@ class _EditEventPageState extends State<EditEventPage> {
             _addImage(),
             _textFieldName(),
             _cardGooglePlaces(),
+            _textDateStart(),
+            DatePickerStart(context),
+            _textDateEnd(),
+            DatePickerEnd(context),
             _textDescription(),
             _textFieldDescription(),
-            _rowPassFree(),
-            _sectionFreePass(context),
-            _rowPassPaid(),
-            _sectionPassPaid(context),
             _buttonRegister(),
           ],
         )),
@@ -114,7 +114,7 @@ class _EditEventPageState extends State<EditEventPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
-        controller: _controller.tittleEvent,
+        controller: _controller.tittleEventController,
         decoration: InputDecoration(labelText: 'Nombre del evento'),
       ),
     );
@@ -477,6 +477,92 @@ class _EditEventPageState extends State<EditEventPage> {
           style: TextStyle(fontSize: 20),
           keyboardType: TextInputType.number,
           controller: _controller.maxTicketsGeneralController,
+        ));
+  }
+
+  Widget _textDateStart() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 20),
+      child: Text(
+        'Desde',
+        style: TextStyle(
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
+      ),
+    );
+  }
+
+  Widget _textDateEnd() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 20),
+      child: Text(
+        'Hasta',
+        style: TextStyle(
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
+      ),
+    );
+  }
+
+  ElevatedButton DatePickerStart(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          DatePicker.showDateTimePicker(context,
+              locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateStartParsed = dateString + " a las " + clockString;
+            dateStart = date.toString();
+          }, onConfirm: (date) {
+            _controller.dateStart = dateStart;
+            _controller.dateStartParsed = dateStartParsed;
+            refresh();
+          }, currentTime: DateTime.now());
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white)),
+        child: Container(
+          width: 300,
+          child: Text(
+            _controller.dateStartParsed == null
+                ? 'DD/MM/AA HH:MM'
+                : _controller.dateStartParsed,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ));
+  }
+
+  ElevatedButton DatePickerEnd(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          DatePicker.showDateTimePicker(context,
+              locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateEndParse = dateString + " a las " + clockString;
+            dateEnd = date.toString();
+          }, onConfirm: (date) {
+            _controller.dateEnd = dateEnd;
+            _controller.dateEndParsed = dateEndParse;
+            refresh();
+          }, currentTime: DateTime.now());
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white)),
+        child: Container(
+          width: 300,
+          child: Text(
+            _controller.dateEndParsed == null
+                ? 'DD/MM/AA HH:MM'
+                : _controller.dateEndParsed,
+            style: TextStyle(color: Colors.grey),
+          ),
         ));
   }
 

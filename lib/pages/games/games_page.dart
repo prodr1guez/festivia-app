@@ -1,20 +1,20 @@
+import 'package:festivia/pages/games/games_controller.dart';
 import 'package:festivia/pages/start_controller.dart';
 import 'package:festivia/widgets/button_app.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:festivia/utils/colors.dart' as utils;
+import 'package:festivia/utils/snackbar.dart' as utils;
 import 'package:flutter/scheduler.dart';
 
 class GamesPage extends StatefulWidget {
   const GamesPage({Key key}) : super(key: key);
-
   @override
   _GamesPageState createState() => _GamesPageState();
 }
 
 class _GamesPageState extends State<GamesPage> {
-  final StartController _controller = StartController();
-
+  GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
+  GamesController _controller = GamesController();
   @override
   void initState() {
     super.initState();
@@ -36,10 +36,18 @@ class _GamesPageState extends State<GamesPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _itemGame("REY MANDA", "crown.png", ""),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Text(
+                  "¡Previá con Festivia!",
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 30, fontFamily: "Ubuntu"),
+                ),
+              ),
               _itemGame("YO NUNCA", "silence.png", "yonunca_page"),
               _itemGame("VERDAD O RETO", "choose.png", "verdad_o_reto_page"),
-              _itemGame("TODOS SEÑALAN", "point.png", "point_game_page")
+              _itemGame("TODOS SEÑALAN", "point.png", "point_game_page"),
+              _itemGame("REY MANDA", "crown.png", ""),
             ],
           ),
         ),
@@ -50,7 +58,7 @@ class _GamesPageState extends State<GamesPage> {
   Widget _itemGame(String name, String icon, String navigatePage) {
     return InkWell(
       onTap: (() {
-        navigate(navigatePage);
+        _controller.navigate(navigatePage);
       }),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
@@ -70,14 +78,16 @@ class _GamesPageState extends State<GamesPage> {
                     child: Text(
                       name,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 17,
+                        fontFamily: "Ubuntu",
+                      ),
                     ),
                   ),
                   Spacer(),
                   Container(
-                    margin: EdgeInsets.only(right: 40),
+                    margin: EdgeInsets.only(right: 10),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: SizedBox(
@@ -93,45 +103,6 @@ class _GamesPageState extends State<GamesPage> {
             )),
       ),
     );
-  }
-
-  Widget _buttonGames() {
-    return Container(
-      height: 40.0,
-      width: 120,
-      margin: EdgeInsets.only(top: 10),
-      child: RaisedButton(
-        onPressed: () {},
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-        padding: EdgeInsets.all(0.0),
-        child: Ink(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xff3e2b57), Colors.indigo[900]],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(30.0)),
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-            alignment: Alignment.center,
-            child: Text(
-              "JUGAR",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Ubuntu"),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void navigate(String navigate) {
-    Navigator.pushNamed(context, navigate);
   }
 
   void refresh() {

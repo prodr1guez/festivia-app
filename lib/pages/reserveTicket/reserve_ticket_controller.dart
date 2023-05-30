@@ -1,5 +1,6 @@
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/GlobalData.dart';
+import 'package:festivia/models/PreSaleTicket.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:festivia/providers/global_data_provider.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,10 @@ class ReserveTicketController {
   String image = "";
   String availableTicketsFreeText = "Quedan - tickets";
   String availableTicketsGeneralText = "Quedan - tickets";
+  String availableTicketsPreSaleText = "Quedan - tickets";
   String typeHost = "";
   String idHost = "";
+  List<PreSaleTicket> preSaleTickets = [];
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -50,23 +53,33 @@ class ReserveTicketController {
     arguments = ModalRoute.of(context).settings.arguments as Map;
     priceService = globalData.ticketCommission;
     isFree = arguments["isFree"];
-    dateParsed = arguments["EndFreePass"];
     isGeneral = arguments["isGeneral"];
+
+    dateParsed = arguments["EndFreePass"];
     priceGeneral = arguments["priceGeneral"];
-    revenue = priceGeneral;
+    preSaleTickets = arguments["preSaleTickets"];
     nameEvent = arguments["nameEvent"];
     date = arguments["date"];
     image = arguments["image"];
     idEvent = arguments["idEvent"];
     location = arguments["location"];
-    priceGeneral = priceGeneral + (priceGeneral * (priceService / 100));
-    priceParced = oCcy.format(priceGeneral);
+    if (isGeneral) {
+      revenue = priceGeneral;
+      priceGeneral = priceGeneral + (priceGeneral * (priceService / 100));
+      priceParced = oCcy.format(priceGeneral);
+    }
     infoFree = arguments["descriptionTicketFree"];
     infoGeneral = arguments["descriptionTicketGeneral"];
     ticketsFree = arguments["maxTicketsFree"].toString();
     ticketsGeneral = arguments["maxTicketsGeneral"].toString();
     typeHost = arguments["typeHost"];
     idHost = arguments["idHost"];
+
+    if (int.parse(ticketsFree) <= 0) {
+      availableTicketsFreeText = "¡AGOTADO!";
+    } else {
+      availableTicketsFreeText = "¡Quedan " + ticketsFree + " lugares!";
+    }
 
     if (int.parse(ticketsFree) <= 0) {
       availableTicketsFreeText = "¡AGOTADO!";
@@ -94,9 +107,31 @@ class ReserveTicketController {
       Navigator.pushNamed(context, 'order', arguments: {
         "type": "general",
         "idEvent": idEvent,
-        "priceGeneral": priceGeneral,
+        "priceTicket": priceGeneral,
         "revenue": revenue,
         "date": date,
+        "location": location,
+        "nameEvent": nameEvent,
+        "image": image,
+        "typeHost": typeHost,
+        "idHost": idHost
+      });
+    } else {
+      utils.Snackbar.showSnackbar(context, key, 'Entradas agotadas');
+    }
+  }
+
+  void preSaleToOrderPage(
+      int index, double priceTicket, double netPrice, String ticketId) {
+    if (preSaleTickets[index].numTickets > 0) {
+      Navigator.pushNamed(context, 'order', arguments: {
+        "type": "preSale",
+        "ticketId": ticketId,
+        "idEvent": idEvent,
+        "date": date,
+        "revenue": netPrice,
+        "tittleTicket": preSaleTickets[index].tittle,
+        "priceTicket": priceTicket,
         "location": location,
         "nameEvent": nameEvent,
         "image": image,
@@ -128,5 +163,16 @@ class ReserveTicketController {
   void vipToOrderPage() {
     Navigator.pushNamed(context, 'order',
         arguments: {"type": "vip", "idEvent": idEvent});
+  }
+
+  String getAvailablesTicketPreSaleText(int index) {
+    if (preSaleTickets[index].numTickets <= 0) {
+      availableTicketsPreSaleText = "¡AGOTADO!";
+    } else {
+      availableTicketsPreSaleText = "¡Quedan " +
+          preSaleTickets[index].numTickets.toString() +
+          " lugares!";
+    }
+    return availableTicketsPreSaleText;
   }
 }

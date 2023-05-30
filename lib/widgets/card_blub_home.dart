@@ -19,69 +19,15 @@ class CardClubHome extends StatelessWidget {
       child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Column(
-            children: [
-              Container(
-                height: 130,
-                width: 350,
-                child: CachedNetworkImage(
-                  imageUrl: snapshot.image,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                            margin: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              snapshot.name,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: "Ubuntu",
-                              ),
-                            )),
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 15),
-                            child: const Icon(
-                              Icons.location_on,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                                margin: const EdgeInsets.only(left: 2),
-                                child: Text(
-                                  snapshot.location,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.red,
-                                    fontFamily: "Ubuntu",
-                                  ),
-                                )),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              )
-            ],
+          child: CachedNetworkImage(
+            imageUrl: snapshot.image,
+            fit: BoxFit.cover,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
           elevation: 5,
-          margin: const EdgeInsets.all(10)),
+          margin: EdgeInsets.all(10)),
     );
   }
 

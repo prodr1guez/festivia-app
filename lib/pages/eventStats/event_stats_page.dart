@@ -69,7 +69,7 @@ class _EventStatsPageState extends State<EventStatsPage> {
             children: [
               ItemStats(
                 "Vendidos",
-                _controller.event.generalTicketsSold,
+                _controller.event.ticketsSold,
                 "Generales",
                 Color(0xFFFFD59E),
               ),

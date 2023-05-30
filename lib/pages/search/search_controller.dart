@@ -76,7 +76,7 @@ class SearchController {
     GoogleMapController controller = await _mapController.future;
     if (controller != null) {
       controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-          bearing: 0, target: LatLng(latitude, longitude), zoom: 14)));
+          bearing: 0, target: LatLng(latitude, longitude), zoom: 12.2)));
     }
   }
 

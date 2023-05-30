@@ -38,4 +38,8 @@ class HomeController {
   Future<List<Club>> getSuggestsClubs() async {
     return await _bannersProvider.getSuggestClubsData();
   }
+
+  void toGames(BuildContext context) {
+    Navigator.pushNamed(context, 'games_page');
+  }
 }

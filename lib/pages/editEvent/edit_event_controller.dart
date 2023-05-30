@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:festivia/api/env.dart';
-import 'package:festivia/models/Club.dart';
+import 'package:festivia/models/HostEvent.dart';
 import 'package:festivia/models/UpdateInfoClub.dart';
-import 'package:festivia/providers/club_provider.dart';
+import 'package:festivia/providers/client_provider.dart';
+import 'package:festivia/providers/event_provider.dart';
+import 'package:festivia/providers/geofire_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../models/Event.dart';
 import '../../providers/auth_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart' as places;
@@ -17,6 +21,7 @@ import 'package:festivia/utils/snackbar.dart' as utils;
 import 'package:progress_dialog/progress_dialog.dart';
 
 import '../../providers/storage_provider.dart';
+import '../../utils/DateParsed.dart';
 import '../../utils/my_progress_dialog.dart';
 
 class EditEventController {
@@ -25,23 +30,30 @@ class EditEventController {
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   places.GoogleMapsPlaces _places =
       places.GoogleMapsPlaces(apiKey: Env.GOOGLE_MAPS_API_KEY);
-  Club club = new Club(
+  Event event = new Event(
     id: "",
-    name: "",
+    tittle: "",
     image: "",
   );
 
   StorageProvider _storageProvider;
   AuthProvider _authProvider;
-  ClubProvider _clubProvider;
+  EventProvider _eventProvider;
+  ClientProvider _clientProvider;
+  GeofireProvider _geofireProvider;
   ProgressDialog _progressDialog;
-  TextEditingController tittleEvent = new TextEditingController();
+  TextEditingController tittleEventController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
+  DropdownEditingController typeEventController =
+      DropdownEditingController<String>();
   TextEditingController maxTicketsFreeController = TextEditingController();
   TextEditingController descriptionTicketFreeController =
       TextEditingController();
+
+  DropdownEditingController ageMinController =
+      DropdownEditingController<String>();
 
   TextEditingController descriptionTicketGeneralController =
       TextEditingController();
@@ -57,32 +69,56 @@ class EditEventController {
   Position _position;
   LatLng fromLatLng;
   String currentImage = "";
-  String idClub;
 
   bool isFree = false;
   bool istimeLimit = false;
   String dateEndFreePass;
   String dateEndFreePassParsed;
   bool isGeneral = false;
+  String typeEvent;
+  String dateStart;
+  String dateStartParsed = "";
+  String dateEndParsed = "";
+  String dateEnd;
+  String ageMin;
+  String tittle;
+  String description;
+  bool showEditTickets;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     _authProvider = new AuthProvider();
-    _clubProvider = new ClubProvider();
+    _eventProvider = new EventProvider();
     _storageProvider = new StorageProvider();
+    _clientProvider = new ClientProvider();
+    _geofireProvider = new GeofireProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento...');
 
-    club = ModalRoute.of(context).settings.arguments as Club;
-    tittleEvent.text = club.name;
-    descriptionController.text = club.description;
-    currentImage = club.image;
-    fromLatLng = LatLng(club.lat, club.long);
-    from = club.location;
-    phoneController.text = club.phone;
-    emailController.text = club.email;
-    idClub = club.id;
+    event = ModalRoute.of(context).settings.arguments as Event;
+    _position = Position(longitude: event.long, latitude: event.lat);
+
+    tittleEventController.text = event.tittle;
+    currentImage = event.image;
+    fromLatLng = LatLng(event.lat, event.long);
+    from = event.location;
+    dateStart = event.dateStart;
+    typeEvent = event.typeEvent;
+    selectedGenders = event.genders;
+    dateEnd = event.dateEnd;
+    descriptionController.text = event.description;
+
+    dateStartParsed = DateParse().DiaConMes(DateTime.parse(event.dateStart)) +
+        " a las " +
+        DateParse().Hora(DateTime.parse(event.dateStart));
+
+    dateEndParsed = DateParse().DiaConMes(DateTime.parse(event.dateEnd)) +
+        " a las " +
+        DateParse().Hora(DateTime.parse(event.dateEnd));
+
+    showEditTickets = !event.isInformative;
+    idEvent = event.id;
     refresh();
   }
 
@@ -125,41 +161,74 @@ class EditEventController {
   publish() async {
     await _progressDialog.show();
 
-    var tittle = tittleEvent.text;
-    var description = descriptionController.text;
-    var phone = phoneController.text;
-    var email = emailController.text;
+    if (typeEventController.value != null) {
+      typeEvent = typeEventController.value.toString();
+    }
+    if (ageMinController.value != null) {
+      ageMin = ageMinController.value.toString();
+    }
+
+    if (descriptionController.value != null) {
+      description = descriptionController.value.text;
+    }
+
+    if (tittleEventController.value != null) {
+      tittle = tittleEventController.value.text;
+    }
 
     if (pickedFile != null) {
       TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
       String imageUrl = await snapshot.ref.getDownloadURL();
 
-      UpdateInfoClub club = UpdateInfoClub(
-          name: tittle,
-          description: description,
-          email: email,
-          phone: phone,
-          location: from,
-          lat: fromLatLng.latitude,
-          long: fromLatLng.longitude,
-          image: imageUrl);
+      event.tittle = tittle;
+      event.description = description;
+      event.location = from;
+      event.dateStart = dateStart;
+      event.dateEnd = dateEnd;
+      event.genders = selectedGenders;
+      event.typeEvent = typeEvent;
+      event.lat = fromLatLng.latitude;
+      event.long = fromLatLng.longitude;
+      event.image = imageUrl;
 
-      await _clubProvider.update(club.toJson(), idClub);
+      HostEvent hostEvent = new HostEvent(
+          id: event.id,
+          image: currentImage,
+          name: event.tittle,
+          dateEnd: event.dateEnd,
+          location: event.location);
+
+      await _eventProvider.update(event.toJson(), idEvent);
+      await _clientProvider.updateClientEvent(
+          hostEvent.toJson(), _authProvider.getUser().uid, event.id);
+      await updateLocation(event.id, event.dateEnd);
       await _progressDialog.hide();
       utils.Snackbar.showSnackbar(context, key, 'Se actualizaron los datos');
     } else {
-      UpdateInfoClub club = UpdateInfoClub(
-          name: tittle,
-          description: description,
-          email: email,
-          phone: phone,
-          location: from,
-          lat: fromLatLng.latitude,
-          long: fromLatLng.longitude,
-          image: currentImage);
+      event.tittle = tittle;
+      event.description = description;
+      event.location = from;
+      event.dateStart = dateStart;
+      event.dateEnd = dateEnd;
+      event.genders = selectedGenders;
+      event.typeEvent = typeEvent;
+      event.lat = fromLatLng.latitude;
+      event.long = fromLatLng.longitude;
+      event.image = currentImage;
+
+      HostEvent hostEvent = new HostEvent(
+          id: event.id,
+          image: currentImage,
+          name: event.tittle,
+          dateEnd: event.dateEnd,
+          location: event.location);
 
       try {
-        await _clubProvider.update(club.toJson(), idClub);
+        await _eventProvider.update(event.toJson(), idEvent);
+
+        await _clientProvider.updateClientEvent(
+            hostEvent.toJson(), _authProvider.getUser().uid, event.id);
+        await updateLocation(event.id, event.dateEnd);
         await _progressDialog.hide();
         utils.Snackbar.showSnackbar(context, key, 'Se actualizaron los datos');
       } catch (e) {
@@ -168,6 +237,12 @@ class EditEventController {
             context, key, "Ocurrió un error, vuelve a intentarlo mas tarde");
       }
     }
+  }
+
+  updateLocation(String id, String end) async {
+    await _geofireProvider.update(
+        id, _position.latitude, _position.longitude, dateEnd);
+    _progressDialog.hide();
   }
 
   Future<Null> showGoogleAutoComplete(bool isFrom) async {

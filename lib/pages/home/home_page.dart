@@ -2,6 +2,7 @@ import 'package:festivia/models/BannerMainHome.dart';
 import 'package:festivia/models/SuggestClub.dart';
 import 'package:festivia/models/SuggestParty.dart';
 import 'package:festivia/models/data.dart';
+import 'package:festivia/pages/games/games_page.dart';
 import 'package:festivia/widgets/banner_home.dart';
 import 'package:festivia/widgets/card_blub_home.dart';
 import 'package:festivia/widgets/card_party_home.dart';
@@ -12,7 +13,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../models/Club.dart';
 import '../../models/Event.dart';
+import '../../widgets/games_button.dart';
 import 'home_controller.dart';
+import 'package:festivia/utils/colors.dart' as utils;
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,11 +45,17 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Container(
-                      height: 50,
-                      width: 120,
-                      margin: EdgeInsets.only(left: 10, top: 10),
-                      child: Image.asset("assets/festivia_negro.png")),
+                  child: Row(
+                    children: [
+                      Container(
+                          height: 50,
+                          width: 120,
+                          margin: EdgeInsets.only(left: 10),
+                          child: Image.asset("assets/logo_slogan_negro.png")),
+                      Spacer(),
+                      GamesButton(),
+                    ],
+                  ),
                 ),
                 FutureBuilder(
                     future: _con.getBannerMain(),
@@ -89,8 +98,9 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "Fiestas Recomendadas",
                         style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
                           fontFamily: "Ubuntu",
                         ),
                       )),
@@ -111,15 +121,15 @@ class _HomePageState extends State<HomePage> {
                                       CenterPageEnlargeStrategy.scale,
                                   enlargeCenterPage: true,
                                   disableCenter: true,
-                                  viewportFraction: 0.8,
-                                  height: 220,
+                                  viewportFraction: 0.6,
+                                  height: 150,
                                   autoPlay: true,
                                   scrollDirection: Axis.horizontal,
                                   autoPlayInterval: Duration(seconds: 4)),
                             )
                           : Container(
                               width: double.infinity,
-                              height: 200.0,
+                              height: 170.0,
                               child: Shimmer.fromColors(
                                 baseColor: Colors.grey[300],
                                 highlightColor: Colors.white,
@@ -134,8 +144,9 @@ class _HomePageState extends State<HomePage> {
                       child: const Text(
                         "Clubs Recomendados",
                         style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
                           fontFamily: "Ubuntu",
                         ),
                       )),
@@ -158,8 +169,8 @@ class _HomePageState extends State<HomePage> {
                                         CenterPageEnlargeStrategy.scale,
                                     enlargeCenterPage: true,
                                     disableCenter: true,
-                                    viewportFraction: 0.8,
-                                    height: 200,
+                                    viewportFraction: 0.57,
+                                    height: 170,
                                     autoPlay: true,
                                     scrollDirection: Axis.horizontal,
                                     autoPlayInterval: Duration(seconds: 5)),
@@ -179,6 +190,12 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  void toGames() {
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return GamesPage();
+    }));
   }
 
   void refresh() {

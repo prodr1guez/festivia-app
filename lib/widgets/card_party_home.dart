@@ -11,26 +11,77 @@ class CardPartyHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: InkWell(
+    return InkWell(
       onTap: () {
         navigateToDetail(context, snapshot.id);
       },
-      child: Container(
-        child: Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Column(
-              children: [
-                Container(
-                  height: 130,
-                  width: 350,
-                  child: CachedNetworkImage(
-                    imageUrl: snapshot.image,
-                    fit: BoxFit.cover,
+      child: Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                child: CachedNetworkImage(
+                  imageUrl: snapshot.image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5, bottom: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          snapshot.tittle,
+                          style: TextStyle(
+                            fontFamily: "Ubuntu",
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 23,
+                          ),
+                        ),
+                        Text(
+                          snapshot.dateStartParsed,
+                          style: TextStyle(
+                            fontFamily: "Ubuntu",
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Container(
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          elevation: 5,
+          margin: EdgeInsets.all(10)),
+    );
+  }
+
+  navigateToDetail(BuildContext context, String id) {
+    //Navigator.pushNamed(context, 'detail_event', arguments: id);
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return DetailEvent(
+          tag: "eventH$id", url: snapshot.image, event: snapshot);
+    }));
+  }
+}
+
+/*
+Container(
                   child: Row(
                     children: [
                       Column(
@@ -93,23 +144,4 @@ class CardPartyHome extends StatelessWidget {
                     ],
                   ),
                 )
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            elevation: 5,
-            margin: EdgeInsets.all(10)),
-      ),
-    ));
-  }
-
-  navigateToDetail(BuildContext context, String id) {
-    //Navigator.pushNamed(context, 'detail_event', arguments: id);
-
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return DetailEvent(
-          tag: "eventH$id", url: snapshot.image, event: snapshot);
-    }));
-  }
-}
+*/

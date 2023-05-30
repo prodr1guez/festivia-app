@@ -104,7 +104,7 @@ class _TicketPageState extends State<TicketPage> {
                   ),
                 ),
               ),
-              Container(
+              /*Container(
                 margin: const EdgeInsets.only(top: 30),
                 child: Text(
                   _controller.type.toUpperCase(),
@@ -115,7 +115,7 @@ class _TicketPageState extends State<TicketPage> {
                     fontFamily: "Ubuntu",
                   ),
                 ),
-              )
+              )*/
             ],
           ),
         ),

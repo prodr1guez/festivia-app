@@ -26,7 +26,7 @@ class EventStatsController {
   Event event = Event(
       tittle: "",
       assistants: 0,
-      generalTicketsSold: 0,
+      ticketsSold: 0,
       freeTicketsSold: 0,
       vipTicketsSold: 0,
       revenue: 0.0);

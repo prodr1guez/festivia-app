@@ -34,7 +34,7 @@ class _MyEventsState extends State<MyEvents> {
                   child: Container(
                       margin: EdgeInsets.only(left: 20, top: 20),
                       child: Text(
-                        "Mis Eventos",
+                        "Eventos creados",
                         style: TextStyle(
                             fontSize: 23, fontWeight: FontWeight.bold),
                       )),

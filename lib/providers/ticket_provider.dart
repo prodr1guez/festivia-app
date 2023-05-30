@@ -7,6 +7,8 @@ import 'package:festivia/providers/club_provider.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:min_id/min_id.dart';
 
+import '../models/PreSaleTicket.dart';
+
 class TicketProvider {
   CollectionReference _ref;
   ClientProvider _clientProvider = new ClientProvider();
@@ -15,7 +17,7 @@ class TicketProvider {
   ClubProvider _clubProvider = new ClubProvider();
 
   Future<void> create(Ticket ticket, String idEvent, double revenue,
-      String typeHost, String idClub) async {
+      String typeHost, String idClub, String preSaleTicketId) async {
     String errorMessage;
 
     try {
@@ -28,9 +30,18 @@ class TicketProvider {
         await _eventProvider.decreaseTicketFree(idEvent);
         await _eventProvider.increaseTicketFreeSold(idEvent);
         await _eventProvider.increaseAssistants(idEvent);
+      } else if (ticket.type == "preSale") {
+        await _eventProvider.decreasePreSaleTicket(idEvent, preSaleTicketId);
+        await _eventProvider.increaseTicketSold(idEvent);
+        await _eventProvider.increaseAssistants(idEvent);
+        await _eventProvider.increaseRevenue(idEvent, revenue);
+
+        if (typeHost == "club") {
+          await _clubProvider.increaseRevenue(idClub, revenue);
+        }
       } else {
         await _eventProvider.decreaseTicketGeneral(idEvent);
-        await _eventProvider.increaseTicketGeneralSold(idEvent);
+        await _eventProvider.increaseTicketSold(idEvent);
         await _eventProvider.increaseAssistants(idEvent);
         await _eventProvider.increaseRevenue(idEvent, revenue);
 

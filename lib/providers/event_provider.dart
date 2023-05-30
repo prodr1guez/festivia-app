@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:festivia/models/Event.dart';
 import 'package:festivia/models/HostEvent.dart';
+import 'package:festivia/models/PreSaleTicket.dart';
 import 'package:festivia/models/Ticket.dart';
 import 'package:festivia/models/User.dart';
 import 'package:festivia/pages/addGuest/add_guest.dart';
@@ -99,6 +100,21 @@ class EventProvider {
     return tickets;
   }
 
+  Future<List<PreSaleTicket>> getPreSaleTickets(String idEvent) async {
+    QuerySnapshot querySnapshot =
+        await _ref.doc(idEvent).collection("preSaleTickets").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<PreSaleTicket> tickets = new List();
+
+    for (Map<String, dynamic> data in allData) {
+      tickets.add(PreSaleTicket.fromJson(data));
+    }
+
+    return tickets;
+  }
+
   Future<void> liquidateRevenue(String id, double amount) {
     return _ref.doc(id).update({
       "revenue": FieldValue.increment(-amount),
@@ -139,6 +155,26 @@ class EventProvider {
     }
   }
 
+  Future<void> addPreSaleTickets(
+      List<PreSaleTicket> tickets, String idEvent) async {
+    String errorMessage;
+    try {
+      for (var ticket in tickets) {
+        _ref
+            .doc(idEvent)
+            .collection("preSaleTickets")
+            .doc(ticket.id)
+            .set(ticket.toJson());
+      }
+    } catch (error) {
+      errorMessage = error.toString();
+    }
+
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+  }
+
   Future<void> decreaseTicketFree(String id) {
     return _ref.doc(id).update({
       "maxTicketsFreePass": FieldValue.increment(-1),
@@ -157,9 +193,19 @@ class EventProvider {
     });
   }
 
-  Future<void> increaseTicketGeneralSold(String id) {
+  Future<void> increaseTicketSold(String id) {
     return _ref.doc(id).update({
-      "generalTicketsSold": FieldValue.increment(1),
+      "ticketsSold": FieldValue.increment(1),
+    });
+  }
+
+  Future<void> decreasePreSaleTicket(String id, preSaleTicketId) {
+    return _ref
+        .doc(id)
+        .collection("preSaleTickets")
+        .doc(preSaleTicketId)
+        .update({
+      "numTickets": FieldValue.increment(-1),
     });
   }
 

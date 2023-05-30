@@ -33,16 +33,13 @@ class _DetailEventHostState extends State<DetailEventHost> {
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Container(
-        child: Card(
-            color: utils.Colors.BackgroundGrey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            elevation: 5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [_buttonToEdit(), _buttonReserve()],
-            )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buttonToEdit(),
+            Visibility(visible: _controller.showStats, child: _buttonReserve())
+          ],
+        ),
       ),
       body: Stack(
         fit: StackFit.expand,

@@ -26,6 +26,8 @@ class EventHightlightsController {
   Future<List<Event>> getEvents() async {
     List<Event> listEvent = await _eventProvider.getEvents();
     listEvent.shuffle();
+
+    listEvent.sort((a, b) => a.dateStart.compareTo(b.dateStart));
     return listEvent;
   }
 }

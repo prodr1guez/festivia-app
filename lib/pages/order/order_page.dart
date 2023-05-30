@@ -233,7 +233,7 @@ class _OrderPageState extends State<OrderPage> {
         var response = await MercadoPagoMobileCheckout.startCheckout(
             globals.mpPublicKey, preferenceId);
 
-        if (response.result == "done") {
+        if (response.result == "done" && response.status == "approved") {
           _controller.hideDialog();
           Navigator.pop(context);
           _controller.addTicket(_controller.revenue);
@@ -249,18 +249,22 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<Map<String, dynamic>> armarPreferencia() async {
     var mp = MP(globals.mpClientID, globals.mpClientSecret);
+    var priceTicket;
+    if (_controller.type == "preSale") {
+      priceTicket = _controller.priceTicket;
+    } else {
+      _controller.tittleTicket = "Entrada General";
+      priceTicket = _controller.priceTicket;
+    }
     var preference = {
       "items": [
         {
           "id": "1234",
-          "title": "Entrada: " +
-              _controller.nameEvent +
-              ", " +
-              _controller.description,
+          "title": _controller.nameEvent + ", " + _controller.tittleTicket,
           "quantity": 1,
           "currency_id": "ARS",
-          "unit_price": _controller.priceGeneral,
-          "description": _controller.description
+          "unit_price": priceTicket,
+          "description": _controller.nameEvent
         }
       ],
       "payer": {

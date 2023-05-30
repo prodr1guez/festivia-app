@@ -63,8 +63,7 @@ class RegisterController {
         Client client = new Client(
             id: userId,
             email: _authProvider.getUser().email,
-            username: username,
-            password: password);
+            username: username);
 
         await _clientProvider.create(client);
         await _userProvider.create(User(id: userId, type: "client"));

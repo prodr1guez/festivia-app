@@ -10,5 +10,9 @@ final List<MiniCard> miniCardList = [
       imageUrl: 'assets/people.jpeg',
       id: "event_highlights_page"),
   const MiniCard(
+      tittle: 'Noticias',
+      imageUrl: 'assets/noticias.png',
+      id: "new_highlights"),
+  const MiniCard(
       tittle: 'Clubs', imageUrl: 'assets/party.png', id: "club_highlights_page")
 ];

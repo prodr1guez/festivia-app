@@ -12,30 +12,98 @@ class ArtistList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 1000,
-        child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: snapshot.data == null ? 0 : snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              Artist artist = snapshot.data[index];
-              return InkWell(
-                onTap: () {
-                  //navigateToDetail(context, artist);
+    return ListView.builder(
+        padding: const EdgeInsets.all(30),
+        itemCount: snapshot.data == null ? 0 : snapshot.data.length,
+        itemBuilder: (BuildContext context, int index) {
+          Artist artist = snapshot.data[index];
+          return InkWell(
+            onTap: () {
+              //navigateToDetail(context, artist);
 
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return ArtistPage(
-                        tag: "artistHighlight$index",
-                        url: artist.image,
-                        artist: artist);
-                  }));
-                },
-                child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Column(
-                      children: [
-                        Hero(
+              Navigator.push(context, MaterialPageRoute(builder: (_) {
+                return ArtistPage(
+                    tag: "artistHighlight$index",
+                    url: artist.image,
+                    artist: artist);
+              }));
+            },
+            child: Container(
+              height: 250,
+              child: Card(
+                  semanticContainer: true,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: CachedNetworkImage(
+                          imageUrl: artist.image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 5, bottom: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  artist.name,
+                                  style: TextStyle(
+                                      fontFamily: "Ubuntu",
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 23,
+                                      shadows: [
+                                        Shadow(
+                                            // bottomLeft
+                                            offset: Offset(-1.5, -1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // bottomRight
+                                            offset: Offset(1.5, -1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // topRight
+                                            offset: Offset(1.5, 1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // topLeft
+                                            offset: Offset(-1.5, 1.5),
+                                            color: Colors.black),
+                                      ]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 5,
+                  margin: EdgeInsets.all(10)),
+            ),
+          );
+        });
+  }
+
+  navigateToDetail(BuildContext context, Artist artist) {
+    Navigator.pushNamed(context, 'artist_page', arguments: artist);
+  }
+}
+
+/*
+
+ Hero(
                           tag: "artistHighlight$index",
                           child: Container(
                               height: 170,
@@ -45,30 +113,5 @@ class ArtistList extends StatelessWidget {
                                   image: CachedNetworkImageProvider(
                                       artist.image))),
                         ),
-                        Container(
-                          height: 40,
-                          child: Center(
-                            child: Text(
-                              artist.name,
-                              style: TextStyle(
-                                  fontFamily: "Ubuntu",
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 5,
-                    margin: EdgeInsets.all(10)),
-              );
-            }));
-  }
 
-  navigateToDetail(BuildContext context, Artist artist) {
-    Navigator.pushNamed(context, 'artist_page', arguments: artist);
-  }
-}
+                        */

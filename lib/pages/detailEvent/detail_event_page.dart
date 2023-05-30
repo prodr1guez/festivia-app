@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:festivia/utils/colors.dart' as utils;
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/Event.dart';
 import '../../utils/DateParsed.dart';
@@ -46,27 +48,30 @@ class _DetailEventState extends State<DetailEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: Container(
-        child: Card(
-            color: utils.Colors.BackgroundGrey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            elevation: 5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Estas interesado?",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Ubuntu",
+      bottomNavigationBar: Visibility(
+        visible: _controller.showCheckout,
+        child: Container(
+          child: Card(
+              color: utils.Colors.BackgroundGrey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              elevation: 5,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Estas interesado?",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Ubuntu",
+                    ),
                   ),
-                ),
-                _buttonReserve(),
-              ],
-            )),
+                  _buttonReserve(),
+                ],
+              )),
+        ),
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -173,13 +178,28 @@ class _DetailEventState extends State<DetailEvent> {
                   child: Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      child: Text(
+                      child: Linkify(
+                          onOpen: (link) async {
+                            if (!await launchUrl(Uri.parse(link.url))) {
+                              throw Exception('Could not launch ${link.url}');
+                            }
+                          },
+                          text:
+                              widget.event?.description.replaceAll('\\n', '\n'),
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 18,
+                            fontFamily: "Ubuntu",
+                          ))
+
+                      /*Text(
                         widget.event?.description,
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: "Ubuntu",
                         ),
-                      )),
+                      )*/
+                      ),
                 )
               ],
             )

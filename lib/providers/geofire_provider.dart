@@ -27,6 +27,11 @@ class GeofireProvider {
     return _ref.doc(id).set({'expired': date, 'position': myLocation.data});
   }
 
+  Future<void> update(String id, double lat, double lng, String date) {
+    GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: lng);
+    return _ref.doc(id).update({'expired': date, 'position': myLocation.data});
+  }
+
   Future<void> createWorking(String id, double lat, double lng) {
     GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: lng);
     return _ref

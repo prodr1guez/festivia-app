@@ -42,11 +42,14 @@ class _EventHighlightsPage extends State<EventHighlightsPage> {
                         ),
                       )),
                 ),
-                FutureBuilder(
-                    future: _con.getEvents(),
-                    builder: (context, AsyncSnapshot<List<Event>> snapshot) {
-                      return EventsHighlistlist(snapshot: snapshot);
-                    }),
+                Container(
+                  height: 730,
+                  child: FutureBuilder(
+                      future: _con.getEvents(),
+                      builder: (context, AsyncSnapshot<List<Event>> snapshot) {
+                        return EventsHighlistlist(snapshot: snapshot);
+                      }),
+                ),
               ],
             ),
           ),

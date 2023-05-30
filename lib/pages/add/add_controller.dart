@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:festivia/api/env.dart';
+import 'package:festivia/models/PreSaleTicket.dart';
 import 'package:festivia/providers/auth_provider.dart';
 import 'package:festivia/providers/event_provider.dart';
+import 'package:festivia/providers/pre_sale_tickets_provider.dart';
 import 'package:festivia/providers/storage_provider.dart';
 import 'package:festivia/utils/my_progress_dialog.dart';
 import 'package:festivia/utils/shared_pref.dart';
@@ -20,6 +22,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:min_id/min_id.dart';
 import '../../models/Event.dart';
+import '../../models/PreSaleTickets.dart';
 import '../../providers/geofire_provider.dart';
 
 class AddController {
@@ -31,8 +34,14 @@ class AddController {
   EventProvider _eventProvider;
   StorageProvider _storageProvider;
   GeofireProvider _geofireProvider;
+  PreSaleTicketsProvider _preSaleTicketsProvider;
   SharedPref _sharedPref;
   Position _position;
+
+  final List<PreSaleTickets> preSaleTicketsControllers = <PreSaleTickets>[];
+  List<PreSaleTicket> preSaleTickets = <PreSaleTicket>[];
+
+  var tittlePreSaleList = <TextEditingController>[];
 
   places.GoogleMapsPlaces _places =
       places.GoogleMapsPlaces(apiKey: Env.GOOGLE_MAPS_API_KEY);
@@ -66,10 +75,18 @@ class AddController {
   String dateEnd;
   String dateEndParsed;
 
+  String maxTicketFree = "0";
+  String maxTicketsPaid = "0";
+
   String description;
   String ageMin;
+
   String dateEndFreePass;
   String dateEndFreePassParsed;
+
+  String dateStartPreSale;
+  String dateStartPreSaleParsed;
+
   int maxTicketsFreePass;
   String maxFreeTicketsOrder;
   String maxTicketsPaidOff;
@@ -77,9 +94,11 @@ class AddController {
   String typeEvent;
 
   bool isFree = false;
+  bool isInformative = false;
   bool istimeLimit = false;
 
   bool isGeneral = false;
+  bool isPreSale = false;
 
   String price;
 
@@ -93,6 +112,7 @@ class AddController {
     _eventProvider = new EventProvider();
     _storageProvider = new StorageProvider();
     _geofireProvider = new GeofireProvider();
+    _preSaleTicketsProvider = new PreSaleTicketsProvider();
     _sharedPref = new SharedPref();
     typeUser = await _sharedPref.read("typeUser");
     _progressDialog =
@@ -113,60 +133,72 @@ class AddController {
       return;
     }
 
-    if (!isFree && !isGeneral) {
-      utils.Snackbar.showSnackbar(
-          context, key, 'Debes seleccionar al menos un tipo de entrada');
-      return;
-    }
-
-    if (isFree) {
-      if (maxTicketsFreeController.value.text.isEmpty) {
-        utils.Snackbar.showSnackbar(context, key,
-            'Debes seleccionar cantidad de entradas para el evento');
-        return;
-      }
-
-      if (descriptionTicketFreeController.value.text.isEmpty) {
+    if (!isInformative) {
+      if (!isFree && !isGeneral && preSaleTicketsControllers.isEmpty) {
         utils.Snackbar.showSnackbar(
-            context, key, 'Debes completar una descripcion para las entradas');
-        return;
-      }
-    } else {
-      maxTicketsFreeController.text = "0";
-    }
-
-    if (isGeneral) {
-      if (priceController.text.isEmpty) {
-        utils.Snackbar.showSnackbar(
-            context, key, 'Debes seleccionar un precio para las entradas');
-        return;
-      }
-      if (maxTicketsGeneralController.value.text.isEmpty) {
-        utils.Snackbar.showSnackbar(context, key,
-            'Debes seleccionar cantidad de entradas para el evento');
+            context, key, 'Debes seleccionar al menos un tipo de entrada');
         return;
       }
 
-      if (descriptionTicketGeneralController.value.text.isEmpty) {
-        utils.Snackbar.showSnackbar(
-            context, key, 'Debes completar una descripcion para las entradas');
-        return;
+      if (isFree) {
+        if (maxTicketsFreeController.value.text.isEmpty) {
+          utils.Snackbar.showSnackbar(context, key,
+              'Debes seleccionar cantidad de entradas para el evento');
+          return;
+        }
+
+        if (descriptionTicketFreeController.value.text.isEmpty) {
+          utils.Snackbar.showSnackbar(context, key,
+              'Debes completar una descripcion para las entradas');
+          return;
+        }
+      } else {
+        maxTicketsFreeController.text = "0";
+      }
+
+      if (isGeneral) {
+        if (priceController.text.isEmpty) {
+          utils.Snackbar.showSnackbar(
+              context, key, 'Debes seleccionar un precio para las entradas');
+          return;
+        }
+        if (maxTicketsGeneralController.value.text.isEmpty) {
+          utils.Snackbar.showSnackbar(context, key,
+              'Debes seleccionar cantidad de entradas para el evento');
+          return;
+        }
+
+        if (descriptionTicketGeneralController.value.text.isEmpty) {
+          utils.Snackbar.showSnackbar(context, key,
+              'Debes completar una descripcion para las entradas');
+          return;
+        }
+      } else {
+        maxTicketsGeneralController.text = "0";
       }
     } else {
       maxTicketsGeneralController.text = "0";
+      maxTicketsFreeController.text = "0";
     }
+
     if (typeEventController.value == null) {
       typeEventController.value = "Fiesta";
     }
 
-    var maxTicketFree = maxTicketsFreeController.value.text.toString();
-    var maxTicketsPaid = maxTicketsGeneralController.value.text.toString();
+    if (maxTicketsFreeController.value.text.isEmpty != null) {
+      maxTicketFree = maxTicketsFreeController.value.text.toString();
+      maxTicketsFreePass = int.parse(maxTicketFree);
+    }
+
+    if (maxTicketsGeneralController.value.text != null) {
+      maxTicketsPaid = maxTicketsGeneralController.value.text.toString();
+    }
 
     tittle = tittleEvent.text;
     description = descriptionController.text;
     ageMin = ageMinController.value.toString();
     maxFreeTicketsOrder = maxTicketsFreeController.value.toString();
-    maxTicketsFreePass = int.parse(maxTicketFree);
+
     maxTicketsPaidOff = maxTicketsGeneralController.value.toString();
     maxTicketsPaidOffEvent = int.parse(maxTicketsPaid);
     price = priceController.text;
@@ -183,6 +215,8 @@ class AddController {
       String idHost = _authProvider.getUser().uid;
       String id = MinId.getId('3{w}3{d}3{w}3{d}');
 
+      addPreSaleTickets();
+
       Event event = Event(
           id: id,
           image: imageUrl,
@@ -195,13 +229,14 @@ class AddController {
           genders: selectedGenders,
           ageMin: ageMin,
           isFree: isFree,
+          isInformative: isInformative,
           isTimeLimit: istimeLimit,
           dateEndFreePass: dateEndFreePass,
           dateEndFreePassParsed: dateEndFreePassParsed,
           maxTicketsFreePass: maxTicketsFreePass,
           assistants: 0,
           freeTicketsSold: 0,
-          generalTicketsSold: 0,
+          ticketsSold: 0,
           revenue: 0,
           vipTicketsSold: 0,
           isPaidOff: isGeneral,
@@ -209,6 +244,8 @@ class AddController {
           maxTicketsPaidOffEvent: maxTicketsPaidOffEvent,
           idHost: idHost,
           location: from,
+          lat: _position.latitude,
+          long: _position.longitude,
           descriptionTicketFree: descriptionTicketFreeController.text,
           descriptionTicketGeneral: descriptionTicketGeneralController.text,
           typeHost: typeUser,
@@ -217,6 +254,7 @@ class AddController {
 
       try {
         await _eventProvider.create(event);
+        await savePreSaleTicket(id);
         await saveLocation(id, dateEnd);
       } catch (error) {
         utils.Snackbar.showSnackbar(
@@ -314,5 +352,66 @@ class AddController {
   navigateToCongratsClub(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
         context, 'congrats_event_club', (route) => false);
+  }
+
+  checkIndexPreSaleTickets() {
+    if (preSaleTicketsControllers.isNotEmpty) {
+      var index = 0;
+
+      for (var ticket in preSaleTicketsControllers) {
+        index++;
+        ticket.index = index;
+      }
+    }
+  }
+
+  deleteTicketPreSale(PreSaleTickets index) {
+    preSaleTicketsControllers.remove(index);
+    checkIndexPreSaleTickets();
+    refresh();
+  }
+
+  checkPreSaleTickets() {
+    if (preSaleTicketsControllers.isNotEmpty) {
+      for (var ticket in preSaleTicketsControllers) {
+        if (ticket.tittle.text.isEmpty ||
+            ticket.price.text.isEmpty ||
+            ticket.numTickets.text.isEmpty ||
+            ticket.dateStart == null ||
+            ticket.dateEnd == null ||
+            ticket.description.text.isEmpty) {
+          utils.Snackbar.showSnackbar(context, key,
+              'Debes completar todos los datos de las entradas para preventa');
+          return false;
+        }
+      }
+    }
+
+    preSaleTicketsControllers.add(PreSaleTickets(
+        TextEditingController(),
+        TextEditingController(),
+        TextEditingController(),
+        TextEditingController()));
+
+    checkIndexPreSaleTickets();
+
+    refresh();
+  }
+
+  void addPreSaleTickets() {
+    for (var ticket in preSaleTicketsControllers) {
+      preSaleTickets.add(PreSaleTicket(
+          id: MinId.getId('3{w}3{d}3{w}3{d}'),
+          tittle: ticket.tittle.text,
+          price: ticket.price.text,
+          dateStart: ticket.dateStart,
+          dateEnd: ticket.dateEnd,
+          numTickets: int.parse(ticket.numTickets.text),
+          description: ticket.description.text));
+    }
+  }
+
+  savePreSaleTicket(String id) async {
+    await _preSaleTicketsProvider.addPreSaleTickets(preSaleTickets, id);
   }
 }

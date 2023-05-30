@@ -13,6 +13,7 @@ import 'package:festivia/pages/detailEvent/detail_event_page.dart';
 import 'package:festivia/pages/detailEventHost/detail_event_host_page.dart';
 import 'package:festivia/pages/editClub/edit_club_page.dart';
 import 'package:festivia/pages/editEvent/edit_event_page.dart';
+import 'package:festivia/pages/editProfile/edit_profile_page.dart';
 import 'package:festivia/pages/eventHighlights/event_highlights_page.dart';
 import 'package:festivia/pages/eventStats/event_stats_page.dart';
 import 'package:festivia/pages/forgotPassword/forgot_pass_page.dart';
@@ -27,6 +28,7 @@ import 'package:festivia/pages/myEvents/my_events_page.dart';
 import 'package:festivia/pages/myTickets/my_tickets_page.dart';
 import 'package:festivia/pages/navigation/navigation_page.dart';
 import 'package:festivia/pages/navigationClub/navigation_club_page.dart';
+import 'package:festivia/pages/newsHighlights/new_highlights_page.dart';
 import 'package:festivia/pages/order/order_page.dart';
 import 'package:festivia/pages/pointGame/point_game_page.dart';
 import 'package:festivia/pages/privacyPolicy/privacy_policy.dart';
@@ -113,6 +115,8 @@ class _MyAppState extends State<MyApp> {
         "point_game_page": (BuildContext context) => PointGamePage(),
         "verdad_o_reto_page": (BuildContext context) => VerdadoretoPage(),
         "edit_event": (BuildContext context) => EditEventPage(),
+        "new_highlights": (BuildContext context) => NewHighlightsPage(),
+        "edit_profile": (BuildContext context) => EditProfilePage(),
       },
     );
   }

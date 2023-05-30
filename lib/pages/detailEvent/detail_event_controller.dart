@@ -1,7 +1,9 @@
 import 'package:festivia/models/Event.dart';
+import 'package:festivia/models/PreSaleTickets.dart';
 import 'package:festivia/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/PreSaleTicket.dart';
 import '../../utils/DateParsed.dart';
 
 class DetailEventController {
@@ -16,16 +18,21 @@ class DetailEventController {
   String dateStartParsed = "";
   String dateEndParsed = "";
   String location;
+  bool showCheckout = false;
+  List<PreSaleTicket> preSaleTickets = [];
 
   Future init(BuildContext context, Function refresh, String idEvent) async {
     this.context = context;
     this.refresh = refresh;
 
-    getEventInfo(idEvent);
+    await getEventInfo(idEvent);
+    showCheckout = !event.isInformative;
+    refresh();
   }
 
   void getEventInfo(String id) async {
     event = await _eventProvider.getById(id);
+    preSaleTickets = await _eventProvider.getPreSaleTickets(id);
 
     refresh();
   }
@@ -34,6 +41,7 @@ class DetailEventController {
     bool isFree = false;
     bool isPaidOff = false;
     double priceGeneral;
+
     if (event?.isFree != null && event.isFree) {
       isFree = true;
     }
@@ -59,7 +67,8 @@ class DetailEventController {
       "descriptionTicketGeneral": event.descriptionTicketGeneral,
       "location": event.location,
       "typeHost": event.typeHost,
-      "idHost": event.idHost
+      "idHost": event.idHost,
+      "preSaleTickets": preSaleTickets
     });
   }
 }

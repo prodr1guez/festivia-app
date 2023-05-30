@@ -57,8 +57,7 @@ class SelectTypeUserController {
         Client client = new Client(
             id: _authProvider.getUser().uid,
             email: _authProvider.getUser().email,
-            username: username,
-            password: password);
+            username: username);
 
         await _clientProvider.create(client);
 

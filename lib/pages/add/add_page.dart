@@ -1,3 +1,4 @@
+import 'package:festivia/models/PreSaleTicket.dart';
 import 'package:festivia/pages/add/add_controller.dart';
 import 'package:festivia/utils/DateParsed.dart';
 import 'package:festivia/widgets/button_app.dart';
@@ -9,6 +10,8 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:dropdown_plus/dropdown_plus.dart';
 
+import '../../models/PreSaleTickets.dart';
+
 class AddPage extends StatefulWidget {
   @override
   _AddPageState createState() => _AddPageState();
@@ -16,6 +19,7 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   AddController _controller = AddController();
+
   String dateStart;
   String dateStartParsed;
   String dateEnd;
@@ -27,6 +31,8 @@ class _AddPageState extends State<AddPage> {
   bool _switchFreePass = false;
   bool _switchPassPaidOff = false;
   bool _switchFreePassLimitTime = false;
+  bool _switchPassPreSale = false;
+  bool _switchEventInformativo = false;
   static List<String> _gendres = [
     "70s-80s",
     "90s-00s",
@@ -76,10 +82,13 @@ class _AddPageState extends State<AddPage> {
             _dropTypeEvent(),
             _textDropAge(),
             _dropAge(),
-            _rowPassFree(),
+            Container(margin: EdgeInsets.only(top: 15), child: _rowPassFree()),
             _sectionFreePass(context),
             _rowPassPaid(),
             _sectionPassPaid(context),
+            _rowPreSale(),
+            _sectionPreSale(context),
+            _rowOnlyEventInfo(),
             _buttonRegister(),
           ],
         )),
@@ -114,6 +123,7 @@ class _AddPageState extends State<AddPage> {
                       onChanged: (value) {
                         setState(() {
                           _switchFreePassLimitTime = value;
+                          _switchPassPreSale = false;
                           _controller.istimeLimit = value;
                         });
                       },
@@ -223,18 +233,58 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+  Visibility _sectionPreSale(BuildContext context) {
+    return Visibility(
+        visible: _switchPassPreSale,
+        child: Column(children: [
+          ..._controller.preSaleTicketsControllers
+              .map((PreSaleTicket) => cardPreSale(PreSaleTicket)),
+          _buttonAddPreSale(),
+        ]));
+  }
+
   Row _rowPassFree() {
     return Row(
       children: [
         _textPassFree(),
-        CupertinoSwitch(
-          value: _switchFreePass,
-          onChanged: (value) {
-            setState(() {
-              _switchFreePass = value;
-              _controller.isFree = value;
-            });
-          },
+        Spacer(),
+        Container(
+          margin: EdgeInsets.only(right: 100),
+          child: CupertinoSwitch(
+            value: _switchFreePass,
+            onChanged: (value) {
+              setState(() {
+                _switchFreePass = value;
+                _switchPassPreSale = false;
+                _switchEventInformativo = false;
+                _controller.isFree = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _rowOnlyEventInfo() {
+    return Row(
+      children: [
+        _textOnlyEventInfo(),
+        Spacer(),
+        Container(
+          margin: EdgeInsets.only(right: 100),
+          child: CupertinoSwitch(
+            value: _switchEventInformativo,
+            onChanged: (value) {
+              setState(() {
+                _switchEventInformativo = value;
+                _switchPassPreSale = false;
+                _switchPassPaidOff = false;
+                _switchFreePass = false;
+                _controller.isInformative = value;
+              });
+            },
+          ),
         ),
       ],
     );
@@ -244,14 +294,44 @@ class _AddPageState extends State<AddPage> {
     return Row(
       children: [
         _textPassPaid(),
-        CupertinoSwitch(
-          value: _switchPassPaidOff,
-          onChanged: (value) {
-            setState(() {
-              _switchPassPaidOff = value;
-              _controller.isGeneral = value;
-            });
-          },
+        Spacer(),
+        Container(
+          margin: EdgeInsets.only(right: 100),
+          child: CupertinoSwitch(
+            value: _switchPassPaidOff,
+            onChanged: (value) {
+              setState(() {
+                _switchPassPaidOff = value;
+                _switchPassPreSale = false;
+                _switchEventInformativo = false;
+                _controller.isGeneral = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _rowPreSale() {
+    return Row(
+      children: [
+        _textPassPreSale(),
+        Spacer(),
+        Container(
+          margin: EdgeInsets.only(right: 100),
+          child: CupertinoSwitch(
+            value: _switchPassPreSale,
+            onChanged: (value) {
+              setState(() {
+                _switchPassPreSale = value;
+                _switchPassPaidOff = false;
+                _switchFreePass = false;
+                _switchEventInformativo = false;
+                _controller.isPreSale = value;
+              });
+            },
+          ),
         ),
       ],
     );
@@ -433,6 +513,68 @@ class _AddPageState extends State<AddPage> {
         ));
   }
 
+  ElevatedButton DatePickerPreSaleStart(
+      BuildContext context, PreSaleTickets controllers) {
+    String dateStartPreSaleParsed;
+    String dateStartPreSale;
+    return ElevatedButton(
+        onPressed: () {
+          DatePicker.showDateTimePicker(context,
+              locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateStartPreSaleParsed = dateString + " a las " + clockString;
+            dateStartPreSale = date.toString();
+          }, onConfirm: (date) {
+            controllers.dateStart = dateStartPreSale;
+            controllers.dateStartParse = dateStartPreSaleParsed;
+            refresh();
+          }, currentTime: DateTime.now());
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white)),
+        child: Container(
+          width: 300,
+          child: Text(
+            controllers.dateStartParse == null
+                ? 'DD/MM/AA HH:MM'
+                : controllers.dateStartParse,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ));
+  }
+
+  ElevatedButton DatePickerPreSaleEnd(
+      BuildContext context, PreSaleTickets controllers) {
+    String dateEndPreSaleParsed;
+    String dateEndPreSale;
+    return ElevatedButton(
+        onPressed: () {
+          DatePicker.showDateTimePicker(context,
+              locale: LocaleType.es, showTitleActions: true, onChanged: (date) {
+            final dateString = DateParse().DiaConMes(date);
+            final clockString = DateParse().Hora(date);
+            dateEndPreSaleParsed = dateString + " a las " + clockString;
+            dateEndPreSale = date.toString();
+          }, onConfirm: (date) {
+            controllers.dateEnd = dateEndPreSale;
+            controllers.dateEndParsed = dateEndPreSaleParsed;
+            refresh();
+          }, currentTime: DateTime.now());
+        },
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white)),
+        child: Container(
+          width: 300,
+          child: Text(
+            controllers.dateEndParsed == null
+                ? 'DD/MM/AA HH:MM'
+                : controllers.dateEndParsed,
+            style: TextStyle(color: Colors.grey),
+          ),
+        ));
+  }
+
   GestureDetector _addImage() {
     return GestureDetector(
       onTap: _controller.showAlertDialog,
@@ -592,12 +734,43 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
+  Widget _textOnlyEventInfo() {
+    return Container(
+      width: 180,
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 10, top: 10),
+      child: Text(
+        'Publicar como evento informativo  ',
+        style: TextStyle(
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
+      ),
+    );
+  }
+
   Widget _textPassPaid() {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(left: 20, right: 15, bottom: 10, top: 10),
       child: Text(
-        'Entrada Paga',
+        'Entrada General',
+        style: TextStyle(
+            fontFamily: "Ubuntu",
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 20),
+      ),
+    );
+  }
+
+  Widget _textPassPreSale() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.only(left: 20, right: 15, bottom: 10, top: 10),
+      child: Text(
+        'Preventas',
         style: TextStyle(
             fontFamily: "Ubuntu",
             color: Colors.black,
@@ -668,6 +841,183 @@ class _AddPageState extends State<AddPage> {
         color: utils.Colors.festiviaColor,
         textColor: Colors.white,
         onPressed: _controller.publish,
+      ),
+    );
+  }
+
+  Visibility cardPreSale(PreSaleTickets controllers) {
+    return Visibility(
+        visible: true,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            elevation: 5.0,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Preventa Nº " + controllers.index.toString(),
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontFamily: "Ubuntu",
+                          )),
+                      Spacer(),
+                      GestureDetector(
+                          onTap: (() {
+                            _controller.deleteTicketPreSale(controllers);
+                          }),
+                          child: Icon(Icons.close))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Titulo:",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Ubuntu",
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        margin: EdgeInsets.only(left: 10),
+                        child: TextField(
+                          controller: controllers.tittle,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Precio",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: "Ubuntu",
+                          ),
+                        ),
+                        Container(
+                          width: 80,
+                          margin: EdgeInsets.only(left: 10, right: 5),
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            controller: controllers.price,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              border: OutlineInputBorder(),
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              hintText: '0.0',
+                            ),
+                          ),
+                        ),
+                        Text("\$",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: "Ubuntu",
+                            ))
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Row(children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Cant de tickets: ",
+                              style:
+                                  TextStyle(fontSize: 18, fontFamily: "Ubuntu"),
+                            )),
+                      ),
+                      Container(
+                          width: 70,
+                          child: TextField(
+                            style:
+                                TextStyle(fontSize: 18, fontFamily: "Ubuntu"),
+                            keyboardType: TextInputType.number,
+                            controller: controllers.numTickets,
+                          ))
+                    ]),
+                  ),
+                  Visibility(
+                    visible: true,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Venta disponible desde:",
+                          style: TextStyle(fontFamily: "Ubuntu", fontSize: 18),
+                        )),
+                  ),
+                  Visibility(
+                    child: Column(
+                      children: [DatePickerPreSaleStart(context, controllers)],
+                    ),
+                    visible: true,
+                  ),
+                  Visibility(
+                    visible: true,
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Hasta:",
+                          style: TextStyle(fontFamily: "Ubuntu", fontSize: 18),
+                        )),
+                  ),
+                  Visibility(
+                    child: Column(
+                      children: [DatePickerPreSaleEnd(context, controllers)],
+                    ),
+                    visible: true,
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(right: 20, bottom: 10, top: 20),
+                    child: Text(
+                      'Descripcion',
+                      style: TextStyle(
+                          fontFamily: "Ubuntu",
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    height: 10 * 10.0,
+                    child: TextField(
+                      controller: controllers.description,
+                      maxLines: 10,
+                      decoration: InputDecoration(
+                        hintText: "Detalles sobre esta entrada",
+                        filled: true,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+
+  Widget _buttonAddPreSale() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      child: ButtonApp(
+        text: 'Añadir entrada preventa',
+        color: Colors.blue[200],
+        textColor: Colors.white,
+        onPressed: () => {_controller.checkPreSaleTickets(), refresh()},
       ),
     );
   }

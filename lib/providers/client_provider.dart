@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:festivia/models/Like.dart';
 import 'package:festivia/models/client.dart';
 
 class ClientProvider {
@@ -41,9 +42,21 @@ class ClientProvider {
     return _ref.doc(id).update(data);
   }
 
+  Future<void> updateClientEvent(
+      Map<String, dynamic> data, String id, String idEvent) {
+    return _ref.doc(id).collection("events").doc(idEvent).set(data);
+  }
+
   Future<bool> getLikeById(String idClient, String idArtist) async {
     DocumentSnapshot document =
         await _ref.doc(idClient).collection("likes").doc(idArtist).get();
+
+    return document.exists;
+  }
+
+  Future<bool> getLikeNewById(String idClient, String idNews) async {
+    DocumentSnapshot document =
+        await _ref.doc(idClient).collection("likes").doc(idNews).get();
 
     return document.exists;
   }
@@ -66,7 +79,29 @@ class ClientProvider {
         .set({"idArtist": idArtist});
   }
 
+  Future<void> addLikeNews(String idClient, String idNews) {
+    return _ref
+        .doc(idClient)
+        .collection("likes")
+        .doc(idNews)
+        .set({"idNews": idNews});
+  }
+
+  Future<List<Like>> getLikes(String id) async {
+    QuerySnapshot querySnapshot = await _ref.doc(id).collection("likes").get();
+
+    List<Object> allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    List<Like> likes = new List();
+
+    return likes;
+  }
+
   Future<void> removeLikeArtist(String idClient, String idArtist) {
     return _ref.doc(idClient).collection("likes").doc(idArtist).delete();
+  }
+
+  Future<void> removeLikeNews(String idClient, String idNews) {
+    return _ref.doc(idClient).collection("likes").doc(idNews).delete();
   }
 }

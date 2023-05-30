@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 
+import 'package:festivia/models/Like.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,11 +27,14 @@ class ProfileController {
   ClientProvider _clientProvider;
   ProgressDialog _progressDialog;
   StorageProvider _storageProvider;
+  List<Like> listlikes;
+  bool haveLikes = false;
 
   PickedFile pickedFile;
   File imageFile;
 
-  Client client = new Client(username: "");
+  Client client =
+      new Client(username: "", image: "", location: "", genders: []);
 
   Future init(BuildContext context, Function refresh) {
     this.context = context;
@@ -123,7 +128,9 @@ class ProfileController {
     Navigator.pushNamed(context, 'my_events');
   }
 
-  void goToEditProfile() {}
+  void goToEditProfile() {
+    Navigator.pushNamed(context, 'edit_profile', arguments: client);
+  }
 
   openDialog() => showDialog(
       context: context,
@@ -154,6 +161,20 @@ class ProfileController {
   Future<void> logout() async {
     await _authProvider.signOut();
     Navigator.pushNamedAndRemoveUntil(context, 'start', (route) => false);
+  }
+
+  Future<List<Like>> getLikes() async {
+    if (listlikes == null) {
+      var likes = await _clientProvider.getLikes(_authProvider.getUser().uid);
+      if (likes.isNotEmpty) {
+        listlikes = likes;
+        haveLikes = true;
+        refresh();
+      }
+      return likes;
+    }
+
+    return listlikes;
   }
 
   Future<void> deleteAccount() async {
