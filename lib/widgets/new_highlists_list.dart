@@ -86,7 +86,7 @@ class NewHighlistlist extends StatelessWidget {
                                 fontSize: 23,
                                 shadows: shadows),
                           ),
-                          Text("29 de mayo",
+                          Text(news.date,
                               style: TextStyle(
                                   fontFamily: "Ubuntu",
                                   color: Colors.white,

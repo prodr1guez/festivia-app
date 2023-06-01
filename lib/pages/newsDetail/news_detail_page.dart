@@ -3,7 +3,9 @@ import 'package:festivia/pages/artistDetailPage/artist_page_controller.dart';
 import 'package:festivia/pages/imageFullScreen/image_full_screen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/Artist.dart';
 import '../../models/News.dart';
@@ -182,18 +184,23 @@ class _NewsPageState extends State<NewsPage> {
             Column(
               children: [
                 Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
-                      child: Text(
-                        widget.news.content.replaceAll('\\n', '\n'),
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontFamily: "Ubuntu",
-                        ),
-                      )),
-                )
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                        padding: EdgeInsets.all(10),
+                        margin:
+                            EdgeInsets.only(left: 15, right: 15, bottom: 20),
+                        child: Linkify(
+                            onOpen: (link) async {
+                              if (!await launchUrl(Uri.parse(link.url))) {
+                                throw Exception('Could not launch ${link.url}');
+                              }
+                            },
+                            text: widget.news.content.replaceAll('\\n', '\n'),
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 18,
+                              fontFamily: "Ubuntu",
+                            ))))
               ],
             )
           ],
