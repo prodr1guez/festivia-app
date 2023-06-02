@@ -63,10 +63,19 @@ class RegisterController {
         Client client = new Client(
             id: userId,
             email: _authProvider.getUser().email,
+            image: "",
+            phone: "",
+            location: "",
+            genders: [],
+            lat: null,
+            long: null,
             username: username);
 
+        print("paso 1");
         await _clientProvider.create(client);
+        print("paso 2");
         await _userProvider.create(User(id: userId, type: "client"));
+        print("paso 3");
         await _sharedPref.save('typeUser', "client");
 
         _progressDialog.hide();

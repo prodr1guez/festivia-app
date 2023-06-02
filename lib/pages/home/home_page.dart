@@ -121,8 +121,8 @@ class _HomePageState extends State<HomePage> {
                                       CenterPageEnlargeStrategy.scale,
                                   enlargeCenterPage: true,
                                   disableCenter: true,
-                                  viewportFraction: 0.6,
-                                  height: 150,
+                                  viewportFraction: 0.5,
+                                  height: 190,
                                   autoPlay: true,
                                   scrollDirection: Axis.horizontal,
                                   autoPlayInterval: Duration(seconds: 4)),
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      margin: const EdgeInsets.only(left: 20, top: 20),
+                      margin: const EdgeInsets.only(left: 20, top: 0),
                       child: const Text(
                         "Clubs Recomendados",
                         style: TextStyle(

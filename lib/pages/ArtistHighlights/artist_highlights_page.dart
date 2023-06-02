@@ -65,7 +65,7 @@ class _ArtistHighlightsState extends State<ArtistHighlights> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Los dj's mas reconocidos de la escena",
+                            "Los dj's locales mas destacados",
                             style: TextStyle(
                                 fontSize: 16,
                                 fontFamily: "Ubuntu",

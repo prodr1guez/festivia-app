@@ -164,7 +164,7 @@ class _DetailEventState extends State<DetailEvent> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                      margin: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.only(left: 20, top: 10),
                       child: Text(
                         "Info",
                         style: TextStyle(

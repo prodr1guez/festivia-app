@@ -8,6 +8,24 @@ class CardPartyHome extends StatelessWidget {
   Event snapshot;
 
   CardPartyHome({this.snapshot});
+  var shadows = [
+    Shadow(
+        // bottomLeft
+        offset: Offset(-1.5, -1.5),
+        color: Colors.black26),
+    Shadow(
+        // bottomRight
+        offset: Offset(1.5, -1.5),
+        color: Colors.black26),
+    Shadow(
+        // topRight
+        offset: Offset(1.5, 1.5),
+        color: Colors.black26),
+    Shadow(
+        // topLeft
+        offset: Offset(-1.5, 1.5),
+        color: Colors.black26),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +42,7 @@ class CardPartyHome extends StatelessWidget {
                 width: double.infinity,
                 child: CachedNetworkImage(
                   imageUrl: snapshot.image,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               Positioned(
@@ -43,6 +61,7 @@ class CardPartyHome extends StatelessWidget {
                             fontFamily: "Ubuntu",
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
+                            shadows: shadows,
                             fontSize: 23,
                           ),
                         ),
@@ -52,6 +71,7 @@ class CardPartyHome extends StatelessWidget {
                             fontFamily: "Ubuntu",
                             color: Colors.white,
                             fontWeight: FontWeight.w400,
+                            shadows: shadows,
                             fontSize: 13,
                           ),
                         )

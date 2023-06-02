@@ -106,7 +106,7 @@ class EventsHighlistlist extends StatelessWidget {
         }));
       },
       child: Container(
-        height: 250,
+        height: 300,
         child: Card(
             semanticContainer: true,
             clipBehavior: Clip.antiAliasWithSaveLayer,
